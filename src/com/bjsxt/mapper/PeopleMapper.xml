@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="a.b">
+	<select id="selById" resultType="com.bjsxt.pojo.People" parameterType="map">
+		select * from people where id=${id} and name='${name}'
+	</select>
+	
+	<select id="test" resultType="com.bjsxt.pojo.People" parameterType="int">
+		<![CDATA[ select * from people where id<#{0} ]]>
+	</select>
+	
+	<select id="page" resultType="People" parameterType="map">
+		select * from people limit #{pageStart},#{pageSize}
+	</select>
+	
+	<insert id="ins" parameterType="People">
+		insert into people values(default,#{name},#{age})
+	</insert>
+	
+	<update id="upd" parameterType="people">
+		update people set name = #{name} where id = #{id}
+	</update>
+	
+	<delete id="del" parameterType="int">
+		delete from people where id = #{0} 
+	</delete>
+	
+	
+	
+	
+	<select id="getSatisfactionRatio" resultType="com.bjsxt.pojo.SatisfactionRatio" parameterType="map">
+		SELECT SUM(a.num) COUNT,
+		MAX(CASE a.result WHEN '1' THEN a.num ELSE 0 END)good,
+		MAX(CASE a.result WHEN '2' THEN a.num ELSE 0 END)general,
+		MAX(CASE a.result WHEN '3' THEN a.num ELSE 0 END)bad
+		FROM 
+		(
+			SELECT result,COUNT(*) 'num' FROM `shop_satisfaction_result` GROUP BY result
+		) a 
+	</select>
+	
+	
+	<select id="getSatisfactionShopRatio" resultType="com.bjsxt.pojo.SatisfactionShopRatio" parameterType="map">
+		SELECT r.shop_id 'shopId',s.no,s.name 'shopName',r.count,r.good,r.general,r.bad FROM
+		(
+			SELECT shop_id,SUM(a.num) COUNT,
+			MAX(CASE a.result WHEN '1' THEN a.num ELSE 0 END)good,
+			MAX(CASE a.result WHEN '2' THEN a.num ELSE 0 END)general,
+			MAX(CASE a.result WHEN '3' THEN a.num ELSE 0 END)bad
+			FROM 
+			(
+				SELECT shop_id,result,COUNT(*) 'num' 
+				FROM `shop_satisfaction_result` 
+				WHERE shop_id 
+				IN 
+				(
+					SELECT shop_id FROM `shop_s_satisfaction_shop`
+				) 
+				GROUP BY result,shop_id ORDER BY shop_id
+			) a 
+			GROUP BY a.shop_id
+		) r 
+		LEFT JOIN `oa_department_structure` s ON r.shop_id=s.id; 
+	</select>
+	
+	
+	
+</mapper>

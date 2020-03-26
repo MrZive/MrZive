@@ -1,0 +1,202 @@
+.treeview, .treeview ul {
+	margin: 0;
+	padding: 0;
+	color: #1248AC;
+	-moz-user-select: none;
+	list-style: none
+}
+
+.treeview div.hitarea {
+	height: 15px;
+	width: 15px;
+	margin-left: -15px;
+	float: left;
+	cursor: pointer
+}
+
+.treeview div.nohitarea {
+	height: 15px;
+	width: 15px;
+	margin-left: -15px;
+	float: left
+}
+
+* html div.hitarea, * html div.nohitarea {
+	background: #fff;
+	filter: alpha(opacity = 0);
+	display: inline;
+	float: none
+}
+
+.treeview li {
+	background: url(tree/tv-item.gif) 0 0 no-repeat
+}
+
+.treeview .collapsable {
+	background-image: url(tree/tv-collapsable.gif)
+}
+
+.treeview .expandable ul {
+	display: none
+}
+
+.treeview .expandable {
+	background-image: url(tree/tv-expandable.gif)
+}
+
+.treeview .last {
+	background-image: url(tree/tv-item-last.gif)
+}
+
+.treeview .lastcollapsable {
+	background-image: url(tree/tv-collapsable-last.gif)
+}
+
+.treeview .lastexpandable {
+	background-image: url(tree/tv-expandable-last.gif)
+}
+
+.treeview .lastexpandable ul {
+	display: none
+}
+
+.treeview li {
+	padding: 3px 0 3px 16px
+}
+
+.treeview li span.selected {
+	padding-left: 3px;
+	font-weight: 700;
+	color: #f90
+}
+
+.treeview .op {
+	font-size: 12px;
+	text-decoration: none;
+	float: right;
+	border-bottom: 1px dashed #eee;
+	height: 15px
+}
+
+.treeview .op span {
+	cursor: pointer;
+	color: #F60;
+	margin: 0 2px 0 2px
+}
+
+.treeview input {
+	width: 150px;
+	height: 16px
+}
+
+.treeview input.input {
+	width: auto;
+	height: auto;
+	display: inline;
+	margin-right: 4px
+}
+
+.treeview li a {
+	font-size: 12px;
+	text-decoration: none;
+	display: block;
+	height: 15px;
+	color: black;
+	cursor: pointer;
+	border-bottom: 1px dashed #eee
+}
+
+.treeview li a.inline {
+	display: inline
+}
+
+.treeview li a span.loading {
+	background: url(tree/i_loading.gif) 0 0 no-repeat;
+	padding-left: 16px;
+	color: #888
+}
+
+.treeview li a.selected {
+	background: #e2e2e2;
+	color: black
+}
+
+.treeview {
+	width: 95%;
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding-bottom: 80px
+}
+
+.treeview ul li {
+	position: relative;
+	*position: static;
+	z-index: 1;
+	height: auto;
+	*height: 18px;
+	line-height: 18px
+}
+
+.treeview ul li div.edit {
+	position: absolute;
+	z-index: 100;
+	right: 0;
+	top: 19px;
+	width: 100px;
+	float: left;
+	height: auto;
+	background: white;
+	border: 1px solid #e3e3e3;
+	padding: 0;
+	text-indent: 0
+}
+
+.treeview ul li span {
+	position: relative;
+	*position: static;
+	height: 18px;
+	vertical-align: middle;
+	word-wrap: break-word;
+	overflow: hidden;
+	padding-left: 3px
+}
+
+.treeview ul li span.bgColor {
+	color: #f90;
+	font-weight: 700
+}
+
+.treeview li span.edit-img {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 18px;
+	height: 18px;
+	display: inline-block;
+	padding-left: 10px;
+	background: #fff url(tree/edit_img.gif) no-repeat left center
+}
+
+.treeview ul li div.edit span {
+	width: 94%;
+	width: 100% \9;
+	display: inline-block;
+	height: 20px;
+	line-height: 20px;
+	color: #666;
+	margin: 0;
+	padding: 0 3%
+}
+
+.treeview ul li div.edit span.hover {
+	background: #e3e3e3;
+	color: black
+}
+
+.hide {
+	display: none
+}
+
+.cursor {
+	cursor: pointer
+}

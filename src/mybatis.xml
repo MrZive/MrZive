@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="logImpl" value="LOG4J"/>
+	</settings>
+	<typeAliases>
+		<package name="com.bjsxt.pojo" />
+	</typeAliases>
+	<!-- default引用environment的id,当前所使用的环境 -->
+	<environments default="default">
+		<!-- 声明可以使用的环境 -->
+		<environment id="default">
+			<!-- 使用原生JDBC事务 -->
+			<transactionManager type="JDBC"></transactionManager>
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver"/>
+				<property name="url" value="jdbc:mysql://119.23.152.69:3306/qhc_core_2"/>
+				<property name="username" value="wang.zw"/>
+				<property name="password" value="wangzw0626@qhc"/>
+			</dataSource>
+<!-- 			<dataSource type="POOLED"> -->
+<!-- 				<property name="driver" value="com.mysql.jdbc.Driver"/> -->
+<!-- 				<property name="url" value="jdbc:mysql://192.168.0.30:3306/qhc_core"/> -->
+<!-- 				<property name="username" value="root"/> -->
+<!-- 				<property name="password" value="Mysql"/> -->
+<!-- 			</dataSource> -->
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="com/bjsxt/mapper/common.xml"/>
+		<mapper resource="com/bjsxt/mapper/PeopleMapper.xml"/>
+		<mapper resource="com/bjsxt/mapper/PeopleMapper2.xml"/>
+		<mapper resource="com/bjsxt/mapper/ProductMapper.xml"/>
+		<mapper resource="com/bjsxt/mapper/SearchProductMapper.xml"/>
+		<mapper resource="com/bjsxt/mapper/DuotaiMapper.xml"/>
+		<mapper resource="com/bjsxt/mapper/coo.xml"/>
+		<mapper resource="com/bjsxt/mapper/cooProject.xml"/>
+		<mapper resource="com/bjsxt/mapper/biInfoShop.xml"/>
+		<mapper resource="com/bjsxt/mapper/biInfoMember.xml"/>
+		<mapper resource="com/bjsxt/mapper/newFile.xml"/>
+		
+		<!-- 数据导出 -->
+		<mapper resource="com/bjsxt/dataOut/mapper/common.xml"/>
+		<mapper resource="com/bjsxt/dataOut/mapper/product.xml"/>
+	</mappers>
+</configuration>

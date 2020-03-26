@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt">
+	
+    <!-- 查询产品取货详情 -->
+    <select id="getCustomProductSalesAnalyzes" parameterType="map" resultMap="productEmployeeMap">
+        SELECT 
+        a.id,'buy' AS 'orderType',a.consumption_id 'consumptionId','' AS 'returnConsumptionId','' AS 'refundConsumptionId',a.consumption_set_id 'consumptionSetId',a.consumption_product_id 'consumptionProductId',a.activity_id 'activityId',h.name 'activityName',h.type 'activityType',h.status 'activityStatus',h.act_type 'activityType',a.buy_number 'buyNumber','0' AS 'refundNumber',a.left_number 'leftNumber',a.member_card_id 'memberCardId',d.consumption_date 'createDate',a.is_send 'isSend',a.buy_unit 'buyUnit',a.price,a.shop_id 'shopId',c.no 'shopNo',c.name 'shopName',c.region 'shopRegion',e.name 'creator',e.employee_no 'creatorNo'
+		,a.experience_price 'experiencePrice',a.promotion_price 'promotionPrice',a.market_price 'marketPrice',a.left_unit 'leftUnit',a.buy_type 'buyType',a.payment,'0' AS 'refundMoney',a.store_pay 'storePay',a.bankcard_pay 'bankcardPay',a.cash_pay 'cashPay',a.effective_earn 'effectiveEarn',a.real_payment 'realPayment',a.is_pay 'isPay'
+		,a.actual_number 'actualNumber',a.actual_unit 'actualUnit',a.actual_price 'actualPrice',b.no 'productNo',b.name 'productName',b.bulk_unit 'bulkUnit',b.boxes_unit 'boxesUnit',b.type,b.num,b.standard
+		,d.ostype,d.is_tuoke 'isTuoke',d.is_cooperation 'isCooperation',g.name 'memberName',g.gender 'memberGender',g.phone 'memberPhone'
+		FROM `shop_s_consumption_product_detail` a 
+		LEFT JOIN `shop_b_product_info` b ON a.product_id=b.id
+		LEFT JOIN `shop_b_activity_info` h ON a.activity_id = h.id
+		LEFT JOIN `oa_department_structure` c ON a.shop_id = c.id
+		RIGHT JOIN `shop_s_consumption` d ON a.consumption_id = d.id and  d.is_cooperation = 0 
+		LEFT JOIN `shop_s_member_card` g ON d.member_card_id = g.id
+		LEFT JOIN `oa_employee_info` e ON d.maker_id = e.id
+		WHERE b.no=#{no} AND a.is_fail!=1 
+		<if test="beginDate != null">
+			AND d.consumption_date BETWEEN #{beginDate} AND #{endDate} 
+		</if>
+		<if test="status != null and status.length()>0">
+			AND d.status = #{status}
+		</if>
+		<if test="shopIds != null and shopIds.length()>0">
+			AND a.shop_id IN ( #{shopIds} )
+		</if>
+    </select>
+    
+   	<resultMap id="productEmployeeMap" type="com.bjsxt.pojo.CustomProductSales">
+		<result property="id" column="id"/>
+		<result property="consumptionId" column="consumptionId"/>
+		<collection property="employeeEarnList" column="{consumptionId=consumptionId,detailId=id}" javaType="list" select="getCustomProductSalesEmployeeEarn" />
+	</resultMap>
+	
+	 <select id="getCustomProductSalesAnalyzesReturn" parameterType="map" resultMap="productEmployeeMapReturn">
+		SELECT a.id,'return' AS 'orderType',a.consumption_id 'consumptionId',m.return_consumption_id 'returnConsumptionId','' AS 'refundConsumptionId',a.consumption_set_id 'consumptionSetId',a.consumption_product_id 'consumptionProductId',a.activity_id 'activityId',h.name 'activityName',h.type 'activityType',h.status 'activityStatus',h.act_type 'activityType',a.buy_number 'buyNumber','0' AS 'refundNumber',a.left_number 'leftNumber',a.member_card_id 'memberCardId',m.create_date 'createDate',a.is_send 'isSend',a.buy_unit 'buyUnit',a.price,m.shop_id 'shopId',c.no 'shopNo',c.name 'shopName',c.region 'shopRegion',e.name 'creator',e.employee_no 'creatorNo'
+		,a.experience_price 'experiencePrice',a.promotion_price 'promotionPrice',a.market_price 'marketPrice',a.left_unit 'leftUnit',a.buy_type 'buyType',a.payment,'0' AS 'refundMoney',m.store_pay 'storePay',m.bankcard_pay 'bankcardPay',m.cash_pay 'cashPay',m.effective_earn 'effectiveEarn',a.real_payment 'realPayment',a.is_pay 'isPay'
+		,a.actual_number 'actualNumber',a.actual_unit 'actualUnit',a.actual_price 'actualPrice',b.no 'productNo',b.name 'productName',b.bulk_unit 'bulkUnit',b.boxes_unit 'boxesUnit',b.type,b.num,b.standard
+		,d.ostype,d.is_tuoke 'isTuoke',d.is_cooperation 'isCooperation',g.name 'memberName',g.gender 'memberGender',g.phone 'memberPhone'
+		FROM `shop_s_consumption_return` m
+		LEFT JOIN `shop_s_consumption_product_detail` a ON m.consumption_pro_id=a.consumption_product_id
+		JOIN shop_b_product_info b ON a.product_id = b.id
+		LEFT JOIN `shop_b_activity_info` h ON a.activity_id = h.id
+		LEFT JOIN `oa_department_structure` c ON m.shop_id = c.id
+		RIGHT JOIN `shop_s_consumption` d ON a.consumption_id = d.id
+		LEFT JOIN `oa_employee_info` e ON d.maker_id = e.id
+		LEFT JOIN `shop_s_member_card` g ON d.member_card_id = g.id
+		WHERE b.no=#{no}
+		<if test="beginDate != null">
+			AND m.return_date BETWEEN #{beginDate} AND #{endDate} 
+		</if>
+		<if test="status != null and status.length()>0">
+			AND m.is_fail != #{status}
+		</if>
+		<if test="shopIds != null and shopIds.length()>0">
+			AND a.shop_id IN ( #{shopIds} )
+		</if>
+		
+		UNION ALL
+		
+		SELECT a.id,'return' AS 'orderType',a.consumption_id 'consumptionId',m.return_consumption_id 'returnConsumptionId','' AS 'refundConsumptionId',a.consumption_set_id 'consumptionSetId',a.consumption_product_id 'consumptionProductId',a.activity_id 'activityId',h.name 'activityName',h.type 'activityType',h.status 'activityStatus',h.act_type 'activityType',a.buy_number 'buyNumber','0' AS 'refundNumber',a.left_number 'leftNumber',a.member_card_id 'memberCardId',m.create_date 'createDate',a.is_send 'isSend',a.buy_unit 'buyUnit',a.price,m.shop_id 'shopId',c.no 'shopNo',c.name 'shopName',c.region 'shopRegion',e.name 'creator',e.employee_no 'creatorNo'
+		,a.experience_price 'experiencePrice',a.promotion_price 'promotionPrice',a.market_price 'marketPrice',a.left_unit 'leftUnit',a.buy_type 'buyType',a.payment,'0' AS 'refundMoney',m.store_pay 'storePay',m.bankcard_pay 'bankcardPay',m.cash_pay 'cashPay',m.effective_earn 'effectiveEarn',a.real_payment 'realPayment',a.is_pay 'isPay'
+		,a.actual_number 'actualNumber',a.actual_unit 'actualUnit',a.actual_price 'actualPrice',b.no 'productNo',b.name 'productName',b.bulk_unit 'bulkUnit',b.boxes_unit 'boxesUnit',b.type,b.num,b.standard
+		,d.ostype,d.is_tuoke 'isTuoke',d.is_cooperation 'isCooperation',g.name 'memberName',g.gender 'memberGender',g.phone 'memberPhone'
+		FROM `shop_s_consumption_return` m
+		LEFT JOIN `shop_s_consumption_product_detail` a ON a.consumption_set_id=m.consumption_pro_id
+		JOIN shop_b_product_info b ON a.product_id = b.id
+		LEFT JOIN `shop_b_activity_info` h ON a.activity_id = h.id
+		LEFT JOIN `oa_department_structure` c ON m.shop_id = c.id
+		RIGHT JOIN `shop_s_consumption` d ON a.consumption_id = d.id
+		LEFT JOIN `oa_employee_info` e ON d.maker_id = e.id
+		LEFT JOIN `shop_s_member_card` g ON d.member_card_id = g.id
+		WHERE b.no=#{no}
+		<if test="beginDate != null">
+			AND m.return_date BETWEEN #{beginDate} AND #{endDate} 
+		</if>
+		<if test="status != null and status.length()>0">
+			AND m.is_fail != #{status}
+		</if>
+		<if test="shopIds != null and shopIds.length()>0">
+			AND m.shop_id IN ( #{shopIds} )
+		</if>
+	</select>
+	
+	<resultMap id="productEmployeeMapReturn" type="com.bjsxt.pojo.CustomProductSales">
+		<result property="id" column="id"/>
+		<result property="consumptionId" column="consumptionId"/>
+		<result property="returnConsumptionId" column="returnConsumptionId"/>
+		<collection property="employeeEarnList" column="{consumptionId=returnConsumptionId,detailId=id}" javaType="list" select="getCustomProductSalesEmployeeEarn" />
+	</resultMap>
+	
+	 <select id="getCustomProductSalesAnalyzesRefund" parameterType="map" resultMap="productEmployeeMapRefund">
+        SELECT a.id,'refund' AS 'orderType',a.consumption_id 'consumptionId','' AS 'returnConsumptionId',m.return_transfer_id 'refundConsumptionId',a.consumption_set_id 'consumptionSetId',a.consumption_product_id 'consumptionProductId',a.activity_id 'activityId',h.name 'activityName',h.type 'activityType',h.status 'activityStatus',h.act_type 'activityType',a.buy_number 'buyNumber',m.number 'refundNumber',a.left_number 'leftNumber',a.member_card_id 'memberCardId',j.check_date 'createDate',a.is_send 'isSend',a.buy_unit 'buyUnit',a.price,a.shop_id 'shopId',c.no 'shopNo',c.name 'shopName',c.region 'shopRegion',e.name 'creator',e.employee_no 'creatorNo'
+		,a.experience_price 'experiencePrice',a.promotion_price 'promotionPrice',a.market_price 'marketPrice',a.left_unit 'leftUnit',a.buy_type 'buyType',a.payment,m.return_money 'refundMoney','0' AS 'storePay','0' AS 'bankcardPay','0' AS 'cashPay','0' AS 'effectiveEarn','0' AS 'realPayment',a.is_pay 'isPay'
+		,a.actual_number 'actualNumber',a.actual_unit 'actualUnit',a.actual_price 'actualPrice',b.no 'productNo',b.name 'productName',b.bulk_unit 'bulkUnit',b.boxes_unit 'boxesUnit',b.type,b.num,b.standard
+		,d.ostype,d.is_tuoke 'isTuoke',d.is_cooperation 'isCooperation',g.name 'memberName',g.gender 'memberGender',g.phone 'memberPhone'
+		FROM `shop_s_return_transfer_detail` m
+		LEFT JOIN `shop_s_return_transfer` j ON j.id=m.return_transfer_id AND check_status=1
+		LEFT JOIN `shop_s_consumption_product_detail` a ON m.consumption_id=a.consumption_id AND m.detail_id = a.id
+		JOIN shop_b_product_info b ON a.product_id = b.id
+		LEFT JOIN `shop_b_activity_info` h ON a.activity_id = h.id
+		LEFT JOIN `oa_department_structure` c ON a.shop_id = c.id
+		RIGHT JOIN `shop_s_consumption` d ON a.consumption_id = d.id
+		LEFT JOIN `oa_employee_info` e ON d.maker_id = e.id
+		LEFT JOIN `shop_s_member_card` g ON d.member_card_id = g.id
+		WHERE b.no=#{no}
+		<if test="beginDate != null">
+			AND j.check_date BETWEEN #{beginDate} AND #{endDate} 
+		</if>
+		<if test="status != null and status.length()>0">
+			AND d.status = #{status}
+		</if>
+		<if test="shopIds != null and shopIds.length()>0">
+			AND a.shop_id IN ( #{shopIds} )
+		</if>
+    </select>
+    
+<!--     退气熏 -->
+    <select id="getCustomProductSalesAnalyzesRefund2" parameterType="map" resultMap="productEmployeeMapRefund">
+        SELECT a.id,'refund' AS 'orderType',a.consumption_id 'consumptionId','' AS 'returnConsumptionId',m.return_transfer_id 'refundConsumptionId',a.consumption_set_id 'consumptionSetId',a.consumption_project_id 'consumptionProductId',a.activity_id 'activityId',h.name 'activityName',h.type 'activityType',h.status 'activityStatus',h.act_type 'activityType',a.buy_number 'buyNumber',m.number 'refundNumber',a.number 'leftNumber',a.member_card_id 'memberCardId',j.check_date 'createDate',a.is_send 'isSend','无' AS 'buyUnit',a.price,a.shop_id 'shopId',c.no 'shopNo',c.name 'shopName',c.region 'shopRegion',e.name 'creator',e.employee_no 'creatorNo'
+		,a.experience_price 'experiencePrice',a.promotion_price 'promotionPrice',a.market_price 'marketPrice','null' AS 'leftUnit',a.buy_type 'buyType',a.payment,m.return_money 'refundMoney','0' AS 'storePay','0' AS 'bankcardPay','0' AS 'cashPay','0' AS 'effectiveEarn','0' AS 'realPayment',a.is_pay 'isPay'
+		,0 AS 'actualNumber','null' AS 'actualUnit',0 AS 'actualPrice',b.no 'productNo',b.name 'productName',b.type
+		,d.ostype,d.is_tuoke 'isTuoke',d.is_cooperation 'isCooperation',g.name 'memberName',g.gender 'memberGender',g.phone 'memberPhone'
+		FROM `shop_s_return_transfer_detail` m
+		LEFT JOIN `shop_s_return_transfer` j ON j.id=m.return_transfer_id AND check_status=1
+		LEFT JOIN `shop_s_consumption_project_detail` a ON m.consumption_id=a.consumption_id AND m.detail_id = a.id
+		JOIN shop_b_project_info b ON a.project_id = b.id
+		LEFT JOIN `shop_b_activity_info` h ON a.activity_id = h.id
+		LEFT JOIN `oa_department_structure` c ON a.shop_id = c.id
+		RIGHT JOIN `shop_s_consumption` d ON a.consumption_id = d.id
+		LEFT JOIN `oa_employee_info` e ON d.maker_id = e.id
+		LEFT JOIN `shop_s_member_card` g ON d.member_card_id = g.id
+		WHERE (b.no=#{no} OR b.no=#{no2} OR b.no=#{no3} OR b.no=#{no4})
+		<if test="beginDate != null">
+			AND j.check_date BETWEEN #{beginDate} AND #{endDate} 
+		</if>
+		<if test="status != null and status.length()>0">
+			AND d.status = #{status}
+		</if>
+		<if test="shopIds != null and shopIds.length()>0">
+			AND a.shop_id IN ( #{shopIds} )
+		</if>
+    </select>
+    
+   	<resultMap id="productEmployeeMapRefund" type="com.bjsxt.pojo.CustomProductSales">
+		<result property="id" column="id"/>
+		<result property="consumptionId" column="consumptionId"/>
+		<result property="refundConsumptionId" column="refundConsumptionId"/>
+		<collection property="employeeEarnList" column="{consumptionId=refundConsumptionId}" javaType="list" select="getCustomProductSalesEmployeeEarn" />
+	</resultMap>
+	
+    <select id="getCustomProductSalesEmployeeEarn" parameterType="map" resultType="com.bjsxt.pojo.CustomProductSalesEmployeeEarn">
+		SELECT a.consumption_id 'consumptionId',a.type 'earnType',a.store_earn 'storeEarn',a.earn,a.is_fail 'isFail',a.detail_id 'detailId',b.id 'employeeId',b.employee_no 'employeeNo',b.name 'employeeName',b.gender
+		,b.phone,b.entry_date 'entryDate' 
+		FROM `shop_s_consumption_earn` a 
+		LEFT JOIN `oa_employee_info` b ON a.shoper_id=b.id
+		WHERE
+		a.consumption_id = #{consumptionId}
+		<if test="detailId != null">
+			AND	a.detail_id = #{detailId}
+		</if>
+		
+		
+<!-- 		UNION ALL -->
+		
+<!-- 		SELECT  -->
+<!-- 		aa.return_transfer_id 'consumptionId','refund' AS 'orderType',bb.earnType,bb.storeEarn,bb.earn,"" AS "storePay","" AS "bankcardPay","" AS "cashPay","" AS "effectiveEarn",bb.isFail,bb.detailId,bb.employeeId,bb.employeeNo,bb.employeeName,bb.gender,bb.phone,bb.entryDate -->
+<!-- 		FROM  -->
+<!-- 		(SELECT return_transfer_id,number,return_money 'price' FROM `shop_s_return_transfer_detail` WHERE consumption_id = #{consumptionId})aa -->
+<!-- 		JOIN  -->
+<!-- 		(SELECT a.consumption_id 'consumptionId',a.store_earn 'storeEarn',a.earn ,a.type 'earnType',a.is_fail 'isFail',a.detail_id 'detailId',b.id 'employeeId',b.employee_no 'employeeNo',b.name 'employeeName',b.gender,b.phone,b.entry_date 'entryDate'  -->
+<!-- 		FROM `shop_s_consumption_earn` a  -->
+<!-- 		JOIN `oa_employee_info` b ON a.shoper_id=b.id)bb -->
+<!-- 		ON aa.return_transfer_id = bb.consumptionId -->
+		
+<!-- 		UNION ALL -->
+		
+<!-- 		SELECT  -->
+<!-- 		aa.return_consumption_id 'consumptionId','return' AS 'orderType',bb.earnType,bb.storeEarn,bb.earn,aa.storePay,aa.bankcardPay,aa.cashPay,aa.effectiveEarn,bb.isFail,bb.detailId,bb.employeeId,bb.employeeNo,bb.employeeName,bb.gender,bb.phone,bb.entryDate -->
+<!-- 		FROM  -->
+<!-- 		(SELECT return_consumption_id,store_pay 'storePay',bankcard_pay 'bankcardPay',cash_pay 'cashPay',effective_earn 'effectiveEarn' FROM `shop_s_consumption_return` WHERE consumption_pro_id = #{consumptionProductId})aa -->
+<!-- 		JOIN  -->
+<!-- 		(SELECT a.consumption_id 'consumptionId',a.store_earn 'storeEarn',a.earn ,a.type 'earnType',a.is_fail 'isFail',a.detail_id 'detailId',b.id 'employeeId',b.employee_no 'employeeNo',b.name 'employeeName',b.gender,b.phone,b.entry_date 'entryDate'  -->
+<!-- 		FROM `shop_s_consumption_earn` a  -->
+<!-- 		JOIN `oa_employee_info` b ON a.shoper_id=b.id)bb -->
+<!-- 		ON aa.return_consumption_id = bb.consumptionId -->
+    </select>
+</mapper>

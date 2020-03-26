@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt.dataOut.common">
+	<select id="getMemberCard" parameterType="com.bjsxt.dataOut.entity.MemberCard" resultType="com.bjsxt.dataOut.entity.MemberCard">
+		select
+		id,
+		phone 'phone',
+		name,
+		is_introduce 'isIndroduce',
+		introducer,
+		activate_date 'activateDate',
+		birthday,
+		gender 'gender',
+		no_phone 'noPhone',
+		addr 'address',
+		shop_id 'shopId',
+		is_pass 'isPass',
+		is_abandon 'isAbandon',
+		pass_shop_id 'passShopId',
+		is_active 'isActive',
+		is_introduce 'isIntroduce',
+		is_sleep 'isSleep',
+		pass_time 'passTime',
+		standard_time 'standardTime',
+		status 'status',
+		store_balance 'storeBalance',
+		point_balance 'pointBalance',
+		treatment_balance 'treatmentBalance',
+		stock_balance 'stockBalance',
+		owe_balance 'oweBalance',
+		create_date 'createDate'
+		from shop_s_member_card
+		<where>
+			<if test="id != null">
+				and id = #{id}
+			</if>
+			<if test="phone != null">
+				and phone = #{phone}
+			</if>
+			<if test="status != null">
+				and status = #{status}
+			</if>
+			<if test="isPass != null">
+				and is_pass = #{isPass}
+			</if>
+		</where>
+	</select>
+
+	<select id="getProductInfo" resultType="com.bjsxt.dataOut.entity.ProductInfo" parameterType="com.bjsxt.dataOut.entity.ProductInfo">
+		SELECT
+		a.`id` 'id',
+		a.`no` 'no',
+		a.is_express 'isExpress',
+		a.is_sale 'isSale',
+		a.`name` 'name',
+		a.`bulk_unit` 'bulkUnit',
+		a.`boxes_unit` 'boxesUnit',
+		b.`market_price` 'marketPrice',
+		b.`boxes_market_price` 'boxesMarketPrice',
+		b.promotion_price 'promotionPrice',
+		b.boxes_promotion_price 'boxesPromotionPrice',
+		b.experience_price 'experiencePrice',
+		b.boxes_experience_price 'boxesExperiencePrice',
+		a.`type` 'type',
+		a.`status` 'status',
+		a.`update_status` 'updateStatus',
+		a.`show_status` 'showStatus',
+		a.`create_date_time` 'createDateTime',
+		a.num,
+		a.num 'unitChangeNumber',
+		a.standard
+		FROM
+		shop_b_product_info a
+		LEFT JOIN shop_b_product_price b ON b.product_id = a.id 
+		<where>
+			<if test="id != null">
+				a.id = #{id}
+			</if>
+			<if test="no != null">
+				a.no = #{no}
+			</if>
+			<if test="status != null">
+				a.status = #{status}
+			</if>
+		</where>
+	</select>
+	
+	
+	<select id="getProjectInfo" resultType="com.bjsxt.dataOut.entity.ProjectInfo" parameterType="com.bjsxt.dataOut.entity.ProjectInfo">
+		SELECT
+		`id`,
+		`no`,
+		`name`,
+		`status`,
+		is_sale 'isSale',
+		is_calculate_sal 'isCalculateSal',
+		is_come 'isCome',
+		is_consume 'isConsume',
+		`type`,
+		DATE_FORMAT(`create_date_time`,'%Y-%m-%d %H:%i:%S') 'createDateTime',
+		effective_months 'effectiveMonths'
+		FROM
+		shop_b_project_info
+		<where>
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="no != null">
+				AND no = #{no}
+			</if>
+			<if test="status != null">
+				AND status = #{status}
+			</if>
+		</where>
+	</select>
+	
+	
+	<select id="getCooperationProject" resultType="com.bjsxt.dataOut.entity.CooperationProject" parameterType="com.bjsxt.dataOut.entity.CooperationProject">
+		SELECT
+			id,
+			no,
+			name,
+			unit,
+			price,
+			percent,
+			effective_cycle 'effectiveCycle',
+			no_limit_price 'noLimitPrice',
+			is_wenxiu 'isWenxiu',
+			is_calculate_sal 'isCalculateSal',
+			is_come 'isCome',
+			is_consume 'isConsume',
+			first_earn 'firstEarn',
+			is_count_comsume 'isCountConsume',
+			status
+			FROM
+			shop_b_cooperation_project
+			<where>
+				<if test="id != null">
+					AND id = #{id}
+				</if>
+				<if test="no != null">
+					AND no = #{no}
+				</if>
+				<if test="status != null">
+					AND status = #{status}
+				</if>
+			</where>
+	</select>
+	
+	<select id="getConsumption" resultType="com.bjsxt.dataOut.entity.Consumption" parameterType="com.bjsxt.dataOut.entity.Consumption">
+		SELECT
+		id,
+        member_card_id memberCardId,
+        shop_id shopId,
+        consumption_date consumptionDate,
+        create_user_id createUserId,
+        create_date createDate,
+        status,
+        is_link_fail isLinkFail,
+        fail_id failId,
+        fail_date failDate,
+        is_over_fail isOverFail,
+        is_cooperation isCooperation,
+        region,
+        maker_id makerId,
+        ostype,
+        fail_user_id failUserId,
+        is_tuoke isTuoke,
+        fail_earn failEarn,
+        is_detail_pay isDetailPay,
+        receipt_shop_type receiptShopType
+        FROM
+        shop_s_consumption
+       	<where>
+       		<if test="id != null">
+       			AND id = #{id}
+       		</if>
+       		<if test="memberCardId != null">
+       			AND member_card_id = #{memberCardId}
+       		</if>
+       		<if test="shopId != null">
+       			AND shop_id = #{shopId}
+       		</if>
+       	</where>
+	</select>
+
+</mapper>

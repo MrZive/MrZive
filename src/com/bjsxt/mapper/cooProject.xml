@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt">
+
+	<insert id="insertDone" parameterType="com.bjsxt.pojo.ConsumptionCooperationProjectDone">
+		INSERT INTO shop_s_consumption_cooperation_project_done ( 
+		id, 
+		doctor, 
+		nurse, 
+		detail_id, 
+		consumption_id, 
+		service_date, 
+		service_number, 
+		service_shop_id, 
+		service_company, 
+		first_earn, 
+		price, 
+		percent, 
+		is_count_comsume, 
+		remark, 
+		is_fail, 
+		share_left_earn, 
+		create_date 
+		)VALUES
+		( 
+		#{id}, 
+		#{doctor}, 
+		#{nurse}, 
+		#{detailId}, 
+		#{consumptionId}, 
+		#{serviceDate}, 
+		#{serviceNumber}, 
+		#{serviceShopId}, 
+		#{serviceCompany}, 
+		#{firstEarn}, 
+		#{price}, 
+		#{percent}, 
+		#{isCountComsume}, 
+		#{remark}, 
+		0, 
+		#{shareLeftEarn}, 
+		#{serviceDate}
+		) 
+	</insert>
+
+	<select id="getCooProject" parameterType="map" resultType="com.bjsxt.pojo.OneCooDetail">
+		SELECT a.id,a.consumption_id,a.consumption_cooperation_id,a.cooperation_id,c.`name` 'projectName',a.member_card_id,a.left_earn,a.left_store_earn,e.id 'shopId',e.no 'shopNo',e.name 'shopName',a.consumption_date
+		FROM `shop_s_consumption_cooperation_project_detail` a
+		LEFT JOIN `shop_s_consumption_cooperation_project` b ON a.`consumption_id`=b.consumption_id
+		LEFT JOIN `shop_b_cooperation_project` c ON a.`cooperation_id`=c.`id`
+		LEFT JOIN `oa_department_structure` e ON e.`id`=b.shopId
+		WHERE
+		a.`left_earn`>0
+		<if test="projectName != null">
+			and c.name = #{projectName}
+		</if>
+		<if test="consumptionId != null">
+			and a.consumption_id = #{consumptionId}
+		</if>
+		<if test="shopName!=null">
+			and e.name = #{shopName}
+		</if>
+		<if test="beginConsumeDate != null">
+	      <![CDATA[ and a.consumption_date >= #{beginConsumeDate}]]>
+		</if>
+		<if test="endConsumeDate != null">
+          <![CDATA[ and a.consumption_date <= #{endConsumeDate}]]>
+		</if>
+	</select>
+	
+	<select id="getEarn" parameterType="map" resultType="com.bjsxt.pojo.Earn">
+		select * from shop_s_consumption_earn where 1=1
+		<if test="beginConsumeDate != null">
+	      <![CDATA[ and consumption_date >= #{beginConsumeDate}]]>
+		</if>
+		<if test="endConsumeDate != null">
+          <![CDATA[ and consumption_date <= #{endConsumeDate}]]>
+		</if>
+		<if test="type != null">
+			and type = #{type}
+		</if>
+	</select>
+	
+	<select id="getOnePercentEarn" parameterType="map" resultType="com.bjsxt.pojo.Earn">
+		select * from shop_s_consumption_earn where 1=1	and consumption_type_id LIKE "%_addOnePercent%" 
+	</select>
+	
+	<select id="getShop" parameterType="map" resultType="string">
+		select id from oa_department_structure where 
+		<if test="no != null">
+		no = #{no}
+		</if>
+		<if test="shopName != null">
+		name = #{shopName}
+		</if>
+	</select>
+	
+	<select id="getShopNo" parameterType="map" resultType="string">
+		select no from oa_department_structure where 
+		<if test="shopName != null">
+		name = #{shopName}
+		</if>
+		<if test="id != null">
+		id = #{id}
+		</if>
+	</select>
+	
+	<select id="getShopName" parameterType="map" resultType="string">
+		select name from oa_department_structure where 
+		<if test="id != null">
+		id = #{id}
+		</if>
+	</select>
+	
+	<select id="getMember" parameterType="map" resultType="java.util.HashMap">
+		select id,name from `shop_s_member_card` where phone = #{phone}
+	</select>
+	
+	<select id="getEmployee" parameterType="map" resultType="java.util.HashMap">
+		SELECT e.id,s.no FROM `oa_employee_info` e LEFT JOIN `oa_department_structure` s ON e.`structure_id` = s.`id` where e.name = #{name}
+	</select>
+	
+	<select id="getEarnCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT COUNT(id) FROM `shop_s_consumption_earn` where consumption_type_id = #{consumption_type_id} and shoper_id = #{shoper_id}
+	</select>
+	
+	<insert id="insertEarn" parameterType="com.bjsxt.pojo.Earn">
+        INSERT INTO shop_s_consumption_earn
+        (
+             `id`,
+             `consumption_id`,
+             `consumption_type_id`,
+             `shoper_id`,
+             `earn`,
+             `type_id`,
+             `type`,
+             `create_date`,
+             `is_fail`,
+             `shop_id`,
+             `consumption_shop_id`,
+             `consumption_date`,
+             `store_earn`,
+             `return_product_earn`,
+             `return_project_earn`,
+             `buy_type`,
+             `detail_id`
+        )
+        values 
+        (
+             #{id},
+             #{consumption_id},
+             #{consumption_type_id},
+             #{shoper_id},
+             #{earn},
+             #{type_id},
+             #{type},
+             #{create_date},
+             #{is_fail},
+             #{shop_id},
+             #{consumption_shop_id},
+             #{consumption_date},
+             #{store_earn},
+             #{return_product_earn},
+             #{return_project_earn},
+             #{buy_type},
+             #{detail_id}
+         )
+    </insert>
+    
+    
+    <update id="updateEarn" parameterType="com.bjsxt.pojo.Earn">
+    	UPDATE shop_s_consumption_earn
+    	<set>
+                    <if test ='null != consumption_id'>consumption_id = #{consumption_id},</if>
+                    <if test ='null != consumption_type_id'>consumption_type_id = #{consumption_type_id},</if>
+                    <if test ='null != type'>type = #{type},</if>
+                    <if test ='null != consumption_date'>consumption_date = #{consumption_date},</if>
+                    <if test ='null != create_date'>create_date = #{create_date},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper>

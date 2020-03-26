@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="a.b">
+    <select id="getNewBuySetOrderDetail" parameterType="map" resultMap="employeeMap">
+        select
+		a.id 'bussionessId',
+		b.id 'orderId',
+		a.fail_earn 'failEarn',
+		a.ostype 'osType',
+		a.region 'region',
+		a.consumption_date 'consumptionDate',
+		a.create_date 'createDate',
+		a.shop_id 'shopId',
+		i.`name` 'shopName',
+		h.`phone` 'cardNo',
+		h.`name` 'memberName',
+		h.is_pass 'isPass', 
+		h.pass_time 'passTime', 
+		h.is_introduce 'isIntroduce',
+		g.`name` 'makerName',
+		d.store_pay 'storePay',
+		d.bankcard_pay 'bankcardPay',
+		d.cash_pay 'cashPay',
+		d.buy_owe 'buyOwe',
+		d.is_book 'isBook',
+		d.payment 'payment',
+		d.remark 'remark',
+		b.is_tuoke 'isTuoke',
+		b.is_fail 'isFail',
+		
+		c.buy_number 'buySetNumber',
+		d.buy_number 'buyItemNumber',
+		c.buy_type 'buyTypeSet',
+		d.buy_type 'buyTypeItem',
+		'次' as 'buyUnit',
+		d.price 'buyPrice',
+		c.activity_id 'activityId',
+		e.`name` 'activityName',
+		d.project_id 'itemId',
+		f.`no` 'itemNo',
+		f.`name` 'itemName',
+		d.id 'detailId',
+		'传统项目' as 'type'
+		
+		from shop_s_consumption a 
+		inner join shop_s_consumption_set b on 
+		b.is_detail_pay = 1 and
+		<if test="beginConsumeDate != null">
+		    <![CDATA[ a.consumption_date >= #{beginConsumeDate} and]]>
+		</if>
+		<if test="endConsumeDate != null">
+		    <![CDATA[ a.consumption_date <= #{endConsumeDate} and]]>
+		</if>
+		a.id = b.consumption_id
+		inner join shop_s_consumption_set_detail c on c.consumption_set_id = b.id
+		inner join shop_s_consumption_project_detail d on d.consumption_set_id = c.consumption_set_id and c.buy_type = d.buy_type
+		left join shop_b_activity_info e on e.id = c.activity_id
+		left join shop_b_project_info f on f.id = d.project_id
+		left join oa_employee_info g on g.id = a.maker_id
+		left join shop_s_member_card h on h.id = a.member_card_id
+		left join oa_department_structure i on i.id = a.shop_id
+    </select>
+    
+    <resultMap id="employeeMap" type="com.bjsxt.pojo.NewSetBuy">
+		<result property="bussionessId" column="bussionessId"/>
+		<result property="orderId" column="orderId"/>
+		<result property="detailId" column="detailId"/>
+		<collection property="employeeEarnList" column="{consumptionId=bussionessId,orderId=orderId,detailId=detailId}" javaType="list" select="getCustomSalesEmployeeEarn" />
+	</resultMap>
+	
+	<select id="getCustomSalesEmployeeEarn" parameterType="map" resultType="com.bjsxt.pojo.EmployeeEarn">
+		SELECT a.consumption_id 'employeeStructureName',b. name 'employeeName',a.earn,a.store_earn 'storeEarn'
+		FROM `shop_s_consumption_earn` a 
+		LEFT JOIN `oa_employee_info` b ON a.shoper_id=b.id
+		WHERE
+		a.consumption_id = #{consumptionId}
+		AND a.consumption_type_id = #{orderId}
+		AND	a.detail_id = #{detailId}
+    </select>
+    
+    
+</mapper>

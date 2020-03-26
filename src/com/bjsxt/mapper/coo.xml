@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt">
+	<select id="getShopConsume" parameterType="map" resultType="com.bjsxt.pojo.Consume">
+		select
+		a.service_shop_id 'shopId',
+		sum(a.service_number) 'consumeNumber',
+		sum(a.service_number *
+		c.price * e.percent) 'consumeMoney',
+		'cooperation' as 'type',
+		e.is_wenxiu as 'data',
+		a.is_count_comsume as 'data2'
+		from
+		shop_s_consumption_cooperation_project_done a
+		inner join
+		shop_s_consumption_cooperation_project_detail c on a.detail_id = c.id
+		inner join
+		shop_b_cooperation_project e on e.id = c.cooperation_id
+		<where>
+			<if test="status != null and status != ''">
+				<if test="status == 1">
+					and a.is_fail = 0
+				</if>
+				<if test="status == 2">
+					and a.is_fail = 1
+				</if>
+				<!-- and b.`status` = #{status} -->
+			</if>
+			<if test="isPass != null">
+				and d.is_pass = #{isPass}
+				<if test="isPass == 1">
+                   <![CDATA[ and d.pass_time <= b.consumption_date]]>
+				</if>
+			</if>
+			<if test="shopIds != null">
+				and a.service_shop_id in
+				<foreach collection="shopIds" index="index" item="item"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="beginConsumeDate != null">
+		      <![CDATA[ and a.service_date >= #{beginConsumeDate}]]>
+			</if>
+			<if test="endConsumeDate != null">
+	          <![CDATA[ and a.service_date <= #{endConsumeDate}]]>
+			</if>
+			<if test="beginSellDate != null">
+				and (case e.is_wenxiu
+				when 1 then 1=1
+				else <![CDATA[ b.consumption_date >= #{beginSellDate}]]>
+				end)
+
+			</if>
+		</where>
+		group by a.service_shop_id,e.is_wenxiu,a.is_count_comsume
+	</select>
+	
+	<select id="getShopConsume2" parameterType="map" resultType="com.bjsxt.pojo.Consume">
+		select
+		a.service_shop_id 'shopId',
+		sum(a.service_number) 'consumeNumber',
+		sum(a.service_number *
+		c.price * a.percent) 'consumeMoney',
+		'cooperation' as 'type',
+		e.is_wenxiu as 'data',
+		a.is_count_comsume as 'data2'
+		from
+		shop_s_consumption_cooperation_project_done a
+		inner join
+		shop_s_consumption_cooperation_project_detail c on a.detail_id = c.id
+		inner join
+		shop_b_cooperation_project e on e.id = c.cooperation_id
+		<where>
+			<if test="status != null and status != ''">
+				<if test="status == 1">
+					and a.is_fail = 0
+				</if>
+				<if test="status == 2">
+					and a.is_fail = 1
+				</if>
+				<!-- and b.`status` = #{status} -->
+			</if>
+			<if test="isPass != null">
+				and d.is_pass = #{isPass}
+				<if test="isPass == 1">
+                   <![CDATA[ and d.pass_time <= b.consumption_date]]>
+				</if>
+			</if>
+			<if test="shopIds != null">
+				and a.service_shop_id in
+				<foreach collection="shopIds" index="index" item="item"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="beginConsumeDate != null">
+		      <![CDATA[ and a.service_date >= #{beginConsumeDate}]]>
+			</if>
+			<if test="endConsumeDate != null">
+	          <![CDATA[ and a.service_date <= #{endConsumeDate}]]>
+			</if>
+			<if test="beginSellDate != null">
+				and (case e.is_wenxiu
+				when 1 then 1=1
+				else <![CDATA[ b.consumption_date >= #{beginSellDate}]]>
+				end)
+
+			</if>
+		</where>
+		group by a.service_shop_id,e.is_wenxiu,a.is_count_comsume
+	</select>
+
+</mapper>

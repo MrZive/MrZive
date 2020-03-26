@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt.dataOut.product">
+
+	<select id="getProductConsumption" parameterType="com.bjsxt.dataOut.entity.ProductConsumption" resultType="com.bjsxt.dataOut.entity.ProductConsumption">
+		SELECT
+		id,
+        consumption_id 'consumptionId',
+        store_pay 'storePay',
+        bankcard_pay 'bankcardPay',
+        cash_pay cashPay,
+        point_pay pointPay,
+        is_book isBook,
+        payment,
+        effective_earn effectiveEarn,
+        remark,
+        real_payment realPayment,
+        owe,
+        member_card_id memberCardId,
+        create_date createDate,
+        is_fail isFail,
+        shopid 'shopId',
+        buy_owe buyOwe,
+        is_detail_pay isDetailPay
+        FROM
+		shop_s_consumption_product
+		<where>
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="consumptionId != null">
+				AND consumption_id = #{consumptionId}
+			</if>
+			<if test="memberCardId != null">
+				AND member_card_id = #{memberCardId}
+			</if>
+			<if test="isFail != null">
+				AND is_fail = #{isFail}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="getProductDetailConsumption" parameterType="com.bjsxt.dataOut.entity.ProductDetailConsumption" resultType="com.bjsxt.dataOut.entity.ProductDetailConsumption">
+		SELECT
+		id,
+        consumption_id 'consumptionId',
+        consumption_product_id 'consumptionProductId',
+        product_id 'productId',
+        activity_id 'activityId',
+        buy_number buyNumber,
+        left_number leftNumber,
+        coupon,
+        is_introduce isIntroduce,
+        introducer,
+        member_card_id memberCardId,
+        create_date createDate,
+        is_send isSend,
+        buy_unit buyUnit,
+        consumption_set_id consumptionSetId,
+        price,
+        shop_id shopId,
+        is_fail isFail,
+        experience_price experiencePrice,
+        promotion_price promotionPrice,
+        market_price marketPrice,
+        left_unit leftUnit,
+        buy_type buyType,
+        express_type expressType,
+        channel_id channelId,
+        payment,
+        store_pay storePay,
+        bankcard_pay bankcardPay,
+        cash_pay cashPay,
+        is_book isBook,
+        owe,
+        buy_owe buyOwe,
+        effective_earn effectiveEarn,
+        real_payment realPayment,
+        is_pay,
+        remark,
+        actual_number actualNumber,
+        actual_price actualPrice,
+        actual_unit actualUnit
+		FROM
+		shop_s_consumption_product_detail
+		<where>
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="consumptionId != null">
+				AND consumption_id = #{consumptionId}
+			</if>
+			<if test="consumptionProductId != null">
+				AND consumption_product_id = #{consumptionProductId}
+			</if>
+			<if test="consumptionSetId != null">
+				AND consumption_set_id = #{consumptionSetId}
+			</if>
+			<if test="memberCardId != null">
+				AND member_card_id = #{memberCardId}
+			</if>
+		</where>
+	</select>
+	
+	
+	<select id="getProductGet" parameterType="com.bjsxt.dataOut.entity.ProductGet" resultType="com.bjsxt.dataOut.entity.ProductGet">
+		SELECT
+		id,
+        consumption_id 'consumptionId',
+        is_fail 'isFail',
+        create_date 'createDate',
+        member_card_id 'memberCardId',
+        remark
+        FROM shop_s_consumption_product_get_order
+        <where>
+        	<if test="id != null">
+        		AND id = #{id}
+        	</if>
+        	<if test="consumptionId != null">
+        		AND consumption_id = #{consumptionId}
+        	</if>
+        	<if test="memberCardId != null">
+				AND member_card_id = #{memberCardId}
+			</if>
+        	<if test="isFail != null">
+        		AND is_fail = #{isFail}
+        	</if>
+        </where>
+    </select>
+	
+	
+	<select id="getProductGetDetail" parameterType="com.bjsxt.dataOut.entity.ProductGetDetail" resultType="com.bjsxt.dataOut.entity.ProductGetDetail">
+		SELECT
+		id,
+        order_id orderId,
+        consumption_id consumptionId,
+        product_detail_id productDetailId,
+        number,
+        unit,
+        create_date createDate,
+        is_fail isFail,
+        price,
+        actual_get_number actualGetNumber,
+        remark
+		FROM
+		shop_s_consumption_product_get
+		<where>
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="orderId != null">
+				AND order_id = #{orderId}
+			</if>
+			<if test="consumptionId != null">
+				AND consumption_id = #{consumptionId}
+			</if>
+			<if test="productDetailId != null">
+				AND product_detail_id = #{productDetailId}
+			</if>
+		</where>
+	</select>
+
+</mapper>

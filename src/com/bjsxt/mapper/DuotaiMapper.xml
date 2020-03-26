@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt">
+	
+    <!-- 查询产品取货详情 -->
+    <select id="getDuotai" resultType="map">
+       	SELECT c.id,c.name,a.consumption_id,a.consumption_project_id,a.project_id,b.name 'productName',a.buy_number,a.number 
+FROM `shop_s_consumption_project_detail` a
+JOIN `shop_b_project_info` b ON a.project_id=b.id AND a.project_id = "598f9723-7bff-40e5-a62b-005adc60da86" AND a.number!=0
+JOIN shop_s_member_card c ON c.id=a.member_card_id
+    </select>
+    
+</mapper>

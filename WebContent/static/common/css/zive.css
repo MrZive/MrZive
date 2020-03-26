@@ -1,0 +1,86 @@
+/* 全局 */
+a {
+ text-decoration:none;
+ color:black;
+ outline:0
+}
+a:hover {
+ text-decoration:none;
+ color:#ff6c00
+}
+
+
+.data_list_container{
+ font:13px "Microsoft Yahei","SimSun",Tahoma,Helvetica,Arial,"\5b8b\4f53","宋体",ans-serif;
+}
+
+/* 表格用 */
+.zz-table{
+	font-size:13px;width:100%;
+	table-layout:fixed;border-collapse:collapse;
+}
+.zz-table-head{background:#eee;}
+.zz-table th{
+	text-align:center;border:1px solid #c0c0c0;font-weight:normal;
+	white-space:nowrap;overflow:hidden;text-overflow:ellipsis;height: 25px;
+	box-shadow:inset -10px 0 10px #F7F8F9, /*左边阴影*/  
+    inset 10px 0 10px #F7F8F9,/* 右边阴影*/  
+    inset 0 -10px 10px #F7F8F9,/* 顶部阴影*/  
+    inset 0 10px 10px #F7F8F9;/* 底边阴影*/  
+}
+.zz-table td{
+	padding:5px;text-align:left;
+	/*border:solid #f3f3f3 1px;*/
+	border:solid #E9EAEC 1px;
+	border-top-width1:0;
+}
+.zz-table tbody td{
+	white-space:nowrap;overflow:hidden;
+	text-overflow:ellipsis;
+}
+
+.zz-table tfoot td{
+	word-wrap: break-word;
+	word-break: normal;
+}
+
+.zz-table tbody tr.selected{background:#DEE5F9;}
+.zz-table tbody tr.selected:hover{background:#DEE5F9;}
+.zz-table tbody tr:hover{background:#F2F3FF;}
+.zz-table span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.zz-table .multi-line span{white-space:normal;}
+.zz-table input{padding:0;margin:0}
+
+
+
+/* 按钮用 */
+.btn {
+	font: 12px "Microsoft Yahei", "SimSun", Tahoma, Helvetica, Arial, "\5b8b\4f53", "宋体";
+	display:inline-block;
+	padding:1px 10px;border:1px solid #cccccc;
+	-webkit-transition: border .25s linear, color .25s linear, background-color .25s linear;
+ 	transition: border .25s linear, color .25s linear, background-color .25s linear;
+	-webkit-font-smoothing: subpixel-antialiased;
+	cursor:pointer;
+	border-radius: .5em;
+}
+.btn:hover{
+	color: #fff;
+	background-color: #ff9900;
+	border-color: #fd6c0b;
+}
+.btn.no-auth{color:#CCCCCC;}
+.btn.no-auth:hover{background:none;border:1px solid #eee;color:#CCCCCC;}
+.btn.no-auth .zzuploader{display:none;}
+
+
+/* 分页用 */
+.page-bar {padding1:5px 0;}
+.page-bar a{display:inline-block;*display:inline;min-width:5px;_width:5px;white-space:nowrap;padding:0px 5px;}
+.page-bar .current{color:#f90;}
+.page-bar input{border:1px solid #C0C0C0;position:relative;top:-1px;width:40px;heigth:20px;}
+
+.clear {clear:both;}
+
+hr {height:1px;border:none;border-bottom:1px solid #f0f0f0;margin-bottom:2px;}
+

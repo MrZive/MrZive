@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt.bi.member">
+	 <!-- 数据模型过滤套餐 -->
+    <sql id="fiterActivity">
+        (
+	        '100001',
+	        '25edc62a-532b-45e7-b989-950e4137275e',
+	        '75083549-95fd-4094-8d01-606abd3a8fd8',
+	        '1217a368-0c69-4b60-8740-fd3d3280de55',
+	        'e3282d90-ba84-44c4-87fc-37cc588045dc',
+	        'b20ef527-0a4a-4b29-9180-4a9a0c88fa5a'
+	        
+        )
+    </sql>
+    <!-- 拓客套餐 -->
+    <sql id="tuokeActivity">
+        (
+	        '100001',
+	        '1217a368-0c69-4b60-8740-fd3d3280de55',
+	        'e3282d90-ba84-44c4-87fc-37cc588045dc',
+	        'b20ef527-0a4a-4b29-9180-4a9a0c88fa5a'
+        )
+    </sql>
+	<select id="getShopConsume" parameterType="map" resultType="com.bjsxt.pojo.Consume">
+        <!-- 产品 消耗-->
+        select 
+		b.shop_id 'shopId',
+		sum(a.number) 'consumeNumber',
+		sum(case c.buy_unit 
+        when e.bulk_unit then (a.number * c.price)
+        when e.boxes_unit then (c.price / e.num * a.number) 
+        else 0
+        end) 'consumeMoney',
+		'product' as 'type',
+		b.member_card_id 'memberCardId',
+		null as 'data',
+		null as 'data2'
+		from shop_s_consumption_product_get a 
+		inner join shop_s_consumption b on a.consumption_id = b.id 
+		inner join shop_s_consumption_product_detail c on a.product_detail_id = c.id
+		inner join shop_s_member_card d on d.id = b.member_card_id 
+		inner join shop_b_product_info e on e.id = c.product_id
+		<where>
+           <if test="status != null and status != ''">
+               and  b.`status` = #{status}
+           </if>
+           <if test="isPass != null">
+               and  d.is_pass = #{isPass} 
+               <if test="isPass == 1">
+                   <![CDATA[ and d.pass_time <= b.consumption_date]]>
+               </if>
+           </if>
+           <if test="shopIds != null">
+               and b.shop_id in
+               <foreach collection="shopIds" index="index" item="item" open="(" separator="," close=")">
+                   #{item}
+               </foreach> 
+           </if>
+           <if test="beginConsumeDate != null">
+		      <![CDATA[ and b.consumption_date >= #{beginConsumeDate}]]>
+	       </if>
+	       <if test="endConsumeDate != null">
+	          <![CDATA[ and b.consumption_date <= #{endConsumeDate}]]>
+	       </if>
+        </where>
+		group by b.member_card_id
+		
+		union all
+		
+		<!-- 产品负数冲正 -->
+		SELECT 
+		n.shop_id 'shopId',
+		SUM(a.number) 'consumeNumber',
+		SUM(CASE c.buy_unit 
+		WHEN e.bulk_unit THEN (a.number * c.price)
+		WHEN e.boxes_unit THEN (c.price / e.num * a.number) 
+		ELSE 0
+		END) 'consumeMoney',
+		'productNegative' AS 'type',
+		n.member_card_id 'memberCardId',
+		NULL AS 'data',
+		NULL AS 'data2'
+		FROM `shop_s_negative_number` n
+		INNER JOIN shop_s_consumption_product_get a ON n.detail_id = a.product_detail_id AND n.id=a.`order_id`
+		INNER JOIN shop_s_consumption_product_detail c ON a.product_detail_id = c.id
+		INNER JOIN shop_s_member_card d ON d.id = n.member_card_id 
+		INNER JOIN shop_b_product_info e ON e.id = c.product_id
+		<where>
+		   <if test="isPass != null">
+			   and  d.is_pass = #{isPass} 
+		   </if>
+		   <if test="shopIds != null">
+			   and n.shop_id in
+			   <foreach collection="shopIds" index="index" item="item" open="(" separator="," close=")">
+				   #{item}
+			   </foreach> 
+		   </if>
+		   <if test="beginConsumeDate != null">
+			  <![CDATA[ and n.create_date_time >= #{beginConsumeDate}]]>
+		   </if>
+		   <if test="endConsumeDate != null">
+			  <![CDATA[ and n.create_date_time <= #{endConsumeDate}]]>
+		   </if>
+		</where>
+		group by n.member_card_id
+		
+		union all
+		
+		<!-- 项目目消耗 -->
+		select 
+		b.shop_id 'shopId',
+		sum(a.done_number) 'consumeNumber',
+		sum(a.done_number * c.price) 'consumeMoney',
+		'project' as 'type',
+		b.member_card_id 'memberCardId',
+		null as 'data',
+		null as 'data2'
+		from shop_s_consumption_project_done a 
+		inner join shop_s_consumption b on a.consumption_id = b.id
+		inner join shop_s_consumption_project_detail c on a.project_detail_id = c.id
+		inner join shop_s_member_card d on d.id = b.member_card_id
+		<where>
+           <if test="status != null and status != ''">
+               and  b.`status` = #{status}
+           </if>
+           <if test="isPass != null">
+               and  d.is_pass = #{isPass} 
+               <if test ="isPass == 1">
+                   <![CDATA[ and d.pass_time <= b.consumption_date]]>
+                   <!-- 99/999套餐不在内 -->
+                   and c.activity_id not in 
+                   <include refid="fiterActivity"/>
+               </if>
+               
+           </if>
+           <if test="shopIds != null">
+               and b.shop_id in
+               <foreach collection="shopIds" index="index" item="item" open="(" separator="," close=")">
+                   #{item}
+               </foreach> 
+           </if>
+           <if test="beginConsumeDate != null">
+		      <![CDATA[ and b.consumption_date >= #{beginConsumeDate}]]>
+	       </if>
+	       <if test="endConsumeDate != null">
+	          <![CDATA[ and b.consumption_date <= #{endConsumeDate}]]>
+	       </if>
+        </where>
+		group by b.member_card_id
+		
+		union all
+		
+		<!-- 项目负数冲正 -->
+		SELECT 
+		n.shop_id 'shopId',
+		SUM(a.done_number) 'consumeNumber',
+		SUM(a.done_number * c.price) 'consumeMoney',
+		'projectNegative' AS 'type',
+		n.member_card_id 'memberCardId',
+		NULL AS 'data',
+		NULL AS 'data2'
+		FROM `shop_s_negative_number` n
+		INNER JOIN shop_s_consumption_project_done a ON a.project_detail_id = n.detail_id AND n.id=a.`order_id`
+		INNER JOIN shop_s_consumption_project_detail c ON a.project_detail_id = c.id
+		INNER JOIN shop_s_member_card d ON d.id = n.member_card_id 
+		<where>
+		   <if test="isPass != null">
+			   and  d.is_pass = #{isPass} 
+			   <if test ="isPass == 1">
+				   <!-- 99/999套餐不在内 -->
+				   and c.activity_id not in 
+				   <include refid="fiterActivity"/>
+			   </if>
+			   
+		   </if>
+		   <if test="shopIds != null">
+			   and n.shop_id in
+			   <foreach collection="shopIds" index="index" item="item" open="(" separator="," close=")">
+				   #{item}
+			   </foreach> 
+		   </if>
+		   <if test="beginConsumeDate != null">
+			  <![CDATA[ and n.create_date_time >= #{beginConsumeDate}]]>
+		   </if>
+		   <if test="endConsumeDate != null">
+			  <![CDATA[ and n.create_date_time <= #{endConsumeDate}]]>
+		   </if>
+		</where>
+		group by n.member_card_id
+		
+		union all
+		
+		<!-- 纹绣项目负数冲正 -->
+		SELECT 
+		n.shop_id 'shopId',
+		SUM(a.done_number) 'consumeNumber',
+		SUM(a.done_number * c.price) 'consumeMoney',
+		'projectWxNegative' AS 'type',
+		n.member_card_id 'memberCardId',
+		NULL AS 'data',
+		NULL AS 'data2'
+		FROM `shop_s_negative_number` n
+		INNER JOIN shop_s_wx_consumption_project_done a ON a.project_detail_id = n.detail_id AND n.id=a.`consumption_id`
+		INNER JOIN shop_s_wx_consumption_project_detail c ON a.project_detail_id = c.id
+		INNER JOIN shop_s_member_card d ON d.id = n.member_card_id 
+		<where>
+		   <if test="isPass != null">
+			   and  d.is_pass = #{isPass} 
+		   </if>
+		   <if test="shopIds != null">
+			   and n.shop_id in
+			   <foreach collection="shopIds" index="index" item="item" open="(" separator="," close=")">
+				   #{item}
+			   </foreach> 
+		   </if>
+		   <if test="beginConsumeDate != null">
+			  <![CDATA[ and n.create_date_time >= #{beginConsumeDate}]]>
+		   </if>
+		   <if test="endConsumeDate != null">
+			  <![CDATA[ and n.create_date_time <= #{endConsumeDate}]]>
+		   </if>
+		</where>
+		group by n.member_card_id
+		
+		union all
+		
+		<!-- 合作项目消耗 （201909前是按照基础资料的比例来计算金额消耗）-->
+		<!-- 合作项目消耗 （201909后是直接按照合作消耗消耗表上新增的比例来计算金额消耗）-->
+		select 
+		a.service_shop_id 'shopId',
+		sum(a.service_number) 'consumeNumber',
+		sum(a.service_number * c.price * a.percent) 'consumeMoney',
+		'cooperation' as 'type',
+		b.member_card_id 'memberCardId',
+		e.is_wenxiu as 'data',
+		a.is_count_comsume as 'data2'
+		from shop_s_consumption_cooperation_project_done a 
+		inner join shop_s_consumption b on a.consumption_id = b.id
+		inner join shop_s_consumption_cooperation_project_detail c on a.detail_id = c.id
+		inner join shop_s_member_card d on d.id = b.member_card_id
+		inner join shop_b_cooperation_project e on e.id = c.cooperation_id
+		<where>
+           <if test="status != null and status != ''">
+               <if test="status == 1">
+                   and a.is_fail = 0
+               </if>
+               <if test="status == 2">
+                   and a.is_fail = 1
+               </if>
+               <!-- and  b.`status` = #{status} -->
+           </if>
+           <if test="isPass != null">
+                and  d.is_pass = #{isPass} 
+               <if test="isPass == 1">
+                   <![CDATA[ and d.pass_time <= b.consumption_date]]>
+               </if>
+           </if>
+           <if test="shopIds != null">
+               and a.service_shop_id in
+               <foreach collection="shopIds" index="index" item="item" open="(" separator="," close=")">
+                   #{item}
+               </foreach> 
+           </if>
+           <if test="beginConsumeDate != null">
+		      <![CDATA[ and a.service_date >= #{beginConsumeDate}]]>
+	       </if>
+	       <if test="endConsumeDate != null">
+	          <![CDATA[ and a.service_date <= #{endConsumeDate}]]>
+	       </if>
+	       <if test="beginSellDate != null" >
+	           and (case e.is_wenxiu 
+	           when 1 then 1=1
+	           else <![CDATA[ b.consumption_date >= #{beginSellDate}]]> end)
+	           
+	       </if>
+        </where>
+		group by b.member_card_id,e.is_wenxiu,a.is_count_comsume
+    </select>
+    
+    
+    <select id="getNewEmployeeEarns" resultType="com.bjsxt.pojo.EmployeeEarn">
+		
+		<!-- 卖青花瓷项目、卖青花瓷产品、青花瓷项目服务、青花瓷产品取货、还青花瓷项目、还青花瓷产品、卖天使之纹项目 、还天使之纹项目、天使之纹项目手工业绩  19年04月15后卖套餐（项目、产品、纹绣   合作项目有比例不一样）和还套餐（项目、产品）业绩查询归类到此处-->
+		select
+		a.id,
+		null as 'memberCardId',
+		<if test="isForWenxiu != null">
+		a.detail_id 'detailId',
+		a.type_id 'returnId',
+		</if>
+		a.consumption_shop_id 'resultStructureId',
+		(select name from oa_department_structure where id = a.consumption_shop_id) 'resultStructureName',
+		c.structure_id 'employeeStructureId',
+		(select name from oa_department_structure where id = c.structure_id) 'employeeStructureName',
+		a.shoper_id 'employeeId',
+		c.`name` 'employeeName',
+		a.consumption_id 'businessId',
+		a.consumption_type_id 'orderId',
+		ifnull(a.earn, 0) 'earn',
+		a.type 'resultType',
+		a.is_fail 'isFail',
+		a.consumption_date 'consumptionDate',
+		ifnull(a.store_earn, 0) 'storeEarn',
+		ifnull(a.return_product_earn, 0) 'refundProductEarn',
+		ifnull(a.return_project_earn, 0) 'refundProjectEarn',
+		1 as 'percent'
+		from 
+		shop_s_consumption_earn a 
+		inner join oa_employee_info c 
+		on <![CDATA[ a.consumption_date >=  #{beginDate} and a.consumption_date <=  #{endDate}]]> 
+		<if test="isForWenxiu == null">
+		and a.type in (2,51,3,52,4,53,5,54,7,59,8,56,34,35,36,37,44,45,48,49,80,81,83,85,86)
+		</if>
+		<if test="isForWenxiu != null">
+		<if test="isForWenxiu == 1">
+		<!-- 纹绣购买项目 -->
+		and a.type in (34,35)
+		</if>
+		<if test="isForWenxiu == 2">
+		<!-- 纹绣手工 -->
+		and a.type in (36,37,44,45)
+		</if>
+		<if test="isForWenxiu == 3">
+		<!-- 纹绣还款单 -->
+		and a.type in (48,49)
+		</if>
+		</if>
+		and a.shoper_id = c.id 
+		<where>
+		    <if test="earnStructureId != null and earnStructureId != ''">
+		        and a.consumption_shop_id= #{earnStructureId}
+		    </if>
+		    <if test="employeeStructureId != null and employeeStructureId != ''">
+		        and c.structure_id= #{employeeStructureId}
+		    </if>
+		    <if test="isFail != null">
+		        and a.is_fail = #{isFail}
+		    </if>
+		    <if test="isFailList != null">
+		        and a.is_fail in
+		        <foreach collection="isFailList" index="index" item="item" open="(" separator="," close=")">
+		            #{item}
+		        </foreach> 
+		    </if>
+		</where>
+		<if test="isForWenxiu == null">
+		union all
+		<!--兼容19年前04月15前 卖青花瓷套餐、还青花瓷套餐(此处拆分是为了得知道此套餐是项目还是产品类型，因为项目和产品提成点不一样) -->
+		select
+		a.id,
+		a.consumption_shop_id 'resultStructureId',
+		d.member_card_id 'memberCardId',
+		(select name from oa_department_structure where id = a.consumption_shop_id) 'resultStructureName',
+		c.structure_id 'employeeStructureId',
+		(select name from oa_department_structure where id = c.structure_id) 'employeeStructureName',
+		a.shoper_id 'employeeId',
+		c.`name` 'employeeName',
+		a.consumption_id 'businessId',
+		a.consumption_type_id 'orderId',
+		ifnull(a.earn, 0) 'earn',
+		<!-- 套餐中  1是项目，2是产品，3是合作项目 -->
+		case 
+		when a.type in (9,55) then (
+			case e.act_type
+			when 1 then 85 
+			when 2 then 86
+			when 3 then 87
+			else 2311244 end	
+		)
+		when a.type in (1,99,50) then (
+			case e.act_type
+			when 1 then 80 
+			when 2 then 81 
+			when 3 then 82
+			else 132132 end
+		)
+		else '3123123123' end 'resultType',
+		a.is_fail 'isFail',
+		a.consumption_date 'consumptionDate',
+		ifnull(a.store_earn, 0) 'storeEarn',
+		ifnull(a.return_product_earn, 0) 'refundProductEarn',
+		ifnull(a.return_project_earn, 0) 'refundProjectEarn',
+		1 as 'percent'
+		from 
+		shop_s_consumption_earn a 
+		inner join oa_employee_info c 
+		on <![CDATA[ a.consumption_date >=  #{beginDate} and a.consumption_date <=  #{endDate}]]> 
+		and a.type in (1,99,50,9,55)
+		and a.shoper_id = c.id  
+		inner join shop_s_consumption_set_detail d on d.consumption_set_id = a.consumption_type_id
+		inner join shop_b_activity_info e on e.id = d.activity_id
+		<where>
+		    <if test="earnStructureId != null and earnStructureId != ''">
+		        and a.consumption_shop_id = #{earnStructureId}
+		    </if>
+		    <if test="employeeStructureId != null and employeeStructureId != ''">
+		        and c.structure_id= #{employeeStructureId}
+		    </if>
+		    <if test="isFail != null">
+		        and a.is_fail = #{isFail}
+		    </if>
+		    <if test="isFailList != null">
+		        and a.is_fail in
+		        <foreach collection="isFailList" index="index" item="item" open="(" separator="," close=")">
+		            #{item}
+		        </foreach> 
+		    </if>
+		</where> 
+		
+		union all
+		<!-- 卖合作项目（非纹绣先给9成14） 因为做合作项目和购买合作项目关联业绩关系不一样，不得不进行分开兼容   19年4月15套餐合作项目业绩82也放在此处 -->
+		select
+		a.id,
+		d.member_card_id 'memberCardId',
+		a.consumption_shop_id 'resultStructureId',
+		(select name from oa_department_structure where id = a.consumption_shop_id) 'resultStructureName',
+		c.structure_id 'employeeStructureId',
+		(select name from oa_department_structure where id = c.structure_id) 'employeeStructureName',
+		a.shoper_id 'employeeId',
+		c.`name` 'employeeName',
+		a.consumption_id 'businessId',
+		a.consumption_type_id 'orderId',
+		ifnull(a.earn, 0) 'earn',
+		a.type 'resultType',
+		a.is_fail 'isFail',
+		a.consumption_date 'consumptionDate',
+		ifnull(a.store_earn, 0) 'storeEarn',
+		ifnull(a.return_product_earn, 0) 'refundProductEarn',
+		ifnull(a.return_project_earn, 0) 'refundProjectEarn',
+		e.percent as 'percent'
+		from 
+		shop_s_consumption_earn a 
+		inner join oa_employee_info c 
+		on <![CDATA[ a.consumption_date >=  #{beginDate} and a.consumption_date <=  #{endDate}]]> 
+		and a.type in (6,14,82)
+		and a.shoper_id = c.id  
+		left join shop_s_consumption_cooperation_project_detail d on d.consumption_id = a.consumption_id
+		left join shop_b_cooperation_project e on e.id = d.cooperation_id
+		<where>
+		    <if test="earnStructureId != null and earnStructureId != ''">
+		        and a.consumption_shop_id= #{earnStructureId}
+		    </if>
+		    <if test="employeeStructureId != null and employeeStructureId != ''">
+		        and c.structure_id= #{employeeStructureId}
+		    </if>
+		    <if test="isFail != null">
+		        and a.is_fail = #{isFail}
+		    </if>
+		    <if test="isFailList != null">
+		        and a.is_fail in
+		        <foreach collection="isFailList" index="index" item="item" open="(" separator="," close=")">
+		            #{item}
+		        </foreach> 
+		    </if>
+		</where>
+		
+		union all
+		<!-- 合作项目还款查法、（卖还合作项目时为拿比例确定是否应该扣储值） -->
+		select
+		a.id,
+		d.member_card_id 'memberCardId',
+		b.shop_id 'resultStructureId',
+		(select name from oa_department_structure where id = b.shop_id) 'resultStructureName',
+		c.structure_id 'employeeStructureId',
+		(select name from oa_department_structure where id = c.structure_id) 'employeeStructureName',
+		a.shoper_id 'employeeId',
+		c.`name` 'employeeName',
+		a.consumption_id 'businessId',
+		a.consumption_type_id 'orderId',
+		ifnull(a.earn, 0) 'earn',
+		a.type 'resultType',
+		a.is_fail 'isFail',
+		a.consumption_date 'consumptionDate',
+		ifnull(a.store_earn, 0) 'storeEarn',
+		ifnull(a.return_product_earn, 0) 'refundProductEarn',
+		ifnull(a.return_project_earn, 0) 'refundProjectEarn',
+		f.percent as 'percent'
+		from 
+		shop_s_consumption_earn a 
+		inner join shop_s_consumption b 
+		on <![CDATA[ a.consumption_date >=  #{beginDate} and a.consumption_date <=  #{endDate}]]> 
+		and a.type in (10,16)
+		and a.consumption_id = b.id
+		inner join oa_employee_info c on a.shoper_id = c.id  
+		left join shop_s_consumption_return d on d.return_consumption_id = a.consumption_id
+		left join shop_s_consumption_cooperation_project_detail e on e.consumption_cooperation_id = d.consumption_pro_id
+		left join shop_b_cooperation_project f on f.id = e.cooperation_id
+		<where>
+		    <if test="earnStructureId != null and earnStructureId != ''">
+		        and b.shop_id= #{earnStructureId}
+		    </if>
+		    <if test="employeeStructureId != null and employeeStructureId != ''">
+		        and c.structure_id= #{employeeStructureId}
+		    </if>
+		    <if test="isFail != null">
+		        and a.is_fail = #{isFail}
+		    </if>
+		    <if test="isFailList != null">
+		        and a.is_fail in
+		        <foreach collection="isFailList" index="index" item="item" open="(" separator="," close=")">
+		            #{item}
+		        </foreach> 
+		    </if>
+		</where>
+		
+		
+		<!-- 05月1非纹绣做合作项目产生的预收业绩,非纹绣服务逐次返还剩余一成18 -->
+		union all
+		select
+		a.id,
+		d.member_card_id 'memberCardId',
+		b.service_shop_id 'resultStructureId',
+		(select name from oa_department_structure where id = b.service_shop_id) 'resultStructureName',
+		c.structure_id 'employeeStructureId',
+		(select name from oa_department_structure where id = c.structure_id) 'employeeStructureName',
+		a.shoper_id 'employeeId',
+		c.`name` 'employeeName',
+		a.consumption_id 'businessId',
+		a.consumption_type_id 'orderId',
+		ifnull(a.earn, 0) 'earn',
+		a.type 'resultType',
+		a.is_fail 'isFail',
+		a.consumption_date 'consumptionDate',
+		ifnull(a.store_earn, 0) 'storeEarn',
+		ifnull(a.return_product_earn, 0) 'refundProductEarn',
+		ifnull(a.return_project_earn, 0) 'refundProjectEarn',
+		e.percent as 'percent'
+		from 
+		shop_s_consumption_earn a 
+		inner join shop_s_consumption_cooperation_project_done b 
+		on <![CDATA[ a.consumption_date >=  #{beginDate} and a.consumption_date <=  #{endDate}]]> 
+		and a.type in (18)
+		and b.id = a.consumption_type_id
+		inner join oa_employee_info c on a.shoper_id = c.id  
+		left join shop_s_consumption_cooperation_project_detail d on d.id = b.detail_id
+		left join shop_b_cooperation_project e on e.id = d.cooperation_id
+		<where>
+		    <if test="earnStructureId != null and earnStructureId != ''">
+		        and b.service_shop_id= #{earnStructureId}
+		    </if>
+		    <if test="employeeStructureId != null and employeeStructureId != ''">
+		        and c.structure_id= #{employeeStructureId}
+		    </if>
+		    <if test="isFail != null">
+		        and a.is_fail = #{isFail}
+		    </if>
+		    <if test="isFailList != null">
+		        and a.is_fail in
+		        <foreach collection="isFailList" index="index" item="item" open="(" separator="," close=")">
+		            #{item}
+		        </foreach> 
+		    </if>
+		</where>
+		
+		
+		<!-- 针对所有退有额外查法 -->
+		union all
+		select
+		a.id,
+		b.member_card_id 'memberCardId',
+		a.consumption_shop_id 'resultStructureId',
+		(select name from oa_department_structure where id = a.consumption_shop_id) 'resultStructureName',
+		c.structure_id 'employeeStructureId',
+		(select name from oa_department_structure where id = c.structure_id ) 'employeeStructureName',
+		a.shoper_id 'employeeId',
+		c.`name` 'employeeName',
+		a.consumption_id 'businessId',
+		a.consumption_type_id 'orderId',
+		ifnull(a.earn, 0) 'earn',
+		a.type 'resultType',
+		a.is_fail 'isFail',
+		b.check_date 'consumptionDate',
+		ifnull(a.store_earn, 0) 'storeEarn',
+		ifnull(a.return_product_earn, 0) 'refundProductEarn',
+		ifnull(a.return_project_earn, 0) 'refundProjectEarn',
+		1 as 'percent'
+		from 
+		shop_s_consumption_earn a 
+		inner join shop_s_return_transfer b on <![CDATA[ b.check_date >=  #{beginDate} and b.check_date <=  #{endDate}]]> 
+		and a.type in (17,27,57,28,58,29,30,60,31,61,32,33,40,41,42,43,46,47) 
+		and a.consumption_id = b.id
+		inner join oa_employee_info c on a.shoper_id = c.id  
+		<where>
+		    <if test="earnStructureId != null and earnStructureId != ''">
+		        and a.consumption_shop_id= #{earnStructureId}
+		    </if>
+		    <if test="employeeStructureId != null and employeeStructureId != ''">
+		        and c.structure_id= #{employeeStructureId}
+		    </if>
+		    <if test="isFail != null">
+		        and a.is_fail = #{isFail}
+		    </if>
+		    <if test="isFailList != null">
+		        and a.is_fail in
+		        <foreach collection="isFailList" index="index" item="item" open="(" separator="," close=")">
+		            #{item}
+		        </foreach> 
+		    </if>
+		</where> 
+		</if>
+    </select>
+
+</mapper>
