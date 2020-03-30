@@ -79,10 +79,10 @@ public class MyProductGet{
 			this.createDate = sf.format(productGet.getCreateDate());
 		}
 		
-		if(productGet.getRemark()!=null && productGet.getRemark().length()>0){
-			this.remark = productGet.getRemark();
-		}else if(productGetDetail.getRemark()!=null && productGetDetail.getRemark().length()>0){
+		if(productGetDetail.getRemark()!=null && productGetDetail.getRemark().length()>0){
 			this.remark = productGetDetail.getRemark();
+		}else if(productGet.getRemark()!=null && productGet.getRemark().length()>0){
+			this.remark = productGet.getRemark();
 		}
 	}
 

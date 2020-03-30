@@ -65,6 +65,7 @@ public class ProductGetDao extends BaseDao{
 		}
 		
 		ExcelUtilForDO.toFile(jsonArray, MyProductGet.class);
+		closeSession();
 	}
 	
 	

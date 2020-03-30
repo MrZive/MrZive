@@ -33,6 +33,10 @@ public class BaseDao {
 		return session;
 	}
 	
+	static public void closeSession(){
+		session.close();
+	}
+	
 	
 	//会员卡----------------------------------------------------------------------------------------------------------------------------------------------------------------
 	static public MemberCard getMemberCardById(String id){

@@ -109,11 +109,10 @@
 	<select id="getProductGet" parameterType="com.bjsxt.dataOut.entity.ProductGet" resultType="com.bjsxt.dataOut.entity.ProductGet">
 		SELECT
 		id,
-        consumption_id 'consumptionId',
-        is_fail 'isFail',
-        create_date 'createDate',
-        member_card_id 'memberCardId',
-        remark
+        consumption_id consumptionId,
+        is_fail isFail,
+        create_date createDate,
+        member_card_id memberCardId
         FROM shop_s_consumption_product_get_order
         <where>
         	<if test="id != null">
