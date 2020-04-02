@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt.dataOut.return">
+
+	<!-- 获取还款单 -->
+	<select id="getWenxiuResturnOrderDetail" parameterType="com.bjsxt.dataOut.entity.ReturnOrderDetail" resultType="com.bjsxt.dataOut.entity.ReturnOrderDetail">
+		SELECT
+		a.id,
+		a.return_date 'returnDate',
+		a.detail_id 'detailId',
+		a.return_consumption_id 'returnOrderId',
+		a.store_pay 'store',
+		a.bankcard_pay 'pos',
+		a.cash_pay
+		'cash',
+		a.shop_id 'shopId',
+		a.is_fail 'isFail',
+		'还纹绣项目' as 'type',
+		a.create_date 'createDate',
+		b.consumption_project_id 'buyOrderId',
+		c.id 'businessId',
+		c.`status`,
+		b.buy_number 'itemNumber'
+		from
+		shop_s_wx_consumption_return a
+		inner join shop_s_wx_consumption_project_detail b on b.consumption_project_id = a.consumption_pro_id
+		inner join shop_s_wx_consumption c on c.id = b.consumption_id
+		<where>
+			<if test="beginReturnDate != null">
+		      <![CDATA[ and a.return_date >= #{beginReturnDate}]]>
+			</if>
+			<if test="endReturnDate != null">
+		      <![CDATA[ and a.return_date  <= #{endReturnDate}]]>
+			</if>
+			<if test="isFail != null">
+			    and a.is_fail = #{isFail}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getResturnOrderDetail" parameterType="com.bjsxt.dataOut.entity.ReturnOrderDetail" resultType="com.bjsxt.dataOut.entity.ReturnOrderDetail">
+		<!-- 还项目 为区分新旧还款数据 增加detail_id is null判断保证导出新旧还款不重复-->
+		SELECT
+		a.id,
+		a.return_consumption_id 'returnOrderId',
+		b.consumption_project_id 'buyOrderId',
+		c.id 'businessId',
+		a.store_pay 'store',
+		a.bankcard_pay 'pos',
+		a.cash_pay 'cash',
+		a.shop_id 'shopId',
+		a.is_fail 'isFail',
+		'还项目' as 'type',
+		a.return_date 'createDate',
+		c.`status`,
+		b.buy_number 'itemNumber',
+		from
+		shop_s_consumption_return a
+		inner join shop_s_consumption_project_detail b on a.type = 'project' and b.consumption_project_id = a.consumption_pro_id and a.detail_id is null
+		inner join shop_s_consumption c on c.id = b.consumption_id
+		<where>
+			<if test="beginReturnDate != null">
+		      <![CDATA[ and a.return_date >= #{beginReturnDate}]]>
+			</if>
+			<if test="endReturnDate != null">
+		      <![CDATA[ and a.return_date  <= #{endReturnDate}]]>
+			</if>
+			<if test="isFail != null">
+			    and a.is_fail = #{isFail}
+			</if>
+		</where>
+
+		<!-- 还产品 -->
+		union all
+		SELECT
+		a.id,
+		a.return_consumption_id 'returnOrderId',
+		b.consumption_product_id 'buyOrderId',
+		c.id 'businessId',
+		a.store_pay 'store',
+		a.bankcard_pay 'pos',
+		a.cash_pay
+		'cash',
+		a.shop_id 'shopId',
+		a.is_fail 'isFail',
+		'还产品' as 'type',
+		a.return_date 'createDate',
+		c.`status`,
+		b.buy_number 'itemNumber',
+		from
+		shop_s_consumption_return a
+		inner join shop_s_consumption_product_detail b on a.type = 'product' and b.consumption_product_id = a.consumption_pro_id and a.detail_id is null
+		inner join shop_s_consumption c on c.id = b.consumption_id
+		<where>
+			<if test="beginReturnDate != null">
+		      <![CDATA[ and a.return_date >= #{beginReturnDate}]]>
+			</if>
+			<if test="endReturnDate != null">
+		      <![CDATA[ and a.return_date  <= #{endReturnDate}]]>
+			</if>
+			<if test="isFail != null">
+			    and a.is_fail = #{isFail}
+			</if>
+		</where>
+
+		<!-- 还套餐 -->
+		union all
+		SELECT
+		a.return_consumption_id 'returnOrderId',
+		a.store_pay 'store',
+		a.bankcard_pay 'pos',
+		a.cash_pay
+		'cash',
+		a.shop_id 'shopId',
+		a.is_fail 'isFail',
+		(SELECT
+		case act_type
+		when 1 then '还项目套餐'
+		when 2 then '还产品套餐'
+		when 3 then '还合作项目套餐'
+		else '未知' end as 'type'
+		from shop_b_activity_info where id = b.activity_id) as 'type',
+		a.return_date 'createDate',
+		b.consumption_set_id 'buyOrderId',
+		c.id 'businessId',
+		c.`status`,
+		d.`name` 'shopName',
+		e.`phone` 'cardNo',
+		e.`name` 'memberName',
+		e.is_pass 'isPass',
+		e.pass_time 'passTime',
+		b.buy_number 'itemNumber',
+		(SELECT no from shop_b_activity_set where activity_id = b.activity_id) 'itemNo',
+		f.`name` 'itemName',
+		1 as percent
+		from
+		shop_s_consumption_return a
+		inner join shop_s_consumption_set_detail b on a.type = 'set' and
+		b.consumption_set_id = a.consumption_pro_id and a.detail_id is null
+		inner join shop_s_consumption c on c.id = b.consumption_id
+		left join oa_department_structure d on d.id = a.shop_id
+		left join
+		shop_s_member_card e on e.id = c.member_card_id
+		left join
+		shop_b_activity_info f on f.id = b.activity_id
+		<where>
+			<if test="beginReturnDate != null">
+		      <![CDATA[ and a.return_date >= #{beginReturnDate}]]>
+			</if>
+			<if test="endReturnDate != null">
+		      <![CDATA[ and a.return_date  <= #{endReturnDate}]]>
+			</if>
+			<if test="isFail != null">
+			    and a.is_fail = #{isFail}
+			</if>
+		</where>
+
+		<!-- 还合作项目 -->
+		union all
+		SELECT
+		a.return_consumption_id 'returnOrderId',
+		a.store_pay 'store',
+		a.bankcard_pay 'pos',
+		a.cash_pay
+		'cash',
+		a.shop_id 'shopId',
+		a.is_fail 'isFail',
+		'还合作项目' as 'type',
+		a.return_date 'createDate',
+		b.consumption_cooperation_id 'buyOrderId',
+		c.id 'businessId',
+		c.`status`,
+		b.buy_number 'itemNumber',
+		from
+		shop_s_consumption_return a
+		inner join shop_s_consumption_cooperation_project_detail b on a.type = 'cooperation_project' and b.consumption_cooperation_id = a.consumption_pro_id
+		inner join shop_s_consumption c on c.id = b.consumption_id
+		<where>
+			<if test="beginReturnDate != null">
+		      <![CDATA[ and a.return_date >= #{beginReturnDate}]]>
+			</if>
+			<if test="endReturnDate != null">
+		      <![CDATA[ and a.return_date  <= #{endReturnDate}]]>
+			</if>
+			<if test="isFail != null">
+			    and a.is_fail = #{isFail}
+			</if>
+			<if test="shopIds != null">
+				and a.shop_id in
+				<foreach collection="shopIds" index="index" item="item"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	
+	<!-- 201906之后 还款要区分项目产品 detail_id is not null 区分新旧还款-->
+	<select id="getNewResturnOrderDetail" parameterType="com.bjsxt.dataOut.entity.ReturnOrderDetail" resultType="com.bjsxt.dataOut.entity.ReturnOrderDetail">
+		<!-- 还项目、产品、套餐 -->
+		SELECT 
+		a.return_consumption_id 'returnOrderId',
+		a.adviser,
+		0 AS 'receiptShopType',
+		a.cosmetologist,
+		a.cosmetologist2,
+		a.cosmetologist3,
+		a.store_pay 'store',
+		a.bankcard_pay 'pos',
+		a.cash_pay 'cash',
+		a.shop_id 'shopId',
+		a.is_fail 'isFail',
+	    case 
+		when k.id is not null and k.consumption_set_id is null then '还项目'
+		when k.id is not null and k.consumption_set_id is not null then '还套餐项目'
+		when l.id is not null and l.consumption_set_id is null then '还产品'
+		when l.id is not null and l.consumption_set_id is not null then '还套餐产品'
+		else '系统错误？' end as 'type',
+		a.return_date 'createDate',
+		case 
+		when k.id is not null then k.consumption_id
+		when l.id is not null then l.consumption_id
+		else '系统错误？' end as 'businessId',
+		a.consumption_pro_id 'buyOrderId',
+		case 
+		when k.id is not null then (SELECT name from shop_b_project_info where id = k.project_id)
+		when l.id is not null then (SELECT name from shop_b_product_info where id = l.product_id)
+		else '系统错误？' end as 'itemName',
+  	    from
+		shop_s_consumption_return a 
+		left join shop_s_consumption_project_detail k on k.id = a.detail_id
+		left join shop_s_consumption_product_detail l on l.id = a.detail_id
+		<where>
+		    a.detail_id is not null 
+			<if test="beginReturnDate != null">
+		      <![CDATA[ and a.return_date >= #{beginReturnDate}]]>
+			</if>
+			<if test="endReturnDate != null">
+		      <![CDATA[ and a.return_date  <= #{endReturnDate}]]>
+			</if>
+			<if test="isFail != null">
+			    and a.is_fail = #{isFail}
+			</if>
+		</where>
+		union all
+		<!-- 还合作项目 -->
+		SELECT
+		a.return_consumption_id 'returnOrderId',
+		a.adviser,
+		a.receipt_shop_type 'receiptShopType',
+		a.cosmetologist,
+		a.cosmetologist2,
+		a.cosmetologist3,
+		a.store_pay 'store',
+		a.bankcard_pay 'pos',
+		a.cash_pay
+		'cash',
+		a.shop_id 'shopId',
+		a.is_fail 'isFail',
+		'还合作项目' as 'type',
+		a.return_date 'createDate',
+		c.id 'businessId',
+		b.consumption_cooperation_id 'buyOrderId',
+		from
+		shop_s_consumption_return a
+		inner join shop_s_consumption_cooperation_project_detail b on a.type = 'cooperation_project' and b.consumption_cooperation_id = a.consumption_pro_id
+		inner join shop_s_consumption c on c.id = b.consumption_id
+		<where>
+			<if test="beginReturnDate != null">
+		      <![CDATA[ and a.return_date >= #{beginReturnDate}]]>
+			</if>
+			<if test="endReturnDate != null">
+		      <![CDATA[ and a.return_date  <= #{endReturnDate}]]>
+			</if>
+			<if test="isFail != null">
+			    and a.is_fail = #{isFail}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="getReturnDetail" parameterType="com.bjsxt.dataOut.entity.ReturnDetail" resultType="com.bjsxt.dataOut.entity.ReturnDetail">
+		SELECT
+		id,
+        consumption_pro_id consumptionProId,
+        store_pay storePay,
+        bankcard_pay bankcardPay,
+        cash_pay cashPay,
+        effective_earn effectiveEarn,
+        create_date createDate,
+        create_user_id createUserId,
+        type,
+        shop_id shopId,
+        is_fail isFail,
+        member_card_id memberCardId,
+        return_date returnDate,
+        return_consumption_id returnConsumptionId,
+        detail_id detailId,
+        receipt_shop_type receiptShopType,
+        adviser,
+        cosmetologist,
+        cosmetologist2,
+        cosmetologist3
+        FROM
+        shop_s_consumption_return
+        <where>
+        	<if test="id != null">
+        		AND id = #{id}
+        	</if>
+        	<if test="memberCardId != null">
+        		AND member_card_id = #{memberCardId}
+        	</if>
+        	<if test="consumptionProId != null">
+        		AND consumption_pro_id = #{consumptionProId}
+        	</if>
+        	<if test="detailId != null">
+        		AND detail_id = #{detailId}
+        	</if>
+        	<if test="returnConsumptionId != null">
+        		AND return_consumption_id = #{returnConsumptionId}
+        	</if>
+        	<if test="isFail != null">
+        		AND is_fail = #{isFail}
+        	</if>
+        </where>
+	
+	</select>
+</mapper>

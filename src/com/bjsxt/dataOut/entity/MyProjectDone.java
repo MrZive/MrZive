@@ -9,7 +9,7 @@ import com.bjsxt.dataOut.annotaion.TableName;
 @TableName("传统项目手工表")
 public class MyProjectDone {
 	
-	SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	final SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	@FieldName("ID")
     private String id;
@@ -84,14 +84,6 @@ public class MyProjectDone {
 		}
 	}
 
-
-	public SimpleDateFormat getSf() {
-		return sf;
-	}
-
-	public void setSf(SimpleDateFormat sf) {
-		this.sf = sf;
-	}
 
 	public String getId() {
 		return id;

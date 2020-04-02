@@ -3,6 +3,49 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjsxt.dataOut.common">
+	
+	<select id="getShop" parameterType="com.bjsxt.dataOut.entity.Shop" resultType="com.bjsxt.dataOut.entity.Shop">
+		SELECT
+		id,
+        no,
+        name,
+        parent_id parentId,
+        status,
+        create_date_time createDateTime,
+        create_user_id createUserId,
+        is_shop isShop,
+        region,
+        chief_id chiefId,
+        address,
+        is_schedule_alert isScheduleAlert,
+        region_id regionId
+		FROM 
+		oa_department_structure
+		<where>
+			<if test="id != null">
+				and id = #{id}
+			</if>
+			<if test="name != null">
+				and name = #{name}
+			</if>
+			<if test="no != null">
+				and no = #{no}
+			</if>
+			<if test="nameLike != null">
+				and name LIKE CONCAT(CONCAT('%', #{nameLike}), '%')
+			</if>
+			<if test="nameNotLike != null">
+				and name NOT LIKE CONCAT(CONCAT('%', #{nameNotLike}), '%')
+			</if>
+			<if test="status != null">
+				and status = #{status}
+			</if>
+			<if test="isShop != null">
+				and is_shop = #{isShop}
+			</if>
+		</where>
+	</select>
+
 	<select id="getMemberCard" parameterType="com.bjsxt.dataOut.entity.MemberCard" resultType="com.bjsxt.dataOut.entity.MemberCard">
 		select
 		id,

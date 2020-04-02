@@ -14,6 +14,7 @@ import com.bjsxt.dataOut.entity.CooperationProject;
 import com.bjsxt.dataOut.entity.MemberCard;
 import com.bjsxt.dataOut.entity.ProductInfo;
 import com.bjsxt.dataOut.entity.ProjectInfo;
+import com.bjsxt.dataOut.entity.Shop;
 
 public class BaseDao {
 
@@ -37,6 +38,18 @@ public class BaseDao {
 		session.close();
 	}
 	
+	//门店----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	static public List<Shop> getShop(Shop shop){
+		List<Shop> list = getSession().selectList("com.bjsxt.dataOut.common.getShop", shop);
+		return list;
+	}
+	
+	static public Shop getShopById(String id){
+		Shop shop = new Shop();
+		shop.setId(id);
+		Shop one = getSession().selectOne("com.bjsxt.dataOut.common.getShop", shop);
+		return one;
+	}
 	
 	//会员卡----------------------------------------------------------------------------------------------------------------------------------------------------------------
 	static public MemberCard getMemberCardById(String id){
