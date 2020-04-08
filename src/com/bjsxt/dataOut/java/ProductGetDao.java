@@ -59,7 +59,6 @@ public class ProductGetDao extends BaseDao{
 				
 				myProductGetList.add(myGet);
 				
-				System.out.println(myGet.getProductPrice());
 				jsonArray.add(JSON.parseObject(JSON.toJSONString(myGet)));
 			}
 		}

@@ -39,7 +39,7 @@ public class ProjectCooperationDoneDao extends BaseDao{
 		
 		ProjectCooperationDone get = new ProjectCooperationDone();
 //		get.setMemberCardId("f9fe1dab-4145-4f42-8f58-7833559ab846");
-		get.setServiceShopId("110103");
+		get.setServiceShopId("110101");
 		List<ProjectCooperationDone> getList = getProjectCooperationDone(get);
 		
 		for (ProjectCooperationDone projectDone : getList) {
@@ -54,7 +54,6 @@ public class ProjectCooperationDoneDao extends BaseDao{
 			
 			myProjectCooperationDoneList.add(myDone);
 			
-			System.out.println(myDone.getProjectPrice());
 			jsonArray.add(JSON.parseObject(JSON.toJSONString(myDone)));
 		}
 		

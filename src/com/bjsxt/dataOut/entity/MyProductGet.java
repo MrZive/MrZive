@@ -9,15 +9,18 @@ import com.bjsxt.dataOut.annotaion.TableName;
 @TableName("产品取货表")
 public class MyProductGet{
 	
-	SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	final SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	@FieldName("ID")
     private String id;
 
-	@FieldName("消费单流水号")
+	@FieldName("流水号")
     private String consumptionId;
 	
-	@FieldName("消费单流水号中的id")
+	@FieldName("消费单号")
+    private String consumptionProductId;
+	
+	@FieldName("消费单中的id")
 	private String productDetailId;
 	
 	@FieldName("取货单号")
@@ -60,6 +63,7 @@ public class MyProductGet{
 
 	public void fromSuper(Consumption consumption, ProductDetailConsumption productDetailConsumption, ProductGet productGet, ProductGetDetail productGetDetail) {
 		this.consumptionId = consumption.getId();
+		this.consumptionProductId = productDetailConsumption.getConsumptionProductId();
 		this.createUserId = consumption.getCreateUserId();
 		this.id = productGetDetail.getId();
 		this.isFail = productGet.getIsFail();
@@ -126,6 +130,16 @@ public class MyProductGet{
 	public void setShopId(String shopId) {
 		this.shopId = shopId;
 	}
+
+	public String getConsumptionProductId() {
+		return consumptionProductId;
+	}
+
+
+	public void setConsumptionProductId(String consumptionProductId) {
+		this.consumptionProductId = consumptionProductId;
+	}
+
 
 	public String getMemberCardId() {
 		return memberCardId;

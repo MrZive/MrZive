@@ -60,7 +60,6 @@ public class ProjectDoneDao extends BaseDao{
 				
 				myProjectDoneList.add(myDone);
 				
-				System.out.println(myDone.getProjectPrice());
 				jsonArray.add(JSON.parseObject(JSON.toJSONString(myDone)));
 			}
 		}

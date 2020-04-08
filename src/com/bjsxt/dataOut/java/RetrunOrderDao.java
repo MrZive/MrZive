@@ -13,12 +13,11 @@ public class RetrunOrderDao extends BaseDao{
 
 	public static void main(String[] args) throws IOException {
 		
-		List<MyReturn> MyReturnList = new ArrayList<>();
 		JSONArray jsonArray = new JSONArray();
 		
 		ReturnDetail detail = new ReturnDetail();
 		detail.setMemberCardId("f9fe1dab-4145-4f42-8f58-7833559ab846");
-		List<ReturnDetail> returnList = getRetuanDetail(detail);
+		List<ReturnDetail> returnList = getReturnDetail(detail);
 		
 		for (ReturnDetail returnDetail : returnList) {
 			MyReturn my = new MyReturn();
@@ -27,13 +26,12 @@ public class RetrunOrderDao extends BaseDao{
 			jsonArray.add(JSON.parseObject(JSON.toJSONString(my)));
 		}
 		
-		
 		ExcelUtilForDO.toFile(jsonArray, MyReturn.class);
 		closeSession();
 	}
 	
 	
-	static List<ReturnDetail> getRetuanDetail(ReturnDetail detail){
+	static List<ReturnDetail> getReturnDetail(ReturnDetail detail){
 		List<ReturnDetail> list = getSession().selectList("com.bjsxt.dataOut.return.getReturnDetail", detail);
 		return list;
 	}

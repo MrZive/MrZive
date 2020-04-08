@@ -14,10 +14,13 @@ public class MyProjectCooperationDone {
 	@FieldName("ID")
     private String id;
 
-	@FieldName("消费单流水号")
+	@FieldName("流水单号")
     private String consumptionId;
 	
-	@FieldName("消费单流水号中的id")
+	@FieldName("消费单号")
+    private String consumptionProjectId;
+	
+	@FieldName("消费单中的id")
 	private String projectDetailId;
 	
 	@FieldName("服务单号")
@@ -60,13 +63,15 @@ public class MyProjectCooperationDone {
     public void fromSuper(Consumption consumption, ProjectCooperationDetailConsumption productDetailConsumption, ProjectCooperationDone productDone) {
     	this.id = "无";
 		this.consumptionId = consumption.getId();
+		this.consumptionProjectId = productDetailConsumption.getConsumptionCooperationId();
 		this.projectDetailId = productDone.getDetailId();
 		this.orderId = productDone.getId();
 		this.memberCardId = consumption.getMemberCardId();
 		this.createUserId = consumption.getCreateUserId();
 		this.projectId = productDetailConsumption.getCooperationId();
 		this.isFail = productDone.getIsFail();
-		this.projectPrice = productDone.getPrice();
+//		this.projectPrice = productDone.getPrice();
+		this.projectPrice = productDetailConsumption.getPrice();
 		this.doneNumber = productDone.getServiceNumber();
 		this.shopId = productDone.getServiceShopId();
 		this.serviceCompany = productDone.getServiceCompany();
@@ -103,6 +108,14 @@ public class MyProjectCooperationDone {
 
 	public void setProjectDetailId(String projectDetailId) {
 		this.projectDetailId = projectDetailId;
+	}
+
+	public String getConsumptionProjectId() {
+		return consumptionProjectId;
+	}
+
+	public void setConsumptionProjectId(String consumptionProjectId) {
+		this.consumptionProjectId = consumptionProjectId;
 	}
 
 	public String getOrderId() {

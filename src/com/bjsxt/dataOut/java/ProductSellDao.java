@@ -52,7 +52,6 @@ public class ProductSellDao extends BaseDao{
 				
 				MyProductConsumptionList.add(myConsumption);
 				
-				System.out.println(myConsumption.getBuyPrice());
 				jsonArray.add(JSON.parseObject(JSON.toJSONString(myConsumption)));
 			}
 		}

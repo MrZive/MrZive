@@ -150,7 +150,7 @@ public class MyProductConsumption {
 		this.memberCardId = productDetailConsumption.getMemberCardId();
 		this.productId = productDetailConsumption.getProductId();
 		this.buyPrice = productDetailConsumption.getPrice();
-		
+		this.shopId = consumption.getShopId();
 		
 		if(consumption.getConsumptionDate()!=null){
 			this.bookDate = sf.format(consumption.getConsumptionDate());
