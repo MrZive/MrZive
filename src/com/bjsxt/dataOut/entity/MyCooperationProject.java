@@ -1,98 +1,93 @@
 package com.bjsxt.dataOut.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.bjsxt.dataOut.annotaion.FieldName;
+import com.bjsxt.dataOut.annotaion.TableName;
 
 /**
  * 合作项目实体类
- * 
  */
-public class CooperationProject {
+@TableName("合作项目")
+public class MyCooperationProject {
+	
+	final SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	/**
-	 * id
-	 */
+	@FieldName("ID")
 	private String id;
 
-	/**
-	 * 合作项目编号
-	 */
+	@FieldName("项目编号")
 	private String no;
 
-	/**
-	 * 合作项目名称
-	 */
+	@FieldName("项目名称")
 	private String name;
 
-	/**
-	 * 项目单位
-	 */
+	@FieldName("项目单位")
 	private String unit;
 
-	/**
-	 * 项目单价
-	 */
+	@FieldName("项目单价")
 	private Double price;
 
-	/**
-	 * 业绩比例
-	 */
+	@FieldName("业绩比例")
 	private Double percent;
 
-	/**
-	 * 有效周期/年
-	 */
+	@FieldName("有效周期/年")
 	private Double effectiveCycle;
 
-	/**
-	 * 不限价格 选中此项不限单价，可随便填写
-	 */
+	@FieldName("不限价格 选中此项不限单价，可随便填写")
 	private Integer noLimitPrice;
 
-	/**
-	 * create_user_id
-	 */
-	private String createUserId;
-
-	/**
-	 * create_date_time
-	 */
-	private Date createDateTime;
-
-	/**
-	 * 状态，0停用1正常，-1删除
-	 */
+	@FieldName("状态：0停用1正常，-1删除")
 	private Integer status;
 
-	/**
-	 * 是否是纹绣
-	 */
+	@FieldName("是否是纹绣")
 	private Integer isWenxiu;
 
-	/**
-	 * 首次提成
-	 */
+	@FieldName("首次提成")
 	private Double firstEarn;
 
-	/**
-	 * 是否计入合作消耗，1是，0否
-	 */
+	@FieldName("是否计入合作消耗：1是，0否")
 	private Integer isCountComsume;
 
-	/**
-	 * 是否计算工资：0不 1是
-	 */
+	@FieldName("是否计算工资：0不 1是")
 	private Integer isCalculateSal;
 
-	/**
-	 * 是否收款：0不 1是
-	 */
+	@FieldName("是否收款：0不 1是")
 	private Integer isCome;
 
-	/**
-	 * 是否计算消耗：0不 1是
-	 */
+	@FieldName("是否计算消耗：0不 1是")
 	private Integer isConsume;
 	
+	@FieldName("创建人ID")
+	private String createUserId;
+
+	@FieldName("创建时间")
+	private String createDateTime;
+	
+	
+	public void fromSuper(CooperationProject info){
+		this.createUserId = info.getCreateUserId();
+		this.effectiveCycle = info.getEffectiveCycle();
+		this.firstEarn = info.getFirstEarn();
+		this.id = info.getId();
+		this.isCalculateSal = info.getIsCalculateSal();
+		this.isCome = info.getIsCome();
+		this.isConsume = info.getIsConsume();
+		this.isCountComsume = info.getIsCountComsume();
+		this.isWenxiu = info.getIsWenxiu();
+		this.name = info.getName();
+		this.no = info.getNo();
+		this.noLimitPrice = info.getNoLimitPrice();
+		this.percent = info.getPercent();
+		this.price = info.getPrice();
+		this.status = info.getStatus();
+		this.unit = info.getUnit();
+		
+		if(info.getCreateDateTime()!=null){
+			this.createDateTime = sf.format(info.getCreateDateTime());
+		}
+	}
 	
 
 	public String getId() {
@@ -167,11 +162,11 @@ public class CooperationProject {
 		this.createUserId = createUserId;
 	}
 
-	public Date getCreateDateTime() {
+	public String getCreateDateTime() {
 		return createDateTime;
 	}
 
-	public void setCreateDateTime(Date createDateTime) {
+	public void setCreateDateTime(String createDateTime) {
 		this.createDateTime = createDateTime;
 	}
 
