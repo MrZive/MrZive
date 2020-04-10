@@ -47,6 +47,7 @@
 		<mapper resource="com/bjsxt/dataOut/mapper/product.xml"/>
 		<mapper resource="com/bjsxt/dataOut/mapper/project.xml"/>
 		<mapper resource="com/bjsxt/dataOut/mapper/cooperation.xml"/>
+		<mapper resource="com/bjsxt/dataOut/mapper/cooperationWx.xml"/>
 		<mapper resource="com/bjsxt/dataOut/mapper/return.xml"/>
 		<mapper resource="com/bjsxt/dataOut/mapper/refund.xml"/>
 	</mappers>

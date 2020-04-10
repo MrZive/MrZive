@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt.dataOut.refund">
+	
+	<select id="getShop" parameterType="com.bjsxt.dataOut.entity.Shop" resultType="com.bjsxt.dataOut.entity.Shop">
+	</select>
+	
+	
+	<select id="getRefundOrderDetail" parameterType="map"
+		resultType="map">
+		<!-- refundOrderDetail仅退储值 -->
+		select
+		a.is_reurn_bank 'isReurnBank',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.return_transfer_date 'transferDate',
+		a.total_money 'totalMoney',
+		a.return_pay_money 'returnPayMoney',
+		a.return_transfer_money 'returnTransferMoney',
+		a.return_is_service_pay 'returnIsServicePay',
+		a.return_bank 'returnBank',
+		a.return_bank_open 'returnBankOpen',
+		a.return_bank_card_number 'returnBankCardNumber',
+		a.return_bank_card_user 'returnBankCardUser',
+		a.return_bank_phone 'returnBankPhone',
+		a.check_status 'checkStatus',
+		a.check_date 'checkDate',
+		a.reason 'remark',
+		a.shop_id 'shopId',
+		ifnull(a.return_money_store,0) 'returnMoneyStore',
+		ifnull(a.return_store_balance,0)'returnStoreBalance',
+		b.number 'tranferNumber',
+		b.unit 'tranferUnit',
+		b.left_money 'leftMoney',
+		b.return_money 'returnMoney',
+		'' as 'buyBusinessId',
+		'' as 'buyOrderId',
+		'passTime',
+		'' as 'proType'
+		from shop_s_return_transfer a
+		left join shop_s_return_transfer_detail b on a.id = b.return_transfer_id
+		<where>
+			a.type= 1 and b.return_transfer_id is null
+			<if test="beginRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date >= #{beginRefundDate}]]>
+			</if>
+			<if test="endRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date  <= #{endRefundDate}]]>
+			</if>
+			<if test="beginCheckDate != null">
+		      <![CDATA[ and a.check_date >= #{beginCheckDate}]]>
+			</if>
+			<if test="endCheckDate != null">
+		      <![CDATA[ and a.check_date  <= #{endCheckDate}]]>
+			</if>
+		</where>
+
+
+		union all
+		<!-- 退项目 -->
+		select
+		a.is_reurn_bank 'isReurnBank',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.return_transfer_date 'transferDate',
+		a.total_money 'totalMoney',
+		a.return_pay_money 'returnPayMoney',
+		a.return_transfer_money 'returnTransferMoney',
+		a.return_is_service_pay 'returnIsServicePay',
+		a.return_bank 'returnBank',
+		a.return_bank_open 'returnBankOpen',
+		a.return_bank_card_number 'returnBankCardNumber',
+		a.return_bank_card_user 'returnBankCardUser',
+		a.return_bank_phone 'returnBankPhone',
+		a.check_status 'checkStatus',
+		a.check_date 'checkDate',
+		a.reason 'remark',
+		a.shop_id 'shopId',
+		ifnull(a.return_money_store,0) 'returnMoneyStore',
+		ifnull(a.return_store_balance,0)'returnStoreBalance',
+		b.number 'tranferNumber',
+		b.unit 'tranferUnit',
+		b.left_money 'leftMoney',
+		b.return_money 'returnMoney',
+		c.consumption_id 'buyBusinessId',
+		c.consumption_project_id 'buyOrderId',
+		'项目' as 'proType'
+		from
+		shop_s_return_transfer a
+		inner join shop_s_return_transfer_detail b on a.type = 1 and b.type = 1 and	a.id = b.return_transfer_id
+		left join shop_s_consumption_project_detail	c on c.id = b.detail_id
+		<where>
+			<if test="beginRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date >= #{beginRefundDate}]]>
+			</if>
+			<if test="endRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date  <= #{endRefundDate}]]>
+			</if>
+			<if test="beginCheckDate != null">
+		      <![CDATA[ and a.check_date >= #{beginCheckDate}]]>
+			</if>
+			<if test="endCheckDate != null">
+		      <![CDATA[ and a.check_date  <= #{endCheckDate}]]>
+			</if>
+
+			<if test="shopIds != null">
+				and a.shop_id in
+				<foreach collection="shopIds" index="index" item="item"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+
+		union all
+		<!-- 退纹绣 -->
+		select
+		a.is_reurn_bank 'isReurnBank',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.return_transfer_date 'transferDate',
+		a.total_money 'totalMoney',
+		a.return_pay_money 'returnPayMoney',
+		a.return_transfer_money 'returnTransferMoney',
+		a.return_is_service_pay 'returnIsServicePay',
+		a.return_bank 'returnBank',
+		a.return_bank_open 'returnBankOpen',
+		a.return_bank_card_number 'returnBankCardNumber',
+		a.return_bank_card_user 'returnBankCardUser',
+		a.return_bank_phone 'returnBankPhone',
+		a.check_status 'checkStatus',
+		a.check_date 'checkDate',
+		a.reason 'remark',
+		a.shop_id 'shopId',
+		ifnull(a.return_money_store,0) 'returnMoneyStore',
+		ifnull(a.return_store_balance,0)'returnStoreBalance',
+		b.number 'tranferNumber',
+		b.unit 'tranferUnit',
+		b.left_money 'leftMoney',
+		b.return_money 'returnMoney',
+		c.consumption_id 'buyBusinessId',
+		c.consumption_project_id 'buyOrderId',
+		'纹绣' as 'proType'
+		from
+		shop_s_return_transfer a
+		inner join shop_s_return_transfer_detail b on a.type = 1 and b.type = 4 and a.id = b.return_transfer_id
+		left join shop_s_wx_consumption_project_detail c on c.id = b.detail_id
+		<where>
+			<if test="beginRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date >= #{beginRefundDate}]]>
+			</if>
+			<if test="endRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date  <= #{endRefundDate}]]>
+			</if>
+			<if test="beginCheckDate != null">
+		      <![CDATA[ and a.check_date >= #{beginCheckDate}]]>
+			</if>
+			<if test="endCheckDate != null">
+		      <![CDATA[ and a.check_date  <= #{endCheckDate}]]>
+			</if>
+		</where>
+
+		<!-- 退产品 -->
+		union all
+		select
+		a.is_reurn_bank 'isReurnBank',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.return_transfer_date 'transferDate',
+		a.total_money 'totalMoney',
+		a.return_pay_money 'returnPayMoney',
+		a.return_transfer_money 'returnTransferMoney',
+		a.return_is_service_pay 'returnIsServicePay',
+		a.return_bank 'returnBank',
+		a.return_bank_open 'returnBankOpen',
+		a.return_bank_card_number 'returnBankCardNumber',
+		a.return_bank_card_user 'returnBankCardUser',
+		a.return_bank_phone 'returnBankPhone',
+		a.check_status 'checkStatus',
+		a.check_date 'checkDate',
+		a.reason 'remark',
+		a.shop_id 'shopId',
+		ifnull(a.return_money_store,0) 'returnMoneyStore',
+		ifnull(a.return_store_balance,0) 'returnStoreBalance',
+		f.`name` 'shopName',
+		b.number 'tranferNumber',
+		b.unit 'tranferUnit',
+		b.left_money 'leftMoney',
+		b.return_money 'returnMoney',
+		c.consumption_id 'buyBusinessId',
+		c.consumption_product_id 'buyOrderId',
+		'产品' as 'proType'
+		from shop_s_return_transfer a
+		inner join shop_s_return_transfer_detail b on a.type = 1 and b.type = 2 and	a.id = b.return_transfer_id
+		left join shop_s_consumption_product_detail	c on c.id = b.detail_id
+		<where>
+			<if test="beginRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date >= #{beginRefundDate}]]>
+			</if>
+			<if test="endRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date  <= #{endRefundDate}]]>
+			</if>
+			<if test="beginCheckDate != null">
+		      <![CDATA[ and a.check_date >= #{beginCheckDate}]]>
+			</if>
+			<if test="endCheckDate != null">
+		      <![CDATA[ and a.check_date  <= #{endCheckDate}]]>
+			</if>
+		</where>
+
+		<!-- 退合作项目 -->
+		union all
+		select
+		a.is_reurn_bank 'isReurnBank',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.return_transfer_date
+		'transferDate',
+		a.total_money 'totalMoney',
+		a.return_pay_money 'returnPayMoney',
+		a.return_transfer_money 'returnTransferMoney',
+		a.return_is_service_pay 'returnIsServicePay',
+		a.return_bank 'returnBank',
+		a.return_bank_open 'returnBankOpen',
+		a.return_bank_card_number 'returnBankCardNumber',
+		a.return_bank_card_user 'returnBankCardUser',
+		a.return_bank_phone 'returnBankPhone',
+		a.check_status 'checkStatus',
+		a.check_date 'checkDate',
+		a.reason 'remark',
+		a.shop_id 'shopId',
+		ifnull(a.return_money_store,0) 'returnMoneyStore',
+		ifnull(a.return_store_balance,0) 'returnStoreBalance',
+		b.number 'tranferNumber',
+		b.unit 'tranferUnit',
+		b.left_money 'leftMoney',
+		b.return_money 'returnMoney',
+		c.consumption_id 'buyBusinessId',
+		c.consumption_cooperation_id 'buyOrderId',
+		'合作项目' as 'proType'
+		from shop_s_return_transfer a
+		inner join shop_s_return_transfer_detail b on a.type = 1 and b.type = 3 and	a.id = b.return_transfer_id
+		left join shop_s_consumption_cooperation_project_detail c on c.id = b.detail_id
+		<where>
+			<if test="beginRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date >= #{beginRefundDate}]]>
+			</if>
+			<if test="endRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date  <= #{endRefundDate}]]>
+			</if>
+			<if test="beginCheckDate != null">
+		      <![CDATA[ and a.check_date >= #{beginCheckDate}]]>
+			</if>
+			<if test="endCheckDate != null">
+		      <![CDATA[ and a.check_date  <= #{endCheckDate}]]>
+			</if>
+		</where>
+	</select>
+	
+	
+	
+	<!-- 查询换购单 -->
+	<select id="getReplaceOrderDetail" parameterType="map"
+		resultType="map">
+		<!-- 换购退项目 -->
+		select
+		a.check_status 'status',
+		a.check_date 'checkDate',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.total_money 'totalMoney',
+		a.return_transfer_date 'returnTransferDate',
+		a.final_bankcard 'pos',
+		a.final_cash 'cash',
+		a.return_is_service_pay 'returnIsServicePay',
+		ifnull(a.return_transfer_money,0) 'returnTransferMoney',
+		a.create_user_id 'createUserId',
+		ifnull(a.return_store_balance,0) 'returnStoreBalance',
+		ifnull(a.store_pay_project,0) 'storePayProject',
+		ifnull(a.store_pay_product,0) 'storePayProduct',
+		b.id 'cardId',
+		b.`phone` 'cardNo',
+		b.`name` 'memberName',
+		b.is_pass 'isPass',
+		b.pass_time 'passTime',
+		a.shop_id 'shopId',
+		c.`name` 'shopName',
+		f.`no` 'itemNo',
+		f.`name` 'itemName',
+		d.number 'itemNumber',
+		d.return_money 'itemMoney',
+		'项目' as 'itemType',
+		'前' as 'type',
+		'次' as 'itemUnit'
+		from
+		shop_s_return_transfer a
+		inner join shop_s_member_card b on a.type = 2 and b.id = a.member_card_id
+		inner join shop_s_return_transfer_detail d on d.return_transfer_id = a.id and d.type = 1
+		inner join shop_s_consumption_project_detail e on e.id = d.detail_id
+		inner join shop_b_project_info f on f.id = e.project_id
+
+
+		<!-- 换购退产品 -->
+		union all
+		select
+		a.check_status 'status',
+		a.check_date 'checkDate',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.total_money 'totalMoney',
+		a.return_transfer_date 'returnTransferDate',
+		a.final_bankcard 'pos',
+		a.final_cash 'cash',
+		a.return_is_service_pay 'returnIsServicePay',
+		ifnull(a.return_transfer_money,0) 'returnTransferMoney',
+		a.create_user_id 'createUserId',
+		ifnull(a.return_store_balance,0) 'returnStoreBalance',
+		ifnull(a.store_pay_project,0) 'storePayProject',
+		ifnull(a.store_pay_product,0) 'storePayProduct',
+		b.id 'cardId',
+		b.`phone` 'cardNo',
+		b.`name` 'memberName',
+		b.is_pass 'isPass',
+		b.pass_time 'passTime',
+		a.shop_id 'shopId',
+		c.`name` 'shopName',
+		f.`no` 'itemNo',
+		f.`name` 'itemName',
+		d.number 'itemNumber',
+		d.return_money 'itemMoney',
+		'产品' as 'itemType',
+		'前' as 'type',
+		'' as 'itemUnit'
+		from
+		shop_s_return_transfer a
+		inner join shop_s_member_card b on a.type = 2 and b.id = a.member_card_id
+		inner join oa_department_structure c on c.id = a.shop_id
+		inner join shop_s_return_transfer_detail d on d.return_transfer_id = a.id and d.type = 2
+		inner join shop_s_consumption_product_detail e on e.id = d.detail_id
+		inner join shop_b_product_info f on f.id = e.product_id
+
+
+		<!-- 换购退合作项目 -->
+		union all
+		select
+		a.check_status 'status',
+		a.check_date 'checkDate',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.total_money 'totalMoney',
+		a.return_transfer_date
+		'returnTransferDate',
+		a.final_bankcard 'pos',
+		a.final_cash 'cash',
+		a.return_is_service_pay 'returnIsServicePay',
+		ifnull(a.return_transfer_money,0) 'returnTransferMoney',
+		a.create_user_id 'createUserId',
+		ifnull(a.return_store_balance,0)
+		'returnStoreBalance',
+		ifnull(a.store_pay_project,0) 'storePayProject',
+		ifnull(a.store_pay_product,0) 'storePayProduct',
+		b.id 'cardId',
+		b.`phone` 'cardNo',
+		b.`name` 'memberName',
+		b.is_pass 'isPass',
+		b.pass_time 'passTime',
+		a.shop_id 'shopId',
+		c.`name` 'shopName',
+		f.`no` 'itemNo',
+		f.`name` 'itemName',
+		d.number 'itemNumber',
+		d.return_money 'itemMoney',
+		'合作项目' as 'itemType',
+		'前' as 'type',
+		'次' as 'itemUnit'
+		from
+		shop_s_return_transfer a
+		inner join shop_s_member_card b on a.type = 2 and b.id = a.member_card_id
+		inner join oa_department_structure c on c.id = a.shop_id
+		inner join shop_s_return_transfer_detail d on d.return_transfer_id = a.id and d.type = 3
+		inner join shop_s_consumption_cooperation_project_detail e on e.id = d.detail_id
+		inner join shop_b_cooperation_project f on f.id = e.cooperation_id
+
+
+		<!-- 换购买项目 -->
+		union all
+		select
+		a.check_status 'status',
+		a.check_date 'checkDate',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.total_money 'totalMoney',
+		a.return_transfer_date
+		'returnTransferDate',
+		a.final_bankcard 'pos',
+		a.final_cash 'cash',
+		a.return_is_service_pay 'returnIsServicePay',
+		ifnull(a.return_transfer_money,0) 'returnTransferMoney',
+		a.create_user_id 'createUserId',
+		ifnull(a.return_store_balance,0)
+		'returnStoreBalance',
+		ifnull(a.store_pay_project,0) 'storePayProject',
+		ifnull(a.store_pay_product,0) 'storePayProduct',
+		b.id 'cardId',
+		b.`phone` 'cardNo',
+		b.`name` 'memberName',
+		b.is_pass 'isPass',
+		b.pass_time 'passTime',
+		a.shop_id 'shopId',
+		c.`name` 'shopName',
+		e.`no` 'itemNo',
+		e.`name` 'itemName',
+		d.buy_number 'itemNumber',
+		(d.buy_number * d.price) 'itemMoney',
+		'项目' as 'itemType',
+		'后' as 'type',
+		'次' as 'itemUnit'
+		from
+		shop_s_return_transfer a
+		inner join shop_s_member_card b on a.type = 2 and b.id = a.member_card_id
+		inner join oa_department_structure c on c.id = a.shop_id
+		inner join shop_s_consumption_project_detail d on d.consumption_project_id = a.id
+		inner join shop_b_project_info e on e.id = d.project_id
+		
+
+		<!-- 换购买产品 -->
+		union all
+		select
+		a.check_status 'status',
+		a.check_date 'checkDate',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.total_money 'totalMoney',
+		a.return_transfer_date 'returnTransferDate',
+		a.final_bankcard 'pos',
+		a.final_cash 'cash',
+		a.return_is_service_pay 'returnIsServicePay',
+		ifnull(a.return_transfer_money,0) 'returnTransferMoney',
+		a.create_user_id 'createUserId',
+		ifnull(a.return_store_balance,0) 'returnStoreBalance',
+		ifnull(a.store_pay_project,0) 'storePayProject',
+		ifnull(a.store_pay_product,0) 'storePayProduct',
+		b.id 'cardId',
+		b.`phone` 'cardNo',
+		b.`name` 'memberName',
+		b.is_pass 'isPass',
+		b.pass_time 'passTime',
+		a.shop_id 'shopId',
+		c.`name` 'shopName',
+		e.`no` 'itemNo',
+		e.`name` 'itemName',
+		d.buy_number 'itemNumber',
+		(d.buy_number * d.price) 'itemMoney',
+		'产品' as 'itemType',
+		'后' as 'type',
+		d.buy_unit as 'itemUnit'
+		from
+		shop_s_return_transfer a
+		inner join shop_s_member_card b on a.type = 2 and b.id = a.member_card_id
+		inner join oa_department_structure c on c.id = a.shop_id
+		inner join shop_s_consumption_product_detail d on d.consumption_product_id = a.id
+		inner join shop_b_product_info e on e.id = d.product_id
+		
+
+		<!-- 换购买合作项目 -->
+		union all
+		select
+		a.check_status 'status',
+		a.check_date 'checkDate',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.total_money 'totalMoney',
+		a.return_transfer_date 'returnTransferDate',
+		a.final_bankcard 'pos',
+		a.final_cash 'cash',
+		a.return_is_service_pay 'returnIsServicePay',
+		ifnull(a.return_transfer_money,0) 'returnTransferMoney',
+		a.create_user_id 'createUserId',
+		ifnull(a.return_store_balance,0)
+		'returnStoreBalance',
+		ifnull(a.store_pay_project,0) 'storePayProject',
+		ifnull(a.store_pay_product,0) 'storePayProduct',
+		b.id 'cardId',
+		b.`phone` 'cardNo',
+		b.`name` 'memberName',
+		b.is_pass 'isPass',
+		b.pass_time 'passTime',
+		a.shop_id 'shopId',
+		c.`name` 'shopName',
+		e.`no` 'itemNo',
+		e.`name` 'itemName',
+		d.buy_number 'itemNumber',
+		(d.buy_number * d.price) 'itemMoney',
+		'合作项目' as 'itemType',
+		'后' as 'type',
+		'次' as 'itemUnit'
+		from
+		shop_s_return_transfer a
+		inner join shop_s_member_card b on a.type = 2 and b.id = a.member_card_id
+		inner join oa_department_structure c on c.id = a.shop_id
+		inner join shop_s_consumption_cooperation_project_detail d on d.consumption_cooperation_id = a.id
+		inner join shop_b_cooperation_project e on e.id = d.cooperation_id
+	</select>
+	
+	
+	
+	
+	
+
+
+	<select id="getRefund" parameterType="com.bjsxt.dataOut.entity.Refund" resultType="com.bjsxt.dataOut.entity.Refund">
+		SELECT
+		id,
+        create_user_id createUserId,
+        create_date_time createDateTime,
+        type,
+        transfer_type transferType,
+        member_card_id memberCardId,
+        return_product_money returnProductMoney,
+        return_project_money returnProjectMoney,
+        total_money totalMoney,
+        return_transfer_date returnTransferDate,
+        maker_id makerId,
+        store_pay_project storePayProject,
+        store_pay_product storePayProduct,
+        bankcard_pay_product bankcardPayProduct,
+        bankcard_pay_project bankcardPayProject,
+        cash_pay_product cashPayProduct,
+        cash_pay_project cashPayProject,
+        return_store_balance returnStoreBalance,
+        shop_chief_id shopChiefId,
+        shoper_id shoperId,
+        old_price oldPrice,
+        transfer_price transferPrice,
+        return_transfer_money returnTransferMoney,
+        reason,
+        return_propose_date returnProposeDate,
+        return_pay_date returnPayDate,
+        return_pay_money returnPayMoney,
+        return_is_service_pay returnIsServicePay,
+        return_bank returnBank,
+        return_bank_open returnBankOpen,
+        return_bank_card_number returnBankCardNumber,
+        return_bank_card_user returnBankCardUser,
+        return_bank_phone returnBankPhone,
+        feedback_visit feedbackVisit,
+        picture_path picturePath,
+        check_status checkStatus,
+        shop_id shopId,
+        check_date checkDate,
+        transfer_project_money transferProjectMoney,
+        transfer_product_money transferProductMoney,
+        final_cash finalCash,
+        final_bankcard finalBankcard,
+        return_money_project returnMoneyProject,
+        return_money_product returnMoneyProduct,
+        return_money_store returnMoneyStore,
+        is_reurn_bank isReurnBank
+		FROM
+		shop_s_return_transfer
+		<where>
+            <if test ='null != type'>
+            AND type = #{type}
+            </if>
+            <if test ='null != transferType'>
+            AND transfer_type = #{transferType}
+            </if>
+            <if test ='null != memberCardId'>
+            AND member_card_id = #{memberCardId}
+            </if>
+            <if test ='null != checkStatus'>
+            AND check_status = #{checkStatus}
+            </if>
+            <if test ='null != shopId'>
+            AND shop_id = #{shopId}
+            </if>
+            <if test ='null != isReurnBank'>
+            AND is_reurn_bank = #{isReurnBank}
+            </if>
+            <if test ='null != returnProposeDate'>
+            AND return_propose_date = #{returnProposeDate}
+            </if>
+            <if test ='null != returnPayDate'>
+            AND return_pay_date = #{returnPayDate}
+            </if>
+            <if test ='null != checkDate'>
+            AND check_date = #{checkDate}
+            </if>
+		</where>
+	</select>
+	
+	
+	<select id="getRefundDetail" parameterType="com.bjsxt.dataOut.entity.RefundDetail" resultType="com.bjsxt.dataOut.entity.RefundDetail">
+	SELECT
+	id,
+    detail_id detailId,
+    type,
+    return_transfer_id returnTransferId,
+    number,
+    left_money leftMoney,
+    return_money returnMoney,
+    consumption_id consumptionId,
+    unit
+    FROM
+    shop_s_return_transfer_detail
+    <where>
+    	<if test="id != null">
+    	AND id = #{id}
+    	</if>
+    	<if test="detailId != null">
+    	AND detail_id = #{detailId}
+    	</if>
+    	<if test="consumptionId != null">
+    	AND consumption_id = #{consumptionId}
+    	</if>
+    	<if test="returnTransferId != null">
+    	AND return_transfer_id = #{returnTransferId}
+    	</if>
+    	<if test="type != null">
+    	AND type = #{type}
+    	</if>
+    </where>
+	</select>
+</mapper>

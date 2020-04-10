@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt.dataOut.project">
+
+	<select id="getProjectCooperationWxConsumption" parameterType="com.bjsxt.dataOut.entity.ProjectCooperationConsumption" resultType="com.bjsxt.dataOut.entity.ProjectCooperationConsumption">
+		SELECT
+        id,
+        consumption_id consumptionId,
+        member_card_id memberCardId,
+        payment,
+        bank_card_pay bankcardPay,
+        cash_pay cashPay,
+        create_date createDate,
+        owe,
+        status,
+        store_pay storePay,
+        is_book isBook,
+        effective_earn effectiveEarn,
+        real_payment realPayment,
+        remark,
+        is_fail isFail,
+        shopid shopId,
+        buy_owe buyOwe,
+        buy_type buyType,
+        activity_id activityId,
+        adviser,
+        cosmetologist,
+        cosmetologist2,
+        cosmetologist3
+        FROM
+		shop_s_consumption_cooperation_project
+		<where>
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="consumptionId != null">
+				AND consumption_id = #{consumptionId}
+			</if>
+			<if test="memberCardId != null">
+				AND member_card_id = #{memberCardId}
+			</if>
+			<if test="isFail != null">
+				AND is_fail = #{isFail}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="getProjectCooperationWxDetailConsumption" parameterType="com.bjsxt.dataOut.entity.ProjectCooperationWxDetailConsumption" resultType="com.bjsxt.dataOut.entity.ProjectCooperationWxDetailConsumption">
+		SELECT
+        id,
+        consumption_id consumptionId,
+        consumption_project_id consumptionProjectId,
+        project_id projectId,
+        activity_id activityId,
+        buy_number buyNumber,
+        number,
+        coupon,
+        is_send isSend,
+        create_date createDate,
+        end_date endDate,
+        member_card_id memberCardId,
+        consumption_set_id consumptionSetId,
+        price,
+        service_time serviceTime,
+        is_count isCount,
+        shop_id shopId,
+        is_fail isFail,
+        experience_price experiencePrice,
+        promotion_price promotionPrice,
+        market_price marketPrice,
+        buy_type buyType,
+        payment,
+        store_pay storePay,
+        bankcard_pay bankcardPay,
+        cash_pay cashPay,
+        point_pay pointPay,
+        is_book isBook,
+        owe,
+        buy_owe buyOwe,
+        effective_earn effectiveEarn,
+        real_payment realPayment,
+        is_pay isPay,
+        remark,
+        is_cash_coupon isCashCoupon,
+        channel_id channelId
+		FROM
+		shop_s_wx_consumption_project_detail
+		<where>
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="consumptionId != null">
+				AND consumption_id = #{consumptionId}
+			</if>
+			<if test="consumptionProjectId != null">
+				AND consumption_project_id = #{consumptionProjectId}
+			</if>
+			<if test="consumptionSetId != null">
+				AND consumption_set_id = #{consumptionSetId}
+			</if>
+			<if test="memberCardId != null">
+				AND member_card_id = #{memberCardId}
+			</if>
+		</where>
+	</select>
+
+	
+	
+	<select id="getProjectCooperationWxDone" parameterType="com.bjsxt.dataOut.entity.ProjectCooperationDone" resultType="com.bjsxt.dataOut.entity.ProjectCooperationDone">
+		SELECT
+        id,
+        consumption_id consumptionId,
+        detail_id detailId,
+        service_date serviceDate,
+        service_number serviceNumber,
+        remark,
+        is_fail isFail,
+        create_date createDate,
+        service_shop_id serviceShopId,
+        share_left_earn shareLeftEarn,
+        price,
+        service_company serviceCompany,
+        percent,
+        first_earn firstEarn,
+        is_count_comsume isCountComsume,
+        doctor,
+        nurse
+        remark
+        FROM shop_s_consumption_cooperation_project_done
+        <where>
+        	<if test="id != null">
+        		AND id = #{id}
+        	</if>
+        	<if test="consumptionId != null">
+        		AND consumption_id = #{consumptionId}
+        	</if>
+        	<if test="detailId != null">
+        		AND detail_id = #{detailId}
+        	</if>
+        	<if test="serviceShopId != null">
+        		AND service_shop_id = #{serviceShopId}
+        	</if>
+        	<if test="isFail != null">
+        		AND is_fail = #{isFail}
+        	</if>
+        </where>
+    </select>
+
+</mapper>

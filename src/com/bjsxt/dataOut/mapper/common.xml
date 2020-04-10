@@ -133,17 +133,19 @@
 	
 	<select id="getProjectInfo" resultType="com.bjsxt.dataOut.entity.ProjectInfo" parameterType="com.bjsxt.dataOut.entity.ProjectInfo">
 		SELECT
-		`id`,
-		`no`,
-		`name`,
-		`status`,
-		is_sale 'isSale',
-		is_calculate_sal 'isCalculateSal',
-		is_come 'isCome',
-		is_consume 'isConsume',
-		`type`,
-		DATE_FORMAT(`create_date_time`,'%Y-%m-%d %H:%i:%S') 'createDateTime',
-		effective_months 'effectiveMonths'
+		id,
+        no,
+        name,
+        type,
+        status,
+        create_date_time createDateTime,
+        effective_months effectiveMonths,
+        update_status updateStatus,
+        show_status showStatus,
+        is_sale isSale,
+        is_calculate_sal isCalculateSal,
+        is_come isCome,
+        is_consume isConsume
 		FROM
 		shop_b_project_info
 		<where>

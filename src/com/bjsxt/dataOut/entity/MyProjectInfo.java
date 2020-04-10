@@ -1,76 +1,80 @@
 package com.bjsxt.dataOut.entity;
 
-import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
+import com.bjsxt.dataOut.annotaion.FieldName;
+import com.bjsxt.dataOut.annotaion.TableName;
 
 
-public class ProjectInfo {
+@TableName("传统项目")
+public class MyProjectInfo {
+	
+	final SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	/**
-	 * 项目id
-	 */
+	@FieldName("ID")
 	private String id;
 
-	/**
-	 * 项目编号
-	 */
+	@FieldName("编号")
 	private String no;
 
-	/**
-	 * 项目名称
-	 */
+	@FieldName("名称")
 	private String name;
 
-	/**
-	 * 项目类型，0普通项目，1可选项目
-	 */
+	@FieldName("项目类型：0普通项目，1可选项目")
 	private Integer type;
 
-	/**
-	 * 状态，1是停用
-	 */
+	@FieldName("状态：1是停用，0正常")
 	private Integer status;
 
-	/**
-	 * create_date_time
-	 */
-	private Date createDateTime;
-
-	/**
-	 * 有效期/月，从顾客购买的时候开始计算
-	 */
+	@FieldName("有效期/月")
 	private Integer effectiveMonths;
 
-	/**
-	 * 更新状态：0自动更新 1 手动更新
-	 */
+	@FieldName("更新状态：0自动更新 1 手动更新")
 	private Integer updateStatus;
 
-	/**
-	 * 门店可见：0全部可见 1选中可见
-	 */
+	@FieldName("门店可见：0全部可见 1选中可见")
 	private Integer showStatus;
 
-	/**
-	 * is_sale
-	 */
+	@FieldName("0不特价，1特价")
 	private Integer isSale;
 
-	/**
-	 * 是否计算工资：0不 1计
-	 */
+	@FieldName("是否计算工资：0不 1计")
 	private Integer isCalculateSal;
 
-	/**
-	 * 是否收款：0不 1收
-	 */
+	@FieldName("是否收款：0不 1收")
 	private Integer isCome;
 
-	/**
-	 * 是否计算消耗：0不 1计
-	 */
+	@FieldName("是否计算消耗：0不 1计")
 	private Integer isConsume;
+	
+	@FieldName("创建用户ID")
+	private String createUserId;
+	
+	@FieldName("创建时间")
+	private String createDateTime;
+	
+	
+	public void fromSuper(ProjectInfo info){
+		this.createUserId = "无此字段";
+		this.effectiveMonths = info.getEffectiveMonths();
+		this.id = info.getId();
+		this.isCalculateSal = info.getIsCalculateSal();
+		this.isCome = info.getIsCome();
+		this.isConsume = info.getIsConsume();
+		this.isSale = info.getIsSale();
+		this.name = info.getName();
+		this.no = info.getNo();
+		this.showStatus = info.getShowStatus();
+		this.status = info.getStatus();
+		this.type = info.getType();
+		this.updateStatus = info.getUpdateStatus();
+		
+		if(info.getCreateDateTime() != null){
+			this.createDateTime = sf.format(info.getCreateDateTime());
+		}
+	}
+	
 
 	public String getId() {
 		return id;
@@ -112,11 +116,11 @@ public class ProjectInfo {
 		this.status = status;
 	}
 
-	public Date getCreateDateTime() {
+	public String getCreateDateTime() {
 		return createDateTime;
 	}
 
-	public void setCreateDateTime(Date createDateTime) {
+	public void setCreateDateTime(String createDateTime) {
 		this.createDateTime = createDateTime;
 	}
 
@@ -174,6 +178,18 @@ public class ProjectInfo {
 
 	public void setIsConsume(Integer isConsume) {
 		this.isConsume = isConsume;
+	}
+
+	public String getCreateUserId() {
+		return createUserId;
+	}
+
+	public void setCreateUserId(String createUserId) {
+		this.createUserId = createUserId;
+	}
+
+	public SimpleDateFormat getSf() {
+		return sf;
 	}
 	
 }
