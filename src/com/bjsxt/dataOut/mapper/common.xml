@@ -93,30 +93,29 @@
 
 	<select id="getProductInfo" resultType="com.bjsxt.dataOut.entity.ProductInfo" parameterType="com.bjsxt.dataOut.entity.ProductInfo">
 		SELECT
-		a.`id` 'id',
-		a.`no` 'no',
-		a.is_express 'isExpress',
-		a.is_sale 'isSale',
-		a.`name` 'name',
-		a.`bulk_unit` 'bulkUnit',
-		a.`boxes_unit` 'boxesUnit',
-		b.`market_price` 'marketPrice',
-		b.`boxes_market_price` 'boxesMarketPrice',
-		b.promotion_price 'promotionPrice',
-		b.boxes_promotion_price 'boxesPromotionPrice',
-		b.experience_price 'experiencePrice',
-		b.boxes_experience_price 'boxesExperiencePrice',
-		a.`type` 'type',
-		a.`status` 'status',
-		a.`update_status` 'updateStatus',
-		a.`show_status` 'showStatus',
-		a.`create_date_time` 'createDateTime',
-		a.num,
-		a.num 'unitChangeNumber',
-		a.standard
+		id,
+        no,
+        name,
+        bulk_unit bulkUnit,
+        boxes_unit boxesUnit,
+        market_price marketPrice,
+        boxes_market_price boxesMarketPrice,
+        type,
+        status,
+        create_date_time createDateTime,
+        num,
+        promotion_price promotionPrice,
+        boxes_promotion_price boxesPromotionPrice,
+        experience_price experiencePrice,
+        boxes_experience_price boxesExperiencePrice,
+        effective_months effectiveMonths,
+        standard,
+        update_status updateStatus,
+        show_status showStatus,
+        is_express isExpress,
+        is_sale isSale
 		FROM
-		shop_b_product_info a
-		LEFT JOIN shop_b_product_price b ON b.product_id = a.id 
+		shop_b_product_info
 		<where>
 			<if test="id != null">
 				a.id = #{id}

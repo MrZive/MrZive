@@ -4,6 +4,45 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjsxt.dataOut.product">
 
+	<select id="getProductInfoMeasure" parameterType="string" resultType="com.bjsxt.dataOut.entity.ProductInfoMeasure">
+		SELECT
+		id,
+        product_id productId,
+        material_id materialId,
+        number,
+        unit
+        FROM
+        shop_b_product_material
+        <where>
+        	<if test="productId != null">
+        	product_id = #{productId}
+        	</if>
+        </where>
+	</select>
+	
+	
+	<select id="getProductInfoPrice" parameterType="string" resultType="com.bjsxt.dataOut.entity.ProductInfoPrice">
+		SELECT
+        id,
+        shop_id shopId,
+        product_id productId,
+        shop_name shopName,
+        product_name productName,
+        market_price marketPrice,
+        boxes_market_price boxesMarketPrice,
+        promotion_price promotionPrice,
+        boxes_promotion_price boxesPromotionPrice,
+        experience_price experiencePrice,
+        boxes_experience_price boxesExperiencePrice
+        FROM
+        shop_b_product_price
+        <where>
+        	<if test="productId != null">
+        	product_id = #{productId}
+        	</if>
+        </where>
+	</select>
+
 	<select id="getProductConsumption" parameterType="com.bjsxt.dataOut.entity.ProductConsumption" resultType="com.bjsxt.dataOut.entity.ProductConsumption">
 		SELECT
 		id,

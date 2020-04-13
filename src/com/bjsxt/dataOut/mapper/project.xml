@@ -5,6 +5,82 @@
 <mapper namespace="com.bjsxt.dataOut.project">
 
 
+
+
+
+
+
+
+
+
+	<!-- 查询详细购买项目单据 -->
+    <select id="getBuyProjectOrderDetail" parameterType="map" resultType="projectBuy">
+        select 
+        g.id 'orderId',
+        b.id 'businessId',
+        b.fail_earn 'failEarn',
+		a.project_id 'projectId',
+		a.real_payment 'projectPrice',
+		a.activity_id 'activityId',
+		d.`name` 'activityName',
+		a.buy_number 'buyNumber',
+		a.coupon 'coupon',
+		a.is_send 'isSend',
+		a.member_card_id 'cardId',
+		a.price 'buyPrice',
+		a.is_count 'isCount',
+		b.shop_id 'shopId',
+		b.consumption_date 'consumeDate',
+		b.`status` 'status', <!-- 2是作废单，1是正常 -->
+		b.fail_date 'failDate', <!-- 作废日期-->
+		b.region 'area', <!-- 门店区域 -->
+		ifnull(a.payment,0) 'shouldPay',
+		ifnull(a.real_payment,0) 'realPay',
+		ifnull(a.store_pay,0) 'store',
+		ifnull(a.bankcard_pay,0) 'pos',
+		ifnull(a.cash_pay,0) 'cash',
+		ifnull(a.point_pay,0) 'point',
+		a.is_book 'isBook',
+		g.remark,
+		g.is_birthday 'isBirthday',
+		a.buy_owe 'owe',
+		a.is_cash_coupon 'isCashCoupon'
+		from shop_s_consumption_project_detail a 
+		inner join shop_s_consumption b on a.consumption_id = b.id and b.is_cooperation = 0 and a.consumption_set_id is null
+		left join shop_s_consumption_project  g on g.consumption_id = a.consumption_id
+		<where>
+		   <if test="projectId != null and projectId != ''">
+		       and a.project_id = #{projectId}
+		   </if>
+		   <if test="shopIds != null">
+               and b.shop_id in
+               <foreach collection="shopIds" index="index" item="item" open="(" separator="," close=")">
+                   #{item}
+               </foreach> 
+           </if>
+		   <if test="status != null">
+		       and b.`status` = #{status}
+		   </if>
+		   <if test="beginConsumeDate != null">
+		      <![CDATA[ and b.consumption_date >= #{beginConsumeDate}]]>
+		   </if>
+		   <if test="endConsumeDate != null">
+		      <![CDATA[ and b.consumption_date <= #{endConsumeDate}]]>
+		   </if>
+		</where>
+		<!-- order by a.consumption_id,a.buy_type,a.is_send  -->
+		<if test="start != null and count != null">
+		    limit #{start},#{count}
+		</if>
+    </select>
+
+
+
+
+
+
+
+
 	<select id="getProjectInfoMeasure" parameterType="string" resultType="com.bjsxt.dataOut.entity.ProjectInfoMeasure">
 		SELECT
 		id,
