@@ -14,7 +14,7 @@
 
 
 	<!-- 查询详细购买项目单据 -->
-    <select id="getBuyProjectOrderDetail" parameterType="map" resultType="projectBuy">
+    <select id="getBuyProjectOrderDetail" parameterType="map" resultType="map">
         select 
         g.id 'orderId',
         b.id 'businessId',

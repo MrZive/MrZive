@@ -1,4 +1,4 @@
-package com.bjsxt.request;
+package com.bjsxt.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

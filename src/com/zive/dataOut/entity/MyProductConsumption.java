@@ -9,7 +9,7 @@ import com.bjsxt.dataOut.annotaion.TableName;
 @TableName("产品销售表")
 public class MyProductConsumption {
 	
-	SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	final SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	@FieldName("ID")
 	private String id;
@@ -166,15 +166,6 @@ public class MyProductConsumption {
 		}
 	}
 	
-	
-
-	public SimpleDateFormat getSf() {
-		return sf;
-	}
-
-	public void setSf(SimpleDateFormat sf) {
-		this.sf = sf;
-	}
 
 	public String getId() {
 		return id;

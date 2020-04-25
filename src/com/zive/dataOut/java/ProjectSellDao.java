@@ -1,10 +1,13 @@
 package com.bjsxt.dataOut.java;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.bjsxt.dataOut.entity.Consumption;
+import com.bjsxt.dataOut.entity.MyProjectConsumption;
 import com.bjsxt.dataOut.entity.ProjectConsumption;
 import com.bjsxt.dataOut.entity.ProjectDetailConsumption;
 
@@ -16,14 +19,18 @@ public class ProjectSellDao extends BaseDao{
 		JSONArray jsonArray = new JSONArray();
 		
 		ProjectConsumption get = new ProjectConsumption();
-		get.setMemberCardId("f9fe1dab-4145-4f42-8f58-7833559ab846");
+		get.setMemberCardId("3e19c08b-4586-426f-b192-0bae47f93bdf");
 		List<ProjectConsumption> getList = getProjectConsumption(get);
 		
 		for (ProjectConsumption projectConsumption : getList) {
 			
 			Consumption consumption = getConsumptionById(projectConsumption.getConsumptionId());
+			if(consumption == null){
+				System.out.println("consumption is null:"+projectConsumption.getId());
+				continue;
+			}
 			
-			if(consumption.getIsCooperation()!=0){
+			if(consumption.getIsCooperation()!=null && consumption.getIsCooperation()!=0){
 				continue;
 			}
 			
@@ -31,7 +38,8 @@ public class ProjectSellDao extends BaseDao{
 			getDetail.setConsumptionId(projectConsumption.getConsumptionId());
 			List<ProjectDetailConsumption> getDetailList = getProjectDetailConsumption(getDetail);
 			if(getDetailList.size() == 0){
-				System.out.println(projectConsumption.getId());
+				System.out.println("getDetail is null:"+projectConsumption.getId());
+				continue;
 			}
 			for (ProjectDetailConsumption projectDetailConsumption : getDetailList) {
 				if(projectDetailConsumption.getConsumptionSetId()==null){
@@ -41,7 +49,6 @@ public class ProjectSellDao extends BaseDao{
 					
 					MyProjectConsumptionList.add(myConsumption);
 					
-					System.out.println(myConsumption.getBuyPrice());
 					jsonArray.add(JSON.parseObject(JSON.toJSONString(myConsumption)));
 				}
 			}

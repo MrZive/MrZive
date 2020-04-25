@@ -1,4 +1,4 @@
-package com.bjsxt.request;
+package com.bjsxt.web;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,7 +31,7 @@ public class Main {
 
 	@RequestMapping(value = "/getList", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public Map<String,Object> getIndex() {
+	public Map<String,Object> getList() {
 		List<Map<String,Object>> list = new ArrayList<>();
 		for(int i=1;i<=20;i++){
 			Map<String, Object> map = new HashMap<>();

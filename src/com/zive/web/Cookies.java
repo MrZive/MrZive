@@ -1,4 +1,4 @@
-package com.bjsxt.request;
+package com.bjsxt.web;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

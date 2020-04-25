@@ -10,7 +10,9 @@
  
 <a href="helloworld">hello world</a>
 
-<a href="http://www.zive2.com:8080/MrZive/getCookie">getCookie</a>
+<a href="getCookie">getCookie</a>
+
+<a href="getStatus">getStatus</a>
  
 </body>
 </html>
