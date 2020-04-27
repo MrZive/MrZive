@@ -3,10 +3,10 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="a.j">
-	<select id="c" resultType="com.bjsxt.pojo.People">
+	<select id="c" resultType="com.zive.pojo.People">
 		select * from people
 	</select>
-	<select id="d" resultType="com.bjsxt.pojo.People">
+	<select id="d" resultType="com.zive.pojo.People">
 		select * from people where id=3 or id=4
 	</select>
 </mapper>

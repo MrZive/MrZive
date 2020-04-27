@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bjsxt.bi.member">
+<mapper namespace="com.zive.bi.member">
 	 <!-- 数据模型过滤套餐 -->
     <sql id="fiterActivity">
         (
@@ -24,7 +24,7 @@
 	        'b20ef527-0a4a-4b29-9180-4a9a0c88fa5a'
         )
     </sql>
-	<select id="getShopConsume" parameterType="map" resultType="com.bjsxt.pojo.Consume">
+	<select id="getShopConsume" parameterType="map" resultType="com.zive.pojo.Consume">
         <!-- 产品 消耗-->
         select 
 		b.shop_id 'shopId',
@@ -281,7 +281,7 @@
     </select>
     
     
-    <select id="getNewEmployeeEarns" resultType="com.bjsxt.pojo.EmployeeEarn">
+    <select id="getNewEmployeeEarns" resultType="com.zive.pojo.EmployeeEarn">
 		
 		<!-- 卖青花瓷项目、卖青花瓷产品、青花瓷项目服务、青花瓷产品取货、还青花瓷项目、还青花瓷产品、卖天使之纹项目 、还天使之纹项目、天使之纹项目手工业绩  19年04月15后卖套餐（项目、产品、纹绣   合作项目有比例不一样）和还套餐（项目、产品）业绩查询归类到此处-->
 		select

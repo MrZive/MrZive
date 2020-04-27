@@ -1,4 +1,4 @@
-package com.bjsxt.pojo;
+package com.zive.pojo;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

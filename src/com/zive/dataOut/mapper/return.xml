@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bjsxt.dataOut.return">
+<mapper namespace="com.zive.dataOut.return">
 
 	<!-- 获取还款单 -->
-	<select id="getWenxiuResturnOrderDetail" parameterType="com.bjsxt.dataOut.entity.ReturnOrderDetail" resultType="com.bjsxt.dataOut.entity.ReturnOrderDetail">
+	<select id="getWenxiuResturnOrderDetail" parameterType="com.zive.dataOut.entity.ReturnOrderDetail" resultType="com.zive.dataOut.entity.ReturnOrderDetail">
 		SELECT
 		a.id,
 		a.return_date 'returnDate',
@@ -40,7 +40,7 @@
 		</where>
 	</select>
 	
-	<select id="getResturnOrderDetail" parameterType="com.bjsxt.dataOut.entity.ReturnOrderDetail" resultType="com.bjsxt.dataOut.entity.ReturnOrderDetail">
+	<select id="getResturnOrderDetail" parameterType="com.zive.dataOut.entity.ReturnOrderDetail" resultType="com.zive.dataOut.entity.ReturnOrderDetail">
 		<!-- 还项目 为区分新旧还款数据 增加detail_id is null判断保证导出新旧还款不重复-->
 		SELECT
 		a.id,
@@ -198,7 +198,7 @@
 	</select>
 	
 	<!-- 201906之后 还款要区分项目产品 detail_id is not null 区分新旧还款-->
-	<select id="getNewResturnOrderDetail" parameterType="com.bjsxt.dataOut.entity.ReturnOrderDetail" resultType="com.bjsxt.dataOut.entity.ReturnOrderDetail">
+	<select id="getNewResturnOrderDetail" parameterType="com.zive.dataOut.entity.ReturnOrderDetail" resultType="com.zive.dataOut.entity.ReturnOrderDetail">
 		<!-- 还项目、产品、套餐 -->
 		SELECT 
 		a.return_consumption_id 'returnOrderId',
@@ -281,7 +281,7 @@
 	</select>
 
 
-	<select id="getReturnDetail" parameterType="com.bjsxt.dataOut.entity.ReturnDetail" resultType="com.bjsxt.dataOut.entity.ReturnDetail">
+	<select id="getReturnDetail" parameterType="com.zive.dataOut.entity.ReturnDetail" resultType="com.zive.dataOut.entity.ReturnDetail">
 		SELECT
 		id,
         consumption_pro_id consumptionProId,

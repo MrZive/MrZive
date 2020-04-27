@@ -1,9 +1,9 @@
-package com.bjsxt.satisfaction;
+package com.zive.satisfaction;
 
 import java.util.List;
 import java.util.Map;
 
-import com.bjsxt.pojo.CustomProductSales;
+import com.zive.pojo.CustomProductSales;
 
 public interface IProductDao {
 

@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjsxt">
 
-	<insert id="insertDone" parameterType="com.bjsxt.pojo.ConsumptionCooperationProjectDone">
+	<insert id="insertDone" parameterType="com.zive.pojo.ConsumptionCooperationProjectDone">
 		INSERT INTO shop_s_consumption_cooperation_project_done ( 
 		id, 
 		doctor, 
@@ -45,7 +45,7 @@
 		) 
 	</insert>
 
-	<select id="getCooProject" parameterType="map" resultType="com.bjsxt.pojo.OneCooDetail">
+	<select id="getCooProject" parameterType="map" resultType="com.zive.pojo.OneCooDetail">
 		SELECT a.id,a.consumption_id,a.consumption_cooperation_id,a.cooperation_id,c.`name` 'projectName',a.member_card_id,a.left_earn,a.left_store_earn,e.id 'shopId',e.no 'shopNo',e.name 'shopName',a.consumption_date
 		FROM `shop_s_consumption_cooperation_project_detail` a
 		LEFT JOIN `shop_s_consumption_cooperation_project` b ON a.`consumption_id`=b.consumption_id
@@ -70,7 +70,7 @@
 		</if>
 	</select>
 	
-	<select id="getEarn" parameterType="map" resultType="com.bjsxt.pojo.Earn">
+	<select id="getEarn" parameterType="map" resultType="com.zive.pojo.Earn">
 		select * from shop_s_consumption_earn where 1=1
 		<if test="beginConsumeDate != null">
 	      <![CDATA[ and consumption_date >= #{beginConsumeDate}]]>
@@ -83,7 +83,7 @@
 		</if>
 	</select>
 	
-	<select id="getOnePercentEarn" parameterType="map" resultType="com.bjsxt.pojo.Earn">
+	<select id="getOnePercentEarn" parameterType="map" resultType="com.zive.pojo.Earn">
 		select * from shop_s_consumption_earn where 1=1	and consumption_type_id LIKE "%_addOnePercent%" 
 	</select>
 	
@@ -126,7 +126,7 @@
 		SELECT COUNT(id) FROM `shop_s_consumption_earn` where consumption_type_id = #{consumption_type_id} and shoper_id = #{shoper_id}
 	</select>
 	
-	<insert id="insertEarn" parameterType="com.bjsxt.pojo.Earn">
+	<insert id="insertEarn" parameterType="com.zive.pojo.Earn">
         INSERT INTO shop_s_consumption_earn
         (
              `id`,
@@ -170,7 +170,7 @@
     </insert>
     
     
-    <update id="updateEarn" parameterType="com.bjsxt.pojo.Earn">
+    <update id="updateEarn" parameterType="com.zive.pojo.Earn">
     	UPDATE shop_s_consumption_earn
     	<set>
                     <if test ='null != consumption_id'>consumption_id = #{consumption_id},</if>

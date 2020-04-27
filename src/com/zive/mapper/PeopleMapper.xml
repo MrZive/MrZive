@@ -3,11 +3,11 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="a.b">
-	<select id="selById" resultType="com.bjsxt.pojo.People" parameterType="map">
+	<select id="selById" resultType="com.zive.pojo.People" parameterType="map">
 		select * from people where id=${id} and name='${name}'
 	</select>
 	
-	<select id="test" resultType="com.bjsxt.pojo.People" parameterType="int">
+	<select id="test" resultType="com.zive.pojo.People" parameterType="int">
 		<![CDATA[ select * from people where id<#{0} ]]>
 	</select>
 	
@@ -30,7 +30,7 @@
 	
 	
 	
-	<select id="getSatisfactionRatio" resultType="com.bjsxt.pojo.SatisfactionRatio" parameterType="map">
+	<select id="getSatisfactionRatio" resultType="com.zive.pojo.SatisfactionRatio" parameterType="map">
 		SELECT SUM(a.num) COUNT,
 		MAX(CASE a.result WHEN '1' THEN a.num ELSE 0 END)good,
 		MAX(CASE a.result WHEN '2' THEN a.num ELSE 0 END)general,
@@ -42,7 +42,7 @@
 	</select>
 	
 	
-	<select id="getSatisfactionShopRatio" resultType="com.bjsxt.pojo.SatisfactionShopRatio" parameterType="map">
+	<select id="getSatisfactionShopRatio" resultType="com.zive.pojo.SatisfactionShopRatio" parameterType="map">
 		SELECT r.shop_id 'shopId',s.no,s.name 'shopName',r.count,r.good,r.general,r.bad FROM
 		(
 			SELECT shop_id,SUM(a.num) COUNT,

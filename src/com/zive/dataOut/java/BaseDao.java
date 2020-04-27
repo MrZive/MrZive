@@ -1,4 +1,4 @@
-package com.bjsxt.dataOut.java;
+package com.zive.dataOut.java;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,12 +9,12 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
-import com.bjsxt.dataOut.entity.Consumption;
-import com.bjsxt.dataOut.entity.CooperationProject;
-import com.bjsxt.dataOut.entity.MemberCard;
-import com.bjsxt.dataOut.entity.ProductInfo;
-import com.bjsxt.dataOut.entity.ProjectInfo;
-import com.bjsxt.dataOut.entity.Shop;
+import com.zive.dataOut.entity.Consumption;
+import com.zive.dataOut.entity.CooperationProject;
+import com.zive.dataOut.entity.MemberCard;
+import com.zive.dataOut.entity.ProductInfo;
+import com.zive.dataOut.entity.ProjectInfo;
+import com.zive.dataOut.entity.Shop;
 
 public class BaseDao {
 

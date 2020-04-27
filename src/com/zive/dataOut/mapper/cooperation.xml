@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bjsxt.dataOut.project">
+<mapper namespace="com.zive.dataOut.project">
 
-	<select id="getProjectCooperationConsumption" parameterType="com.bjsxt.dataOut.entity.ProjectCooperationConsumption" resultType="com.bjsxt.dataOut.entity.ProjectCooperationConsumption">
+	<select id="getProjectCooperationConsumption" parameterType="com.zive.dataOut.entity.ProjectCooperationConsumption" resultType="com.zive.dataOut.entity.ProjectCooperationConsumption">
 		SELECT
         id,
         consumption_id consumptionId,
@@ -48,7 +48,7 @@
 	</select>
 
 
-	<select id="getProjectCooperationDetailConsumption" parameterType="com.bjsxt.dataOut.entity.ProjectCooperationDetailConsumption" resultType="com.bjsxt.dataOut.entity.ProjectCooperationDetailConsumption">
+	<select id="getProjectCooperationDetailConsumption" parameterType="com.zive.dataOut.entity.ProjectCooperationDetailConsumption" resultType="com.zive.dataOut.entity.ProjectCooperationDetailConsumption">
 		SELECT
 		id,
         consumption_id consumptionId,
@@ -94,7 +94,7 @@
 
 	
 	
-	<select id="getProjectCooperationDone" parameterType="com.bjsxt.dataOut.entity.ProjectCooperationDone" resultType="com.bjsxt.dataOut.entity.ProjectCooperationDone">
+	<select id="getProjectCooperationDone" parameterType="com.zive.dataOut.entity.ProjectCooperationDone" resultType="com.zive.dataOut.entity.ProjectCooperationDone">
 		SELECT
         id,
         consumption_id consumptionId,

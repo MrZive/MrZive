@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bjsxt.bi.shop">
+<mapper namespace="com.zive.bi.shop">
 	 <!-- 数据模型过滤套餐 -->
     <sql id="fiterActivity">
         (
@@ -24,7 +24,7 @@
 	        'b20ef527-0a4a-4b29-9180-4a9a0c88fa5a'
         )
     </sql>
-	<select id="getShopConsume" parameterType="map" resultType="com.bjsxt.pojo.Consume">
+	<select id="getShopConsume" parameterType="map" resultType="com.zive.pojo.Consume">
         <!-- 产品 消耗-->
         select 
 		b.shop_id 'shopId',

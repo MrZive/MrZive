@@ -1,4 +1,4 @@
-package com.bjsxt.dataOut.entity;
+package com.zive.dataOut.entity;
 
 import java.sql.Date;
 

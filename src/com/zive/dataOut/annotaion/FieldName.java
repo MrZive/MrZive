@@ -1,4 +1,4 @@
-package com.bjsxt.dataOut.annotaion;
+package com.zive.dataOut.annotaion;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

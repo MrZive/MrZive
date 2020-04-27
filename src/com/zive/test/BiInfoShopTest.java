@@ -1,4 +1,4 @@
-package com.bjsxt.test;
+package com.zive.test;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,8 +20,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.poi.util.ArrayUtil;
 
-import com.bjsxt.pojo.Consume;
-import com.bjsxt.pojo.ShopKPISort;
+import com.zive.pojo.Consume;
+import com.zive.pojo.ShopKPISort;
 
 public class BiInfoShopTest {
 	public static void main(String[] args) throws IOException, ParseException {

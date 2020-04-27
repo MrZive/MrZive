@@ -1,4 +1,4 @@
-package com.bjsxt.test;
+package com.zive.test;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,8 +13,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
-import com.bjsxt.pojo.Consume;
-import com.bjsxt.pojo.ShopKPISort;
+import com.zive.pojo.Consume;
+import com.zive.pojo.ShopKPISort;
 
 public class CooTest {
 	public static void main(String[] args) throws IOException, ParseException {

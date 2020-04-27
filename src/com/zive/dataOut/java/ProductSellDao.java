@@ -1,4 +1,4 @@
-package com.bjsxt.dataOut.java;
+package com.zive.dataOut.java;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,12 +6,12 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.bjsxt.dataOut.entity.Consumption;
-import com.bjsxt.dataOut.entity.MyProductConsumption;
-import com.bjsxt.dataOut.entity.ProductConsumption;
-import com.bjsxt.dataOut.entity.ProductDetailConsumption;
-import com.bjsxt.dataOut.entity.ProductConsumption;
-import com.bjsxt.dataOut.entity.ProductDetailConsumption;
+import com.zive.dataOut.entity.Consumption;
+import com.zive.dataOut.entity.MyProductConsumption;
+import com.zive.dataOut.entity.ProductConsumption;
+import com.zive.dataOut.entity.ProductDetailConsumption;
+import com.zive.dataOut.entity.ProductConsumption;
+import com.zive.dataOut.entity.ProductDetailConsumption;
 
 public class ProductSellDao extends BaseDao{
 

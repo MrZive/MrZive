@@ -1,4 +1,4 @@
-package com.bjsxt.test;
+package com.zive.test;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,16 +13,16 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.alibaba.fastjson.JSONArray;
-import com.bjsxt.dataOut.annotaion.FieldName;
-import com.bjsxt.dataOut.annotaion.TableName;
-import com.bjsxt.dataOut.entity.Shop;
-import com.bjsxt.dataOut.java.BaseDao;
-import com.bjsxt.dataOut.java.ExcelUtilForDO;
-import com.bjsxt.pub.Excel;
-import com.bjsxt.pub.ExcelCell;
-import com.bjsxt.pub.ExcelRow;
-import com.bjsxt.pub.ExcelSheet;
-import com.bjsxt.pub.OfficeUtil;
+import com.zive.dataOut.annotaion.FieldName;
+import com.zive.dataOut.annotaion.TableName;
+import com.zive.dataOut.entity.Shop;
+import com.zive.dataOut.java.BaseDao;
+import com.zive.dataOut.java.ExcelUtilForDO;
+import com.zive.pub.Excel;
+import com.zive.pub.ExcelCell;
+import com.zive.pub.ExcelRow;
+import com.zive.pub.ExcelSheet;
+import com.zive.pub.OfficeUtil;
 
 public class QinchunShuiYanTest2 {
 

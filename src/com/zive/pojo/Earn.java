@@ -1,4 +1,4 @@
-package com.bjsxt.pojo;
+package com.zive.pojo;
 
 import java.util.Date;
 

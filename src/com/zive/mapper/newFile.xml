@@ -63,14 +63,14 @@
 		left join oa_department_structure i on i.id = a.shop_id
     </select>
     
-    <resultMap id="employeeMap" type="com.bjsxt.pojo.NewSetBuy">
+    <resultMap id="employeeMap" type="com.zive.pojo.NewSetBuy">
 		<result property="bussionessId" column="bussionessId"/>
 		<result property="orderId" column="orderId"/>
 		<result property="detailId" column="detailId"/>
 		<collection property="employeeEarnList" column="{consumptionId=bussionessId,orderId=orderId,detailId=detailId}" javaType="list" select="getCustomSalesEmployeeEarn" />
 	</resultMap>
 	
-	<select id="getCustomSalesEmployeeEarn" parameterType="map" resultType="com.bjsxt.pojo.EmployeeEarn">
+	<select id="getCustomSalesEmployeeEarn" parameterType="map" resultType="com.zive.pojo.EmployeeEarn">
 		SELECT a.consumption_id 'employeeStructureName',b. name 'employeeName',a.earn,a.store_earn 'storeEarn'
 		FROM `shop_s_consumption_earn` a 
 		LEFT JOIN `oa_employee_info` b ON a.shoper_id=b.id

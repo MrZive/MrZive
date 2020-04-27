@@ -1,7 +1,7 @@
-package com.bjsxt.dataOut.entity;
+package com.zive.dataOut.entity;
 
-import com.bjsxt.dataOut.annotaion.FieldName;
-import com.bjsxt.dataOut.annotaion.TableName;
+import com.zive.dataOut.annotaion.FieldName;
+import com.zive.dataOut.annotaion.TableName;
 
 @TableName("退款单-合作项目--纹绣")
 public class MyRefundDetailOfCooperationWx {

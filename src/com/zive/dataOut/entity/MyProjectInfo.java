@@ -1,10 +1,10 @@
-package com.bjsxt.dataOut.entity;
+package com.zive.dataOut.entity;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import com.bjsxt.dataOut.annotaion.FieldName;
-import com.bjsxt.dataOut.annotaion.TableName;
+import com.zive.dataOut.annotaion.FieldName;
+import com.zive.dataOut.annotaion.TableName;
 
 
 @TableName("传统项目")

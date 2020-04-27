@@ -1,4 +1,4 @@
-package com.bjsxt.web;
+package com.zive.web;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

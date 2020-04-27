@@ -1,4 +1,4 @@
-package com.bjsxt.test;
+package com.zive.test;
 
 import java.util.HashMap;
 import java.util.Map;

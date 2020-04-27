@@ -1,10 +1,10 @@
-package com.bjsxt.satisfaction;
+package com.zive.satisfaction;
 
 import java.util.List;
 import java.util.Map;
 
-import com.bjsxt.pojo.SatisfactionRatio;
-import com.bjsxt.pojo.SatisfactionShopRatio;
+import com.zive.pojo.SatisfactionRatio;
+import com.zive.pojo.SatisfactionShopRatio;
 
 public interface ISatisfactionResultDao {
 

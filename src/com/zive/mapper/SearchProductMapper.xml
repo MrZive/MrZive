@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bjsxt.search">
+<mapper namespace="com.zive.search">
 	
     <!-- 查询产品取货详情 -->
     <select id="getCustomProductSalesAnalyzes" parameterType="map" resultMap="productEmployeeMap">
@@ -30,13 +30,13 @@
 		</if>
     </select>
     
-   	<resultMap id="productEmployeeMap" type="com.bjsxt.pojo.CustomProductSales">
+   	<resultMap id="productEmployeeMap" type="com.zive.pojo.CustomProductSales">
 		<result property="id" column="id"/>
 		<result property="consumptionId" column="consumptionId"/>
 		<collection property="employeeEarnList" column="{consumptionId=consumptionId,detailId=id}" javaType="list" select="getCustomProductSalesEmployeeEarn" />
 	</resultMap>
 	
-	<select id="getCustomProductSalesEmployeeEarn" parameterType="map" resultType="com.bjsxt.pojo.CustomProductSalesEmployeeEarn">
+	<select id="getCustomProductSalesEmployeeEarn" parameterType="map" resultType="com.zive.pojo.CustomProductSalesEmployeeEarn">
 		SELECT a.consumption_id 'consumptionId',a.type 'earnType',a.store_earn 'storeEarn',a.earn,a.is_fail 'isFail',a.detail_id 'detailId',b.id 'employeeId',b.employee_no 'employeeNo',b.name 'employeeName',b.gender
 		,b.phone,b.entry_date 'entryDate' 
 		FROM `shop_s_consumption_earn` a 
@@ -98,7 +98,7 @@
 		</if>
 	</select>
 	
-	<resultMap id="productEmployeeMapReturn" type="com.bjsxt.pojo.CustomProductSales">
+	<resultMap id="productEmployeeMapReturn" type="com.zive.pojo.CustomProductSales">
 		<result property="id" column="id"/>
 		<result property="consumptionId" column="consumptionId"/>
 		<result property="returnConsumptionId" column="returnConsumptionId"/>
@@ -131,7 +131,7 @@
 		</if>
     </select>
     
-   	<resultMap id="productEmployeeMapRefund" type="com.bjsxt.pojo.CustomProductSales">
+   	<resultMap id="productEmployeeMapRefund" type="com.zive.pojo.CustomProductSales">
 		<result property="id" column="id"/>
 		<result property="consumptionId" column="consumptionId"/>
 		<result property="refundConsumptionId" column="refundConsumptionId"/>

@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bjsxt.dataOut.product">
+<mapper namespace="com.zive.dataOut.product">
 
-	<select id="getProductInfoMeasure" parameterType="string" resultType="com.bjsxt.dataOut.entity.ProductInfoMeasure">
+	<select id="getProductInfoMeasure" parameterType="string" resultType="com.zive.dataOut.entity.ProductInfoMeasure">
 		SELECT
 		id,
         product_id productId,
@@ -21,7 +21,7 @@
 	</select>
 	
 	
-	<select id="getProductInfoPrice" parameterType="string" resultType="com.bjsxt.dataOut.entity.ProductInfoPrice">
+	<select id="getProductInfoPrice" parameterType="string" resultType="com.zive.dataOut.entity.ProductInfoPrice">
 		SELECT
         id,
         shop_id shopId,
@@ -43,7 +43,7 @@
         </where>
 	</select>
 
-	<select id="getProductConsumption" parameterType="com.bjsxt.dataOut.entity.ProductConsumption" resultType="com.bjsxt.dataOut.entity.ProductConsumption">
+	<select id="getProductConsumption" parameterType="com.zive.dataOut.entity.ProductConsumption" resultType="com.zive.dataOut.entity.ProductConsumption">
 		SELECT
 		id,
         consumption_id 'consumptionId',
@@ -82,7 +82,7 @@
 	</select>
 
 
-	<select id="getProductDetailConsumption" parameterType="com.bjsxt.dataOut.entity.ProductDetailConsumption" resultType="com.bjsxt.dataOut.entity.ProductDetailConsumption">
+	<select id="getProductDetailConsumption" parameterType="com.zive.dataOut.entity.ProductDetailConsumption" resultType="com.zive.dataOut.entity.ProductDetailConsumption">
 		SELECT
 		id,
         consumption_id 'consumptionId',
@@ -145,7 +145,7 @@
 	</select>
 	
 	
-	<select id="getProductGet" parameterType="com.bjsxt.dataOut.entity.ProductGet" resultType="com.bjsxt.dataOut.entity.ProductGet">
+	<select id="getProductGet" parameterType="com.zive.dataOut.entity.ProductGet" resultType="com.zive.dataOut.entity.ProductGet">
 		SELECT
 		id,
         consumption_id consumptionId,
@@ -170,7 +170,7 @@
     </select>
 	
 	
-	<select id="getProductGetDetail" parameterType="com.bjsxt.dataOut.entity.ProductGetDetail" resultType="com.bjsxt.dataOut.entity.ProductGetDetail">
+	<select id="getProductGetDetail" parameterType="com.zive.dataOut.entity.ProductGetDetail" resultType="com.zive.dataOut.entity.ProductGetDetail">
 		SELECT
 		id,
         order_id orderId,

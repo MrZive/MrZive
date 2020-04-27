@@ -1,4 +1,4 @@
-package com.bjsxt.pojo;
+package com.zive.pojo;
 
 public class People {
 	private int id;

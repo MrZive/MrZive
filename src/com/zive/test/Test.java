@@ -1,4 +1,4 @@
-package com.bjsxt.test;
+package com.zive.test;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,9 +12,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
-import com.bjsxt.pojo.People;
-import com.bjsxt.pojo.SatisfactionShopRatio;
-import com.bjsxt.util.CommonUtil;
+import com.zive.pojo.People;
+import com.zive.pojo.SatisfactionShopRatio;
+import com.zive.util.CommonUtil;
 
 public class Test {
 	public static void main(String[] args) throws IOException {

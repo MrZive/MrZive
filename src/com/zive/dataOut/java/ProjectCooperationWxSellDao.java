@@ -1,10 +1,10 @@
-package com.bjsxt.dataOut.java;
+package com.zive.dataOut.java;
 
 import java.io.IOException;
 import java.util.List;
 
-import com.bjsxt.dataOut.entity.ProjectCooperationConsumption;
-import com.bjsxt.dataOut.entity.ProjectCooperationWxDetailConsumption;
+import com.zive.dataOut.entity.ProjectCooperationConsumption;
+import com.zive.dataOut.entity.ProjectCooperationWxDetailConsumption;
 
 public class ProjectCooperationWxSellDao extends BaseDao{
 

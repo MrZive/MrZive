@@ -1,4 +1,4 @@
-package com.bjsxt.test;
+package com.zive.test;
 
 import java.awt.Color;
 import java.io.File;
@@ -25,13 +25,13 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import com.alibaba.fastjson.JSON;
-import com.bjsxt.pojo.Earn;
-import com.bjsxt.pojo.OneCooDetail;
-import com.bjsxt.pub.Excel;
-import com.bjsxt.pub.ExcelCell;
-import com.bjsxt.pub.ExcelRow;
-import com.bjsxt.pub.ExcelSheet;
-import com.bjsxt.pub.OfficeUtil;
+import com.zive.pojo.Earn;
+import com.zive.pojo.OneCooDetail;
+import com.zive.pub.Excel;
+import com.zive.pub.ExcelCell;
+import com.zive.pub.ExcelRow;
+import com.zive.pub.ExcelSheet;
+import com.zive.pub.OfficeUtil;
 
 public class AndOneCooTest2 {
 	public static void main(String[] args) throws IOException, ParseException {

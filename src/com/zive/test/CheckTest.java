@@ -1,4 +1,4 @@
-package com.bjsxt.test;
+package com.zive.test;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,11 +12,11 @@ import java.util.Map;
 
 import org.apache.poi.ss.usermodel.CellType;
 
-import com.bjsxt.pub.Excel;
-import com.bjsxt.pub.ExcelCell;
-import com.bjsxt.pub.ExcelRow;
-import com.bjsxt.pub.ExcelSheet;
-import com.bjsxt.pub.OfficeUtil;
+import com.zive.pub.Excel;
+import com.zive.pub.ExcelCell;
+import com.zive.pub.ExcelRow;
+import com.zive.pub.ExcelSheet;
+import com.zive.pub.OfficeUtil;
 
 public class CheckTest {
 
@@ -93,7 +93,7 @@ public class CheckTest {
 			}
 		}
 		System.out.println(storePayAll+"------"+cardPayAll+"------"+earnAll);
-		System.out.println("×Ü£º"+storePayAll+cardPayAll);
+		System.out.println("ï¿½Ü£ï¿½"+storePayAll+cardPayAll);
 		return list;
 	}
 }

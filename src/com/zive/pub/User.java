@@ -1,4 +1,4 @@
-package com.bjsxt.pub;
+package com.zive.pub;
 
 public class User {
     private String id;

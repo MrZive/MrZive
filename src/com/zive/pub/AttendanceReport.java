@@ -1,4 +1,4 @@
-package com.bjsxt.pub;
+package com.zive.pub;
 /**
  * 考勤对象
  * @author lwf

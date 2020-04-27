@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bjsxt.dataOut.common">
-	
-	<select id="getShop" parameterType="com.bjsxt.dataOut.entity.Shop" resultType="com.bjsxt.dataOut.entity.Shop">
+<mapper namespace="com.zive.dataOut.common">
+
+	<select id="getShop" parameterType="com.zive.dataOut.entity.Shop" resultType="com.zive.dataOut.entity.Shop">
 		SELECT
 		id,
         no,
@@ -46,7 +46,7 @@
 		</where>
 	</select>
 
-	<select id="getMemberCard" parameterType="com.bjsxt.dataOut.entity.MemberCard" resultType="com.bjsxt.dataOut.entity.MemberCard">
+	<select id="getMemberCard" parameterType="com.zive.dataOut.entity.MemberCard" resultType="com.zive.dataOut.entity.MemberCard">
 		select
 		id,
 		phone 'phone',
@@ -91,7 +91,7 @@
 		</where>
 	</select>
 
-	<select id="getProductInfo" resultType="com.bjsxt.dataOut.entity.ProductInfo" parameterType="com.bjsxt.dataOut.entity.ProductInfo">
+	<select id="getProductInfo" resultType="com.zive.dataOut.entity.ProductInfo" parameterType="com.zive.dataOut.entity.ProductInfo">
 		SELECT
 		id,
         no,
@@ -130,7 +130,7 @@
 	</select>
 	
 	
-	<select id="getProjectInfo" resultType="com.bjsxt.dataOut.entity.ProjectInfo" parameterType="com.bjsxt.dataOut.entity.ProjectInfo">
+	<select id="getProjectInfo" resultType="com.zive.dataOut.entity.ProjectInfo" parameterType="com.zive.dataOut.entity.ProjectInfo">
 		SELECT
 		id,
         no,
@@ -161,7 +161,7 @@
 	</select>
 	
 	
-	<select id="getCooperationProject" resultType="com.bjsxt.dataOut.entity.CooperationProject" parameterType="com.bjsxt.dataOut.entity.CooperationProject">
+	<select id="getCooperationProject" resultType="com.zive.dataOut.entity.CooperationProject" parameterType="com.zive.dataOut.entity.CooperationProject">
 		SELECT
   		id,
         no,
@@ -195,7 +195,7 @@
 		</where>
 	</select>
 	
-	<select id="getConsumption" resultType="com.bjsxt.dataOut.entity.Consumption" parameterType="com.bjsxt.dataOut.entity.Consumption">
+	<select id="getConsumption" resultType="com.zive.dataOut.entity.Consumption" parameterType="com.zive.dataOut.entity.Consumption">
 		SELECT
 		id,
         member_card_id memberCardId,

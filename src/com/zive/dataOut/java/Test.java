@@ -1,9 +1,14 @@
-package com.bjsxt.dataOut.java;
+package com.zive.dataOut.java;
 
-import com.bjsxt.dataOut.annotaion.TableName;
-import com.bjsxt.dataOut.entity.MyProductGet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class Test {
+import com.alibaba.rocketmq.shade.com.alibaba.fastjson.JSON;
+import com.zive.dataOut.annotaion.TableName;
+import com.zive.dataOut.entity.MyProductGet;
+
+public class Test extends BaseDao{
 
 	
 	public static void main(String[] args) {
@@ -16,6 +21,6 @@ public class Test {
 //        }
 		
 		int rate = 12;
-		System.out.println(rate >= 60 ? (rate > 120 ? 120 : rate) : 0);
+		System.out.println(rate >= 60 ? rate > 120 ? 120 : rate : 0);
 	}
 }

@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bjsxt.dataOut.refund">
+<mapper namespace="com.zive.dataOut.refund">
 	
-	<select id="getShop" parameterType="com.bjsxt.dataOut.entity.Shop" resultType="com.bjsxt.dataOut.entity.Shop">
+	<select id="getShop" parameterType="com.zive.dataOut.entity.Shop" resultType="com.zive.dataOut.entity.Shop">
 	</select>
 	
 	
@@ -510,7 +510,7 @@
 	
 
 
-	<select id="getRefund" parameterType="com.bjsxt.dataOut.entity.Refund" resultType="com.bjsxt.dataOut.entity.Refund">
+	<select id="getRefund" parameterType="com.zive.dataOut.entity.Refund" resultType="com.zive.dataOut.entity.Refund">
 		SELECT
 		id,
         create_user_id createUserId,
@@ -592,7 +592,7 @@
 	</select>
 	
 	
-	<select id="getRefundDetail" parameterType="com.bjsxt.dataOut.entity.RefundDetail" resultType="com.bjsxt.dataOut.entity.RefundDetail">
+	<select id="getRefundDetail" parameterType="com.zive.dataOut.entity.RefundDetail" resultType="com.zive.dataOut.entity.RefundDetail">
 	SELECT
 	id,
     detail_id detailId,

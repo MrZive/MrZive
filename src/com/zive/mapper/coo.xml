@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjsxt">
-	<select id="getShopConsume" parameterType="map" resultType="com.bjsxt.pojo.Consume">
+	<select id="getShopConsume" parameterType="map" resultType="com.zive.pojo.Consume">
 		select
 		a.service_shop_id 'shopId',
 		sum(a.service_number) 'consumeNumber',
@@ -58,7 +58,7 @@
 		group by a.service_shop_id,e.is_wenxiu,a.is_count_comsume
 	</select>
 	
-	<select id="getShopConsume2" parameterType="map" resultType="com.bjsxt.pojo.Consume">
+	<select id="getShopConsume2" parameterType="map" resultType="com.zive.pojo.Consume">
 		select
 		a.service_shop_id 'shopId',
 		sum(a.service_number) 'consumeNumber',

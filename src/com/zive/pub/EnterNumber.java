@@ -1,4 +1,4 @@
-package com.bjsxt.pub;
+package com.zive.pub;
 
 /**
  * 进店人数

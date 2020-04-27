@@ -1,4 +1,4 @@
-package com.bjsxt.test;
+package com.zive.test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,16 +21,16 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.poi.hssf.util.HSSFColor;
 
-import com.bjsxt.pojo.CustomProductSales;
-import com.bjsxt.pojo.CustomProductSalesEmployeeEarn;
-import com.bjsxt.pojo.People;
-import com.bjsxt.pojo.SatisfactionRatio;
-import com.bjsxt.pojo.SatisfactionShopRatio;
-import com.bjsxt.pub.Excel;
-import com.bjsxt.pub.ExcelCell;
-import com.bjsxt.pub.ExcelRow;
-import com.bjsxt.pub.ExcelSheet;
-import com.bjsxt.pub.OfficeUtil;
+import com.zive.pojo.CustomProductSales;
+import com.zive.pojo.CustomProductSalesEmployeeEarn;
+import com.zive.pojo.People;
+import com.zive.pojo.SatisfactionRatio;
+import com.zive.pojo.SatisfactionShopRatio;
+import com.zive.pub.Excel;
+import com.zive.pub.ExcelCell;
+import com.zive.pub.ExcelRow;
+import com.zive.pub.ExcelSheet;
+import com.zive.pub.OfficeUtil;
 
 public class SearchProductTest {
 	public static void main(String[] args) throws IOException, ParseException {
