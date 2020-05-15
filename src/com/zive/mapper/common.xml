@@ -6,4 +6,8 @@
 	 <select id="getMemberCardId" parameterType="string" resultType="string">
 	 	select id from `shop_s_member_card` where phone = #{value}
 	 </select>
+	 
+	 <select id="getSettingByKey" resultType="string">
+	 	SELECT `value` FROM `qhc_system_setting` WHERE `key` = #{value}
+	 </select>
 </mapper>
