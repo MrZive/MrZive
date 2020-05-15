@@ -66,12 +66,12 @@ public class ProjectCooperationDoneDao extends BaseDao{
 //	static public ProjectCooperationDone getProjectCooperationDoneById(String id){
 //		ProjectCooperationDone ProjectCooperationDone = new ProjectCooperationDone();
 //		ProjectCooperationDone.setId(id);
-//		ProjectCooperationDone one = getSession().selectOne("com.bjsxt.dataOut.project.getProjectCooperationDone", ProjectCooperationDone);
+//		ProjectCooperationDone one = getSession().selectOne("com.zive.dataOut.project.getProjectCooperationDone", ProjectCooperationDone);
 //		return one;
 //	}
 	
 	static public List<ProjectCooperationDone> getProjectCooperationDone(ProjectCooperationDone ProjectCooperationDone){
-		List<ProjectCooperationDone> list = getSession().selectList("com.bjsxt.dataOut.project.getProjectCooperationDone", ProjectCooperationDone);
+		List<ProjectCooperationDone> list = getSession().selectList("com.zive.dataOut.project.getProjectCooperationDone", ProjectCooperationDone);
 		return list;
 	}
 	

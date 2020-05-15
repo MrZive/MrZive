@@ -55,19 +55,19 @@ public class ProjectCooperationWxSellDao extends BaseDao{
 	}
 	
 //	static List<ProjectCooperationConsumption> getProjectCooperationConsumption(ProjectCooperationConsumption detail){
-//		List<ProjectCooperationConsumption> list = getSession().selectList("com.bjsxt.dataOut.project.getProjectCooperationConsumption", detail);
+//		List<ProjectCooperationConsumption> list = getSession().selectList("com.zive.dataOut.project.getProjectCooperationConsumption", detail);
 //		return list;
 //	}
 	
 	static List<ProjectCooperationWxDetailConsumption> getProjectCooperationWxDetailConsumption(ProjectCooperationWxDetailConsumption detail){
-		List<ProjectCooperationWxDetailConsumption> list = getSession().selectList("com.bjsxt.dataOut.project.getProjectCooperationWxDetailConsumption", detail);
+		List<ProjectCooperationWxDetailConsumption> list = getSession().selectList("com.zive.dataOut.project.getProjectCooperationWxDetailConsumption", detail);
 		return list;
 	}
 	
 	static ProjectCooperationWxDetailConsumption getProjectCooperationWxDetailConsumptionById(String id){
 		ProjectCooperationWxDetailConsumption detail = new ProjectCooperationWxDetailConsumption();
 		detail.setId(id);
-		ProjectCooperationWxDetailConsumption one = getSession().selectOne("com.bjsxt.dataOut.project.getProjectCooperationWxDetailConsumption", detail);
+		ProjectCooperationWxDetailConsumption one = getSession().selectOne("com.zive.dataOut.project.getProjectCooperationWxDetailConsumption", detail);
 		return one;
 	}
 }

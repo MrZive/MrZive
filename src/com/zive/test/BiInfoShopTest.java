@@ -40,7 +40,7 @@ public class BiInfoShopTest {
 		map.put("shopIds", null);
 		
 		//获取门店消耗统计
-		List<Consume> shopConsume = session.selectList("com.bjsxt.bi.shop.getShopConsume",map);
+		List<Consume> shopConsume = session.selectList("com.zive.bi.shop.getShopConsume",map);
 		show(shopConsume,map.get("shopIds"));
 	}
 	

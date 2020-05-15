@@ -50,5 +50,8 @@
 		<mapper resource="com/zive/dataOut/mapper/cooperationWx.xml"/>
 		<mapper resource="com/zive/dataOut/mapper/return.xml"/>
 		<mapper resource="com/zive/dataOut/mapper/refund.xml"/>
+		
+		<!-- bi报表相关 -->
+		<mapper resource="com/zive/bi/mapper/biProjectPrice.xml"/>
 	</mappers>
 </configuration>

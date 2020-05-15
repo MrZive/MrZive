@@ -55,7 +55,7 @@ public class ActivityMemberTest {
 		map.put("status", "1");
 //		map.put("shopIds", "110105");
 		
-		List<Map<String,Object>> activityMemberForm = session.selectList("com.bjsxt.getActivityMemberAnalyzes",map);
+		List<Map<String,Object>> activityMemberForm = session.selectList("com.zive.getActivityMemberAnalyzes",map);
 		file(activityMemberForm);
 	}
 	

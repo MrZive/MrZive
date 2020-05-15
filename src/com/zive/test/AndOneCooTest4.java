@@ -40,7 +40,7 @@ public class AndOneCooTest4 {
 		SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(is);
 		SqlSession session = factory.openSession(false);
 		Map<String,Object> kxi = new HashMap<>();
-		List<Earn> selectList = session.selectList("com.bjsxt.getOnePercentEarn",kxi);
+		List<Earn> selectList = session.selectList("com.zive.getOnePercentEarn",kxi);
 		
 		
 		File file = new File("C://22/统计后合作表格2.xlsx");

@@ -63,7 +63,7 @@ public class ProductTest {
 //		map.put("shopIds", "110105");
 		BigDecimal code=new BigDecimal(0);
 		
-//		List<CustomProductSales> product = session.selectList("com.bjsxt.getCustomProductSalesAnalyzes",map);
+//		List<CustomProductSales> product = session.selectList("com.zive.getCustomProductSalesAnalyzes",map);
 //		check(product,1);
 //		System.out.println(product.size());
 //		file(product);
@@ -71,7 +71,7 @@ public class ProductTest {
 //			code=code.add(cu.getCashPay().add(cu.getBankcardPay()));
 //		}
 		
-		List<CustomProductSales> productReturn = session.selectList("com.bjsxt.getCustomProductSalesAnalyzesReturn",map);
+		List<CustomProductSales> productReturn = session.selectList("com.zive.getCustomProductSalesAnalyzesReturn",map);
 //		check(productReturn,2);
 //		System.out.println(productReturn.size());
 //		file(productReturn);
@@ -79,8 +79,8 @@ public class ProductTest {
 //			code=code.add(cu.getCashPay().add(cu.getBankcardPay()));
 //		}
 		
-//		List<CustomProductSales> productRefund = session.selectList("com.bjsxt.getCustomProductSalesAnalyzesRefund",map);
-//		List<CustomProductSales> productRefund = session.selectList("com.bjsxt.getCustomProductSalesAnalyzesRefund2",map);
+//		List<CustomProductSales> productRefund = session.selectList("com.zive.getCustomProductSalesAnalyzesRefund",map);
+//		List<CustomProductSales> productRefund = session.selectList("com.zive.getCustomProductSalesAnalyzesRefund2",map);
 //		check(productRefund,3);
 //		System.out.println(productRefund.size());
 //		file(productRefund);

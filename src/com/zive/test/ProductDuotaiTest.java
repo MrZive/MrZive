@@ -45,7 +45,7 @@ public class ProductDuotaiTest {
 		HashMap<String, Object> map = new HashMap<String,Object>();
 		map.put("beginDate", sdf.parse(beginDate));
 		map.put("endDate", sdf.parse(endDate));
-		List<Map<String,Object>> product = session.selectList("com.bjsxt.getDuotai");
+		List<Map<String,Object>> product = session.selectList("com.zive.getDuotai");
 		
 		file(product);
 	}

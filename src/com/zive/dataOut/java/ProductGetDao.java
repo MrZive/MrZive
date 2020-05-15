@@ -72,12 +72,12 @@ public class ProductGetDao extends BaseDao{
 	static public ProductGet getProductGetById(String id){
 		ProductGet ProductGet = new ProductGet();
 		ProductGet.setId(id);
-		ProductGet one = getSession().selectOne("com.bjsxt.dataOut.product.getProductGet", ProductGet);
+		ProductGet one = getSession().selectOne("com.zive.dataOut.product.getProductGet", ProductGet);
 		return one;
 	}
 	
 	static public List<ProductGet> getProductGet(ProductGet ProductGet){
-		List<ProductGet> list = getSession().selectList("com.bjsxt.dataOut.product.getProductGet", ProductGet);
+		List<ProductGet> list = getSession().selectList("com.zive.dataOut.product.getProductGet", ProductGet);
 		return list;
 	}
 	
@@ -85,12 +85,12 @@ public class ProductGetDao extends BaseDao{
 	static public ProductGetDetail getProductGetDetailById(String id){
 		ProductGetDetail ProductGetDetail = new ProductGetDetail();
 		ProductGetDetail.setId(id);
-		ProductGetDetail one = getSession().selectOne("com.bjsxt.dataOut.product.getProductGetDetail", ProductGetDetail);
+		ProductGetDetail one = getSession().selectOne("com.zive.dataOut.product.getProductGetDetail", ProductGetDetail);
 		return one;
 	}
 	
 	static public List<ProductGetDetail> getProductGetDetail(ProductGetDetail ProductGetDetail){
-		List<ProductGetDetail> list = getSession().selectList("com.bjsxt.dataOut.product.getProductGetDetail", ProductGetDetail);
+		List<ProductGetDetail> list = getSession().selectList("com.zive.dataOut.product.getProductGetDetail", ProductGetDetail);
 		return list;
 	}
 }

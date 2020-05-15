@@ -94,12 +94,12 @@ public class RefundOrderDao extends BaseDao{
 	}
 	
 	static List<Refund> getRefund(Refund refund){
-		List<Refund> list = getSession().selectList("com.bjsxt.dataOut.refund.getRefund", refund);
+		List<Refund> list = getSession().selectList("com.zive.dataOut.refund.getRefund", refund);
 		return list;
 	}
 	
 	static List<RefundDetail> getRefundDetail(RefundDetail detail){ 
-		List<RefundDetail> list = getSession().selectList("com.bjsxt.dataOut.refund.getRefundDetail", detail);
+		List<RefundDetail> list = getSession().selectList("com.zive.dataOut.refund.getRefundDetail", detail);
 		return list;
 	}
 	

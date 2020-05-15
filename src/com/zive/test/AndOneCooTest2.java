@@ -197,7 +197,7 @@ public class AndOneCooTest2 {
 		
 		HashMap<String, Object> shopmap = new HashMap<String,Object>();
 		shopmap.put("shopName", one.getShopName());
-		String consumptionShopId = session.selectOne("com.bjsxt.getShop",shopmap);
+		String consumptionShopId = session.selectOne("com.zive.getShop",shopmap);
 		if(consumptionShopId==null || consumptionShopId.length()==0){
 			session.rollback();
 			throw new RuntimeException();
@@ -216,7 +216,7 @@ public class AndOneCooTest2 {
 		List<String> list = new ArrayList<>();
 		
 		//获取门店消耗统计
-		List<OneCooDetail> cooProjectList = session.selectList("com.bjsxt.getCooProject",map);
+		List<OneCooDetail> cooProjectList = session.selectList("com.zive.getCooProject",map);
 		
 		if(cooProjectList.size()!=1){
 			return null;
@@ -226,7 +226,7 @@ public class AndOneCooTest2 {
 		Map<String,Object> mem = new HashMap<>();
 		mem.put("phone", one.getMember_card_phone());
 		
-		Map<String,Object> selectOne = session.selectOne("com.bjsxt.getMember",mem);
+		Map<String,Object> selectOne = session.selectOne("com.zive.getMember",mem);
 		if(selectOne==null){
 			return null;
 		}
@@ -265,7 +265,7 @@ public class AndOneCooTest2 {
 			allEarn += excelEarn.getEarn();
 //			Map<String,String> map2 = new HashMap<>();
 //			map2.put("name", excelEarn.getShoper_name());
-//			List<Map<String,Object>> shoperList = session.selectList("com.bjsxt.getEmployee",map2);
+//			List<Map<String,Object>> shoperList = session.selectList("com.zive.getEmployee",map2);
 //			if(shoperList==null || shoperList.size()==0){
 //				return false;
 //			}
@@ -288,7 +288,7 @@ public class AndOneCooTest2 {
 			}
 			map.put("no", excelEarn.getShop_no());
 			
-			String shopId = session.selectOne("com.bjsxt.getShop",map);
+			String shopId = session.selectOne("com.zive.getShop",map);
 			if(shopId==null || shopId.length()==0){
 				return false;
 			}else{
@@ -297,7 +297,7 @@ public class AndOneCooTest2 {
 			
 			Map<String,String> map2 = new HashMap<>();
 			map2.put("name", excelEarn.getShoper_name());
-			List<Map<String,Object>> shoperList = session.selectList("com.bjsxt.getEmployee",map2);
+			List<Map<String,Object>> shoperList = session.selectList("com.zive.getEmployee",map2);
 			if(shoperList==null || shoperList.size()==0){
 				System.out.println(excelEarn.getShoper_name());
 				if(excelEarn.getShoper_name().equals("卢凤娟") || excelEarn.getShoper_name().equals("陈慧珍") || excelEarn.getShoper_name().equals("康小凤") || excelEarn.getShoper_name().equals("欧雨萍") || excelEarn.getShoper_name().equals("吕琼练") || excelEarn.getShoper_name().equals("李明凤") || excelEarn.getShoper_name().equals("林小青") || excelEarn.getShoper_name().equals("陈精慧") || excelEarn.getShoper_name().equals("魏璐") || excelEarn.getShoper_name().equals("洗玉萍") || excelEarn.getShoper_name().equals("林艳春") || excelEarn.getShoper_name().equals("汤佳萍")){
@@ -325,7 +325,7 @@ public class AndOneCooTest2 {
 			Map<String,Object> kxi = new HashMap<>();
 			kxi.put("consumption_type_id", one.getConsumption_id()+"_addOnePercent");
 			kxi.put("shoper_id", earn.getShoper_id());
-			Integer oldCount = session.selectOne("com.bjsxt.getEarnCount",kxi);
+			Integer oldCount = session.selectOne("com.zive.getEarnCount",kxi);
 			if(oldCount>0){
 				continue;
 			}
@@ -353,7 +353,7 @@ public class AndOneCooTest2 {
 			}
 			
 			System.out.println(earn.toString());
-			int update = session.update("com.bjsxt.insertEarn", earn);
+			int update = session.update("com.zive.insertEarn", earn);
 			if(update==0){
 				return false;
 			}

@@ -73,12 +73,12 @@ public class ProjectDoneDao extends BaseDao{
 	static public ProjectDone getProjectDoneById(String id){
 		ProjectDone ProjectDone = new ProjectDone();
 		ProjectDone.setId(id);
-		ProjectDone one = getSession().selectOne("com.bjsxt.dataOut.project.getProjectDone", ProjectDone);
+		ProjectDone one = getSession().selectOne("com.zive.dataOut.project.getProjectDone", ProjectDone);
 		return one;
 	}
 	
 	static public List<ProjectDone> getProjectDone(ProjectDone ProjectDone){
-		List<ProjectDone> list = getSession().selectList("com.bjsxt.dataOut.project.getProjectDone", ProjectDone);
+		List<ProjectDone> list = getSession().selectList("com.zive.dataOut.project.getProjectDone", ProjectDone);
 		return list;
 	}
 	
@@ -86,12 +86,12 @@ public class ProjectDoneDao extends BaseDao{
 	static public ProjectDoneDetail getProjectDoneDetailById(String id){
 		ProjectDoneDetail ProjectDoneDetail = new ProjectDoneDetail();
 		ProjectDoneDetail.setId(id);
-		ProjectDoneDetail one = getSession().selectOne("com.bjsxt.dataOut.project.getProjectDoneDetail", ProjectDoneDetail);
+		ProjectDoneDetail one = getSession().selectOne("com.zive.dataOut.project.getProjectDoneDetail", ProjectDoneDetail);
 		return one;
 	}
 	
 	static public List<ProjectDoneDetail> getProjectDoneDetail(ProjectDoneDetail ProjectDoneDetail){
-		List<ProjectDoneDetail> list = getSession().selectList("com.bjsxt.dataOut.project.getProjectDoneDetail", ProjectDoneDetail);
+		List<ProjectDoneDetail> list = getSession().selectList("com.zive.dataOut.project.getProjectDoneDetail", ProjectDoneDetail);
 		return list;
 	}
 }

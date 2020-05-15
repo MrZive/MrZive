@@ -32,7 +32,7 @@ public class RetrunOrderDao extends BaseDao{
 	
 	
 	static List<ReturnDetail> getReturnDetail(ReturnDetail detail){
-		List<ReturnDetail> list = getSession().selectList("com.bjsxt.dataOut.return.getReturnDetail", detail);
+		List<ReturnDetail> list = getSession().selectList("com.zive.dataOut.return.getReturnDetail", detail);
 		return list;
 	}
 }

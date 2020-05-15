@@ -40,14 +40,14 @@ public class BaseDao {
 	
 	//门店----------------------------------------------------------------------------------------------------------------------------------------------------------------
 	static public List<Shop> getShop(Shop shop){
-		List<Shop> list = getSession().selectList("com.bjsxt.dataOut.common.getShop", shop);
+		List<Shop> list = getSession().selectList("com.zive.dataOut.common.getShop", shop);
 		return list;
 	}
 	
 	static public Shop getShopById(String id){
 		Shop shop = new Shop();
 		shop.setId(id);
-		Shop one = getSession().selectOne("com.bjsxt.dataOut.common.getShop", shop);
+		Shop one = getSession().selectOne("com.zive.dataOut.common.getShop", shop);
 		return one;
 	}
 	
@@ -55,19 +55,19 @@ public class BaseDao {
 	static public MemberCard getMemberCardById(String id){
 		MemberCard memberCard = new MemberCard();
 		memberCard.setId(id);
-		MemberCard one = getSession().selectOne("com.bjsxt.dataOut.common.getMemberCard", memberCard);
+		MemberCard one = getSession().selectOne("com.zive.dataOut.common.getMemberCard", memberCard);
 		return one;
 	}
 
 	static public MemberCard getMemberCardByPhone(String phone){
 		MemberCard memberCard = new MemberCard();
 		memberCard.setPhone(phone);
-		MemberCard one = getSession().selectOne("com.bjsxt.dataOut.common.getMemberCard", memberCard);
+		MemberCard one = getSession().selectOne("com.zive.dataOut.common.getMemberCard", memberCard);
 		return one;
 	}
 	
 	static public List<MemberCard> getMemberCard(MemberCard memberCard){
-		List<MemberCard> list = getSession().selectList("com.bjsxt.dataOut.common.getMemberCard", memberCard);
+		List<MemberCard> list = getSession().selectList("com.zive.dataOut.common.getMemberCard", memberCard);
 		return list;
 	}
 	
@@ -75,19 +75,19 @@ public class BaseDao {
 	static public ProductInfo getProductInfoById(String id){
 		ProductInfo ProductInfo = new ProductInfo();
 		ProductInfo.setId(id);
-		ProductInfo one = getSession().selectOne("com.bjsxt.dataOut.common.getProductInfo", ProductInfo);
+		ProductInfo one = getSession().selectOne("com.zive.dataOut.common.getProductInfo", ProductInfo);
 		return one;
 	}
 
 	static public ProductInfo getProductInfoByNo(String no){
 		ProductInfo ProductInfo = new ProductInfo();
 		ProductInfo.setNo(no);
-		ProductInfo one = getSession().selectOne("com.bjsxt.dataOut.common.getProductInfo", ProductInfo);
+		ProductInfo one = getSession().selectOne("com.zive.dataOut.common.getProductInfo", ProductInfo);
 		return one;
 	}
 	
 	static public List<ProductInfo> getProductInfo(ProductInfo ProductInfo){
-		List<ProductInfo> list = getSession().selectList("com.bjsxt.dataOut.common.getProductInfo", ProductInfo);
+		List<ProductInfo> list = getSession().selectList("com.zive.dataOut.common.getProductInfo", ProductInfo);
 		return list;
 	}
 	
@@ -95,19 +95,19 @@ public class BaseDao {
 	static public ProjectInfo getProjectInfoById(String id){
 		ProjectInfo ProjectInfo = new ProjectInfo();
 		ProjectInfo.setId(id);
-		ProjectInfo one = getSession().selectOne("com.bjsxt.dataOut.common.getProjectInfo", ProjectInfo);
+		ProjectInfo one = getSession().selectOne("com.zive.dataOut.common.getProjectInfo", ProjectInfo);
 		return one;
 	}
 
 	static public ProjectInfo getProjectInfoByNo(String no){
 		ProjectInfo ProjectInfo = new ProjectInfo();
 		ProjectInfo.setNo(no);
-		ProjectInfo one = getSession().selectOne("com.bjsxt.dataOut.common.getProjectInfo", ProjectInfo);
+		ProjectInfo one = getSession().selectOne("com.zive.dataOut.common.getProjectInfo", ProjectInfo);
 		return one;
 	}
 	
 	static public List<ProjectInfo> getProjectInfo(ProjectInfo ProjectInfo){
-		List<ProjectInfo> list = getSession().selectList("com.bjsxt.dataOut.common.getProjectInfo", ProjectInfo);
+		List<ProjectInfo> list = getSession().selectList("com.zive.dataOut.common.getProjectInfo", ProjectInfo);
 		return list;
 	}
 	
@@ -115,19 +115,19 @@ public class BaseDao {
 	static public CooperationProject getCooperationProjectById(String id){
 		CooperationProject CooperationProject = new CooperationProject();
 		CooperationProject.setId(id);
-		CooperationProject one = getSession().selectOne("com.bjsxt.dataOut.common.getCooperationProject", CooperationProject);
+		CooperationProject one = getSession().selectOne("com.zive.dataOut.common.getCooperationProject", CooperationProject);
 		return one;
 	}
 
 	static public CooperationProject getCooperationProjectByNo(String no){
 		CooperationProject CooperationProject = new CooperationProject();
 		CooperationProject.setNo(no);
-		CooperationProject one = getSession().selectOne("com.bjsxt.dataOut.common.getCooperationProject", CooperationProject);
+		CooperationProject one = getSession().selectOne("com.zive.dataOut.common.getCooperationProject", CooperationProject);
 		return one;
 	}
 	
 	static public List<CooperationProject> getCooperationProject(CooperationProject CooperationProject){
-		List<CooperationProject> list = getSession().selectList("com.bjsxt.dataOut.common.getCooperationProject", CooperationProject);
+		List<CooperationProject> list = getSession().selectList("com.zive.dataOut.common.getCooperationProject", CooperationProject);
 		return list;
 	}
 	
@@ -135,12 +135,12 @@ public class BaseDao {
 	static public Consumption getConsumptionById(String id){
 		Consumption Consumption = new Consumption();
 		Consumption.setId(id);
-		Consumption one = getSession().selectOne("com.bjsxt.dataOut.common.getConsumption", Consumption);
+		Consumption one = getSession().selectOne("com.zive.dataOut.common.getConsumption", Consumption);
 		return one;
 	}
 	
 	static public List<Consumption> getConsumption(Consumption Consumption){
-		List<Consumption> list = getSession().selectList("com.bjsxt.dataOut.common.getConsumption", Consumption);
+		List<Consumption> list = getSession().selectList("com.zive.dataOut.common.getConsumption", Consumption);
 		return list;
 	}
 }

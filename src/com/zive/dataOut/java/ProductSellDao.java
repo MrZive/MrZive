@@ -61,19 +61,19 @@ public class ProductSellDao extends BaseDao{
 	}
 	
 	static List<ProductConsumption> getProductConsumption(ProductConsumption detail){
-		List<ProductConsumption> list = getSession().selectList("com.bjsxt.dataOut.product.getProductConsumption", detail);
+		List<ProductConsumption> list = getSession().selectList("com.zive.dataOut.product.getProductConsumption", detail);
 		return list;
 	}
 	
 	static List<ProductDetailConsumption> getProductDetailConsumption(ProductDetailConsumption detail){
-		List<ProductDetailConsumption> list = getSession().selectList("com.bjsxt.dataOut.product.getProductDetailConsumption", detail);
+		List<ProductDetailConsumption> list = getSession().selectList("com.zive.dataOut.product.getProductDetailConsumption", detail);
 		return list;
 	}
 	
 	static ProductDetailConsumption getProductDetailConsumptionById(String id){
 		ProductDetailConsumption detail = new ProductDetailConsumption();
 		detail.setId(id);
-		ProductDetailConsumption one = getSession().selectOne("com.bjsxt.dataOut.product.getProductDetailConsumption", detail);
+		ProductDetailConsumption one = getSession().selectOne("com.zive.dataOut.product.getProductDetailConsumption", detail);
 		return one;
 	}
 }

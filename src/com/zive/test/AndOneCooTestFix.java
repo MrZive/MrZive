@@ -42,7 +42,7 @@ public class AndOneCooTestFix {
 		SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(is);
 		SqlSession session = factory.openSession(false);
 		Map<String,Object> kxi = new HashMap<>();
-		List<Earn> selectList = session.selectList("com.bjsxt.getOnePercentEarn",kxi);
+		List<Earn> selectList = session.selectList("com.zive.getOnePercentEarn",kxi);
 		
 		Map<String,Boolean> same = new HashMap<>();
 		for (Earn earnBig : selectList) {
@@ -51,8 +51,8 @@ public class AndOneCooTestFix {
 				
 				Map<String,String> map = new HashMap<>();
 				map.put("id", earnBig.getConsumption_shop_id());
-				String shopNo = session.selectOne("com.bjsxt.getShopNo",map);
-				String shopName = session.selectOne("com.bjsxt.getShopName",map);
+				String shopNo = session.selectOne("com.zive.getShopNo",map);
+				String shopName = session.selectOne("com.zive.getShopName",map);
 				
 				String doneId = "S"+shopNo+System.currentTimeMillis()+"_addOnePercent";
 				
@@ -75,7 +75,7 @@ public class AndOneCooTestFix {
 				done.setRemark("9月份之前合作项目剩余的一成业绩分配");
 				done.setShareLeftEarn(0D);
 				done.setCreateDate(date);
-				int update = session.update("com.bjsxt.insertDone", done);
+				int update = session.update("com.zive.insertDone", done);
 				if(update<=0){
 					throw new RuntimeException();
 				}
@@ -94,7 +94,7 @@ public class AndOneCooTestFix {
 						earnUpdate.setConsumption_type_id(doneId);
 						earnUpdate.setConsumption_date(date);
 						earnUpdate.setCreate_date(date);
-						int updateEarn = session.update("com.bjsxt.updateEarn", earnUpdate);
+						int updateEarn = session.update("com.zive.updateEarn", earnUpdate);
 						if(updateEarn<=0){
 							throw new RuntimeException();
 						}

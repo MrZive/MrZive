@@ -51,12 +51,12 @@ public class ProductInfoDao extends BaseDao{
 	}
 	
 	static public List<ProductInfoMeasure> getProductInfoMeasure(String productId){
-		List<ProductInfoMeasure> list = getSession().selectList("com.bjsxt.dataOut.product.getProductInfoMeasure", productId);
+		List<ProductInfoMeasure> list = getSession().selectList("com.zive.dataOut.product.getProductInfoMeasure", productId);
 		return list;
 	}
 	
 	static public List<ProductInfoPrice> getProductInfoPrice(String productId){
-		List<ProductInfoPrice> list = getSession().selectList("com.bjsxt.dataOut.product.getProductInfoPrice", productId);
+		List<ProductInfoPrice> list = getSession().selectList("com.zive.dataOut.product.getProductInfoPrice", productId);
 		return list;
 	}
 }

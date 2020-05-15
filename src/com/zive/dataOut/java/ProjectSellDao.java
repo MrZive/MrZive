@@ -59,19 +59,19 @@ public class ProjectSellDao extends BaseDao{
 	}
 	
 	static List<ProjectConsumption> getProjectConsumption(ProjectConsumption detail){
-		List<ProjectConsumption> list = getSession().selectList("com.bjsxt.dataOut.project.getProjectConsumption", detail);
+		List<ProjectConsumption> list = getSession().selectList("com.zive.dataOut.project.getProjectConsumption", detail);
 		return list;
 	}
 	
 	static List<ProjectDetailConsumption> getProjectDetailConsumption(ProjectDetailConsumption detail){
-		List<ProjectDetailConsumption> list = getSession().selectList("com.bjsxt.dataOut.project.getProjectDetailConsumption", detail);
+		List<ProjectDetailConsumption> list = getSession().selectList("com.zive.dataOut.project.getProjectDetailConsumption", detail);
 		return list;
 	}
 	
 	static ProjectDetailConsumption getProjectDetailConsumptionById(String id){
 		ProjectDetailConsumption detail = new ProjectDetailConsumption();
 		detail.setId(id);
-		ProjectDetailConsumption one = getSession().selectOne("com.bjsxt.dataOut.project.getProjectDetailConsumption", detail);
+		ProjectDetailConsumption one = getSession().selectOne("com.zive.dataOut.project.getProjectDetailConsumption", detail);
 		return one;
 	}
 }

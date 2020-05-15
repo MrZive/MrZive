@@ -33,8 +33,8 @@ public class CooTest {
 		map.put("shopIds", null);
 		
 		//获取门店消耗统计
-		List<Consume> shopConsume = session.selectList("com.bjsxt.getShopConsume",map);
-		List<Consume> shopConsume2 = session.selectList("com.bjsxt.getShopConsume2",map);
+		List<Consume> shopConsume = session.selectList("com.zive.getShopConsume",map);
+		List<Consume> shopConsume2 = session.selectList("com.zive.getShopConsume2",map);
 		show(shopConsume);
 		show(shopConsume2);
 	}

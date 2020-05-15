@@ -51,12 +51,12 @@ public class ProjectInfoDao extends BaseDao{
 	}
 	
 	static public List<ProjectInfoMeasure> getProjectInfoMeasure(String projectId){
-		List<ProjectInfoMeasure> list = getSession().selectList("com.bjsxt.dataOut.project.getProjectInfoMeasure", projectId);
+		List<ProjectInfoMeasure> list = getSession().selectList("com.zive.dataOut.project.getProjectInfoMeasure", projectId);
 		return list;
 	}
 	
 	static public List<ProjectInfoPrice> getProjectInfoPrice(String projectId){
-		List<ProjectInfoPrice> list = getSession().selectList("com.bjsxt.dataOut.project.getProjectInfoPrice", projectId);
+		List<ProjectInfoPrice> list = getSession().selectList("com.zive.dataOut.project.getProjectInfoPrice", projectId);
 		return list;
 	}
 }
