@@ -1,0 +1,1578 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zive.bi">
+
+	<select id="getNewEmployeeEarns" resultType="com.zive.bi.entity.EmployeeEarn">
+		
+		<!-- 卖青花瓷项目、卖青花瓷产品、青花瓷项目服务、青花瓷产品取货、还青花瓷项目、还青花瓷产品、卖天使之纹项目 、还天使之纹项目、天使之纹项目手工业绩  19年04月15后卖套餐（项目、产品、纹绣   合作项目有比例不一样）和还套餐（项目、产品）业绩查询归类到此处-->
+		select
+		a.id,
+		a.consumption_shop_id 'resultStructureId',
+		(select name from oa_department_structure where id = a.consumption_shop_id) 'resultStructureName',
+		c.structure_id 'employeeStructureId',
+		(select name from oa_department_structure where id = c.structure_id) 'employeeStructureName',
+		a.shoper_id 'employeeId',
+		c.`name` 'employeeName',
+		a.consumption_id 'businessId',
+		a.consumption_type_id 'orderId',
+		ifnull(a.earn, 0) 'earn',
+		a.type 'resultType',
+		a.is_fail 'isFail',
+		a.consumption_date 'consumptionDate',
+		ifnull(a.store_earn, 0) 'storeEarn',
+		ifnull(a.return_product_earn, 0) 'refundProductEarn',
+		ifnull(a.return_project_earn, 0) 'refundProjectEarn',
+		1 as 'percent'
+		from 
+		shop_s_consumption_earn a 
+		inner join oa_employee_info c 
+		on <![CDATA[ a.consumption_date >=  #{beginDate} and a.consumption_date <=  #{endDate}]]> 
+		and a.type in (2,51,3,52,4,53,5,54,7,59,8,56,34,35,36,37,44,45,48,49,80,81,83,85,86)
+		and a.shoper_id = c.id 
+		<where>
+		    <if test="earnStructureId != null and earnStructureId != ''">
+		        and a.consumption_shop_id= #{earnStructureId}
+		    </if>
+		    <if test="employeeStructureId != null and employeeStructureId != ''">
+		        and c.structure_id= #{employeeStructureId}
+		    </if>
+		    <if test="isFail != null">
+		        and a.is_fail = #{isFail}
+		    </if>
+		    <if test="isFailList != null">
+		        and a.is_fail in
+		        <foreach collection="isFailList" index="index" item="item" open="(" separator="," close=")">
+		            #{item}
+		        </foreach> 
+		    </if>
+		</where>
+		
+		union all
+		<!--兼容19年前04月15前 卖青花瓷套餐、还青花瓷套餐(此处拆分是为了得知道此套餐是项目还是产品类型，因为项目和产品提成点不一样) -->
+		
+		select
+		a.id,
+		a.consumption_shop_id 'resultStructureId',
+		(select name from oa_department_structure where id = a.consumption_shop_id) 'resultStructureName',
+		c.structure_id 'employeeStructureId',
+		(select name from oa_department_structure where id = c.structure_id) 'employeeStructureName',
+		a.shoper_id 'employeeId',
+		c.`name` 'employeeName',
+		a.consumption_id 'businessId',
+		a.consumption_type_id 'orderId',
+		ifnull(a.earn, 0) 'earn',
+		<!-- 套餐中  1是项目，2是产品，3是合作项目 -->
+		case 
+		when a.type in (9,55) then (
+			case e.act_type
+			when 1 then 85 
+			when 2 then 86
+			when 3 then 87
+			else 2311244 end	
+		)
+		when a.type in (1,99,50) then (
+			case e.act_type
+			when 1 then 80 
+			when 2 then 81 
+			when 3 then 82
+			else 132132 end
+		)
+		else '3123123123' end 'resultType',
+		a.is_fail 'isFail',
+		a.consumption_date 'consumptionDate',
+		ifnull(a.store_earn, 0) 'storeEarn',
+		ifnull(a.return_product_earn, 0) 'refundProductEarn',
+		ifnull(a.return_project_earn, 0) 'refundProjectEarn',
+		1 as 'percent'
+		from 
+		shop_s_consumption_earn a 
+		inner join oa_employee_info c 
+		on <![CDATA[ a.consumption_date >=  #{beginDate} and a.consumption_date <=  #{endDate}]]> 
+		and a.type in (1,99,50,9,55)
+		and a.shoper_id = c.id  
+		inner join shop_s_consumption_set_detail d on d.consumption_set_id = a.consumption_type_id
+		inner join shop_b_activity_info e on e.id = d.activity_id
+		<where>
+		    <if test="earnStructureId != null and earnStructureId != ''">
+		        and a.consumption_shop_id = #{earnStructureId}
+		    </if>
+		    <if test="employeeStructureId != null and employeeStructureId != ''">
+		        and c.structure_id= #{employeeStructureId}
+		    </if>
+		    <if test="isFail != null">
+		        and a.is_fail = #{isFail}
+		    </if>
+		    <if test="isFailList != null">
+		        and a.is_fail in
+		        <foreach collection="isFailList" index="index" item="item" open="(" separator="," close=")">
+		            #{item}
+		        </foreach> 
+		    </if>
+		</where> 
+		
+		union all
+		<!-- 卖合作项目（非纹绣先给9成14） 因为做合作项目和购买合作项目关联业绩关系不一样，不得不进行分开兼容   19年4月15套餐合作项目业绩82也放在此处 -->
+		select
+		a.id,
+		a.consumption_shop_id 'resultStructureId',
+		(select name from oa_department_structure where id = a.consumption_shop_id) 'resultStructureName',
+		c.structure_id 'employeeStructureId',
+		(select name from oa_department_structure where id = c.structure_id) 'employeeStructureName',
+		a.shoper_id 'employeeId',
+		c.`name` 'employeeName',
+		a.consumption_id 'businessId',
+		a.consumption_type_id 'orderId',
+		ifnull(a.earn, 0) 'earn',
+		a.type 'resultType',
+		a.is_fail 'isFail',
+		a.consumption_date 'consumptionDate',
+		ifnull(a.store_earn, 0) 'storeEarn',
+		ifnull(a.return_product_earn, 0) 'refundProductEarn',
+		ifnull(a.return_project_earn, 0) 'refundProjectEarn',
+		e.percent as 'percent'
+		from 
+		shop_s_consumption_earn a 
+		inner join oa_employee_info c 
+		on <![CDATA[ a.consumption_date >=  #{beginDate} and a.consumption_date <=  #{endDate}]]> 
+		and a.type in (6,14,82)
+		and a.shoper_id = c.id  
+		left join shop_s_consumption_cooperation_project_detail d on d.consumption_id = a.consumption_id
+		left join shop_b_cooperation_project e on e.id = d.cooperation_id
+		<where>
+		    <if test="earnStructureId != null and earnStructureId != ''">
+		        and a.consumption_shop_id= #{earnStructureId}
+		    </if>
+		    <if test="employeeStructureId != null and employeeStructureId != ''">
+		        and c.structure_id= #{employeeStructureId}
+		    </if>
+		    <if test="isFail != null">
+		        and a.is_fail = #{isFail}
+		    </if>
+		    <if test="isFailList != null">
+		        and a.is_fail in
+		        <foreach collection="isFailList" index="index" item="item" open="(" separator="," close=")">
+		            #{item}
+		        </foreach> 
+		    </if>
+		</where>
+		
+		union all
+		<!-- 合作项目还款查法、（卖还合作项目时为拿比例确定是否应该扣储值） -->
+		select
+		a.id,
+		b.shop_id 'resultStructureId',
+		(select name from oa_department_structure where id = b.shop_id) 'resultStructureName',
+		c.structure_id 'employeeStructureId',
+		(select name from oa_department_structure where id = c.structure_id) 'employeeStructureName',
+		a.shoper_id 'employeeId',
+		c.`name` 'employeeName',
+		a.consumption_id 'businessId',
+		a.consumption_type_id 'orderId',
+		ifnull(a.earn, 0) 'earn',
+		a.type 'resultType',
+		a.is_fail 'isFail',
+		a.consumption_date 'consumptionDate',
+		ifnull(a.store_earn, 0) 'storeEarn',
+		ifnull(a.return_product_earn, 0) 'refundProductEarn',
+		ifnull(a.return_project_earn, 0) 'refundProjectEarn',
+		f.percent as 'percent'
+		from 
+		shop_s_consumption_earn a 
+		inner join shop_s_consumption b 
+		on <![CDATA[ a.consumption_date >=  #{beginDate} and a.consumption_date <=  #{endDate}]]> 
+		and a.type in (10,16)
+		and a.consumption_id = b.id
+		inner join oa_employee_info c on a.shoper_id = c.id  
+		left join shop_s_consumption_return d on d.return_consumption_id = a.consumption_id
+		left join shop_s_consumption_cooperation_project_detail e on e.consumption_cooperation_id = d.consumption_pro_id
+		left join shop_b_cooperation_project f on f.id = e.cooperation_id
+		<where>
+		    <if test="earnStructureId != null and earnStructureId != ''">
+		        and b.shop_id= #{earnStructureId}
+		    </if>
+		    <if test="employeeStructureId != null and employeeStructureId != ''">
+		        and c.structure_id= #{employeeStructureId}
+		    </if>
+		    <if test="isFail != null">
+		        and a.is_fail = #{isFail}
+		    </if>
+		    <if test="isFailList != null">
+		        and a.is_fail in
+		        <foreach collection="isFailList" index="index" item="item" open="(" separator="," close=")">
+		            #{item}
+		        </foreach> 
+		    </if>
+		</where>
+		
+		
+		<!-- 05月1非纹绣做合作项目产生的预收业绩,非纹绣服务逐次返还剩余一成18 -->
+		union all
+		select
+		a.id,
+		b.service_shop_id 'resultStructureId',
+		(select name from oa_department_structure where id = b.service_shop_id) 'resultStructureName',
+		c.structure_id 'employeeStructureId',
+		(select name from oa_department_structure where id = c.structure_id) 'employeeStructureName',
+		a.shoper_id 'employeeId',
+		c.`name` 'employeeName',
+		a.consumption_id 'businessId',
+		a.consumption_type_id 'orderId',
+		ifnull(a.earn, 0) 'earn',
+		a.type 'resultType',
+		a.is_fail 'isFail',
+		a.consumption_date 'consumptionDate',
+		ifnull(a.store_earn, 0) 'storeEarn',
+		ifnull(a.return_product_earn, 0) 'refundProductEarn',
+		ifnull(a.return_project_earn, 0) 'refundProjectEarn',
+		e.percent as 'percent'
+		from 
+		shop_s_consumption_earn a 
+		inner join shop_s_consumption_cooperation_project_done b 
+		on <![CDATA[ a.consumption_date >=  #{beginDate} and a.consumption_date <=  #{endDate}]]> 
+		and a.type in (18)
+		and b.id = a.consumption_type_id
+		inner join oa_employee_info c on a.shoper_id = c.id  
+		left join shop_s_consumption_cooperation_project_detail d on d.id = b.detail_id
+		left join shop_b_cooperation_project e on e.id = d.cooperation_id
+		<where>
+		    <if test="earnStructureId != null and earnStructureId != ''">
+		        and b.service_shop_id= #{earnStructureId}
+		    </if>
+		    <if test="employeeStructureId != null and employeeStructureId != ''">
+		        and c.structure_id= #{employeeStructureId}
+		    </if>
+		    <if test="isFail != null">
+		        and a.is_fail = #{isFail}
+		    </if>
+		    <if test="isFailList != null">
+		        and a.is_fail in
+		        <foreach collection="isFailList" index="index" item="item" open="(" separator="," close=")">
+		            #{item}
+		        </foreach> 
+		    </if>
+		</where>
+		
+		
+		<!-- 针对所有退有额外查法 -->
+		union all
+		select
+		a.id,
+		a.consumption_shop_id 'resultStructureId',
+		(select name from oa_department_structure where id = a.consumption_shop_id) 'resultStructureName',
+		c.structure_id 'employeeStructureId',
+		(select name from oa_department_structure where id = c.structure_id ) 'employeeStructureName',
+		a.shoper_id 'employeeId',
+		c.`name` 'employeeName',
+		a.consumption_id 'businessId',
+		a.consumption_type_id 'orderId',
+		ifnull(a.earn, 0) 'earn',
+		a.type 'resultType',
+		a.is_fail 'isFail',
+		b.check_date 'consumptionDate',
+		ifnull(a.store_earn, 0) 'storeEarn',
+		ifnull(a.return_product_earn, 0) 'refundProductEarn',
+		ifnull(a.return_project_earn, 0) 'refundProjectEarn',
+		1 as 'percent'
+		from 
+		shop_s_consumption_earn a 
+		inner join shop_s_return_transfer b on <![CDATA[ b.check_date >=  #{beginDate} and b.check_date <=  #{endDate}]]> 
+		and a.type in (17,27,57,28,58,29,30,60,31,61,32,33,40,41,42,43,46,47) 
+		and a.consumption_id = b.id
+		inner join oa_employee_info c on a.shoper_id = c.id  
+		<where>
+		    <if test="earnStructureId != null and earnStructureId != ''">
+		        and a.consumption_shop_id= #{earnStructureId}
+		    </if>
+		    <if test="employeeStructureId != null and employeeStructureId != ''">
+		        and c.structure_id= #{employeeStructureId}
+		    </if>
+		    <if test="isFail != null">
+		        and a.is_fail = #{isFail}
+		    </if>
+		    <if test="isFailList != null">
+		        and a.is_fail in
+		        <foreach collection="isFailList" index="index" item="item" open="(" separator="," close=")">
+		            #{item}
+		        </foreach> 
+		    </if>
+		</where> 
+    </select>
+    
+    <select id="getMonthOfTarget" resultType="string">
+    	SELECT shop_id FROM bi_month_shop_target WHERE month = #{month}
+    </select>
+    
+    <select id="getBuyProjectOrderDetail" parameterType="map" resultType="com.zive.bi.entity.ProjectBuy">
+        select 
+        g.id 'orderId',
+        b.id 'businessId',
+        b.fail_earn 'failEarn',
+        (select name from oa_employee_info where id = b.maker_id) 'makerName',
+		a.project_id 'projectId',
+		c.`name` 'projectName',
+		c.`no` 'projectNo',
+		a.real_payment 'projectPrice',
+		a.activity_id 'activityId',
+		d.`name` 'activityName',
+		a.buy_number 'buyNumber',
+		a.coupon 'coupon',
+		a.is_send 'isSend',
+		a.member_card_id 'cardId',
+		e.phone 'cardNo',
+		e.`name` 'memberName',
+		e.is_pass 'isPass',
+		e.pass_time 'passTime',
+		a.price 'buyPrice',
+		<!-- a.service_time 'serviceTime', -->
+		a.is_count 'isCount',
+		b.shop_id 'shopId',
+		f.`name` 'shopName',
+		b.consumption_date 'consumeDate',
+		b.`status` 'status', <!-- 2是作废单，1是正常 -->
+		b.fail_date 'failDate', <!-- 作废日期-->
+		b.region 'area', <!-- 门店区域 -->
+		ifnull(a.payment,0) 'shouldPay',
+		ifnull(a.real_payment,0) 'realPay',
+		ifnull(a.store_pay,0) 'store',
+		ifnull(a.bankcard_pay,0) 'pos',
+		ifnull(a.cash_pay,0) 'cash',
+		ifnull(a.point_pay,0) 'point',
+		a.is_book 'isBook',
+		g.remark,
+		g.is_birthday 'isBirthday',
+		a.buy_owe 'owe',
+		a.is_cash_coupon 'isCashCoupon'
+		from shop_s_consumption_project_detail a 
+		inner join shop_s_consumption b on a.consumption_id = b.id and b.is_cooperation = 0 and a.consumption_set_id is null
+		left join shop_b_project_info c on a.project_id = c.id
+		left join shop_b_activity_info d on a.activity_id = d.id
+		left join shop_s_member_card e on e.id = a.member_card_id
+		left join oa_department_structure f on f.id = b.shop_id
+		left join shop_s_consumption_project  g on g.consumption_id = a.consumption_id
+		<where>
+		   <if test="projectId != null and projectId != ''">
+		       and a.project_id = #{projectId}
+		   </if>
+		   <if test="shopId != null">
+               and b.shop_id = #{shopId}
+           </if>
+		   <if test="status != null">
+		       and b.`status` = #{status}
+		   </if>
+		   <if test="beginConsumeDate != null">
+		      <![CDATA[ and b.consumption_date >= #{beginConsumeDate}]]>
+		   </if>
+		   <if test="endConsumeDate != null">
+		      <![CDATA[ and b.consumption_date <= #{endConsumeDate}]]>
+		   </if>
+		</where>
+    </select>
+    
+    <!-- 查询详细购买产品单据 -->
+    <select id="getBuyProductOrderDetail" parameterType="map" resultType="com.zive.bi.entity.ProductBuy">
+        select 
+        g.id 'orderId',
+        b.id 'businessId',
+        b.fail_earn 'failEarn',
+        (select name from oa_employee_info where id = b.maker_id) 'makerName',
+		a.product_id 'productId',
+		c.`name` 'productName',
+		c.`no` 'productNo',
+		a.activity_id 'activityId',
+		d.`name` 'activityName',
+		a.buy_number 'buyNumber',
+		a.coupon 'coupon',
+		a.is_send 'isSend',
+		a.member_card_id 'cardId',
+		e.phone 'cardNo',
+		e.`name` 'memberName',
+		e.is_pass 'isPass',
+		e.pass_time 'passTime',
+		a.price 'buyPrice',
+		a.buy_unit 'buyUnit',
+		b.shop_id 'shopId',
+		f.`name` 'shopName',
+		b.consumption_date 'consumeDate',
+		b.`status` 'status', <!-- 2是作废单，1是正常 -->
+		b.fail_date 'failDate', <!-- 作废日期-->
+		b.region 'area', <!-- 门店区域 -->
+		a.channel_id 'channelId',
+		ifnull((CASE WHEN a.channel_id=2 THEN g.payment ELSE a.payment END),0) 'shouldPay',
+		ifnull((CASE WHEN a.channel_id=2 THEN g.real_payment ELSE a.real_payment END),0) 'realPay',
+		ifnull((CASE WHEN a.channel_id=2 THEN g.store_pay ELSE a.store_pay END),0) 'store',
+		ifnull((CASE WHEN a.channel_id=2 THEN g.bankcard_pay ELSE a.bankcard_pay END),0) 'pos',
+		ifnull((CASE WHEN a.channel_id=2 THEN g.cash_pay ELSE a.cash_pay END),0) 'cash',
+		ifnull(g.point_pay,0) 'point',
+		a.is_book 'isBook',
+		g.remark,
+		ifnull((CASE WHEN a.channel_id=2 THEN g.buy_owe ELSE a.buy_owe END),0) 'owe',
+		<!-- 2019-05-16添加查询养生顾问和业绩 开始 -->
+		GROUP_CONCAT(CONCAT((SELECT NAME FROM oa_department_structure WHERE id=h.shop_id),':',(SELECT NAME FROM oa_employee_info WHERE id = h.shoper_id),'(',h.earn + h.store_earn,')')) AS 'shoperAndEarn',
+		if((a.buy_number = a.left_number) &amp; (a.buy_unit = a.left_unit),'未提货','已提货') as 'isPick'
+		<!-- 2019-05-16添加查询养生顾问和业绩 结束-->
+		from shop_s_consumption_product_detail a 
+		inner join shop_s_consumption b on a.consumption_id = b.id and b.is_cooperation = 0 and a.consumption_set_id is null
+		left join shop_b_product_info c on a.product_id = c.id
+		left join shop_b_activity_info d on a.activity_id = d.id
+		left join shop_s_member_card e on e.id = a.member_card_id
+		left join oa_department_structure f on f.id = b.shop_id
+		left join shop_s_consumption_product g on g.consumption_id = a.consumption_id
+		<!-- 2019-05-16添加查询养生顾问和业绩 开始-->
+		left join shop_s_consumption_earn h on h.consumption_id = a.consumption_id and (h.type = 3 OR h.type = 52) and IFNULL(h.detail_id,h.consumption_type_id) = IF(h.detail_id,a.id,a.consumption_product_id)
+		<!-- 2019-05-16添加查询养生顾问和业绩 结束-->
+		<where>
+		   <if test="productId != null and productId != ''">
+		       and a.product_id = #{productId}
+		   </if>
+		   <if test="shopId != null">
+               and b.shop_id = #{shopId} 
+           </if>
+		   <if test="status != null">
+		       and b.`status` = #{status}
+		   </if>
+		   <if test="beginConsumeDate != null">
+		      <![CDATA[ and b.consumption_date >= #{beginConsumeDate}]]>
+		   </if>
+		   <if test="endConsumeDate != null">
+		      <![CDATA[ and b.consumption_date <= #{endConsumeDate}]]>
+		   </if>
+		</where>
+		GROUP BY a.id
+    </select>
+
+	<select id="getNewBuySetOrderDetail" parameterType="map" resultMap="employeeMap">
+        select
+		a.id 'bussionessId',
+		b.id 'orderId',
+		a.fail_earn 'failEarn',
+		a.ostype 'osType',
+		a.region 'region',
+		a.consumption_date 'consumptionDate',
+		a.create_date 'createDate',
+		a.shop_id 'shopId',
+		i.`name` 'shopName',
+		h.`phone` 'cardNo',
+		h.`name` 'memberName',
+		h.is_pass 'isPass', 
+		h.pass_time 'passTime', 
+		h.is_introduce 'isIntroduce',
+		g.`name` 'makerName',
+		d.store_pay 'storePay',
+		d.bankcard_pay 'bankcardPay',
+		d.cash_pay 'cashPay',
+		d.buy_owe 'buyOwe',
+		d.is_book 'isBook',
+		d.payment 'payment',
+		d.remark 'remark',
+		b.is_tuoke 'isTuoke',
+		b.is_fail 'isFail',
+		
+		c.buy_number 'buySetNumber',
+		d.buy_number 'buyItemNumber',
+		c.buy_type 'buyTypeSet',
+		d.buy_type 'buyTypeItem',
+		'次' as 'buyUnit',
+		d.price 'buyPrice',
+		c.activity_id 'activityId',
+		e.`name` 'activityName',
+		d.project_id 'itemId',
+		f.`no` 'itemNo',
+		f.`name` 'itemName',
+		d.id 'detailId',
+		'传统项目' as 'type'
+		
+		from shop_s_consumption a 
+		inner join shop_s_consumption_set b on 
+		b.is_detail_pay = 1 and
+		<if test="beginConsumeDate != null">
+		    <![CDATA[ a.consumption_date >= #{beginConsumeDate} and]]>
+		</if>
+		<if test="endConsumeDate != null">
+		    <![CDATA[ a.consumption_date <= #{endConsumeDate} and]]>
+		</if>
+		<if test="shopId != null">
+			a.shop_id = #{shopId} and 
+		</if>
+		<if test="status != null">
+			a.`status` = #{status} and
+		</if>
+		a.id = b.consumption_id
+		inner join shop_s_consumption_set_detail c on c.consumption_set_id = b.id
+		inner join shop_s_consumption_project_detail d on d.consumption_set_id = c.consumption_set_id and c.buy_type = d.buy_type
+		left join shop_b_activity_info e on e.id = c.activity_id
+		left join shop_b_project_info f on f.id = d.project_id
+		left join oa_employee_info g on g.id = a.maker_id
+		left join shop_s_member_card h on h.id = a.member_card_id
+		left join oa_department_structure i on i.id = a.shop_id
+		
+		union all 
+		
+		select
+		a.id 'bussionessId',
+		b.id 'orderId',
+		a.fail_earn 'failEarn',
+		a.ostype 'osType',
+		a.region 'region',
+		a.consumption_date 'consumptionDate',
+		a.create_date 'createDate',
+		a.shop_id 'shopId',
+		i.`name` 'shopName',
+		h.`phone` 'cardNo',
+		h.`name` 'memberName',
+		h.is_pass 'isPass', 
+		h.pass_time 'passTime', 
+		h.is_introduce 'isIntroduce',
+		g.`name` 'makerName',
+		d.store_pay 'storePay',
+		d.bankcard_pay 'bankcardPay',
+		d.cash_pay 'cashPay',
+		d.buy_owe 'buyOwe',
+		d.is_book 'isBook',
+		d.payment 'payment',
+		d.remark 'remark',
+		b.is_tuoke 'isTuoke',
+		b.is_fail 'isFail',
+		
+		c.buy_number 'buySetNumber',
+		d.buy_number 'buyItemNumber',
+		c.buy_type 'buyTypeSet',
+		d.buy_type 'buyTypeItem',
+		d.buy_unit as 'buyUnit',
+		d.price 'buyPrice',
+		c.activity_id 'activityId',
+		e.`name` 'activityName',
+		d.product_id 'itemId',
+		f.`no` 'itemNo',
+		f.`name` 'itemName',
+		d.id 'detailId',
+		'家居产品' as 'type'
+		
+		from shop_s_consumption a 
+		inner join shop_s_consumption_set b on 
+		b.is_detail_pay = 1 and
+		<if test="beginConsumeDate != null">
+		    <![CDATA[ a.consumption_date >= #{beginConsumeDate} and]]>
+		</if>
+		<if test="endConsumeDate != null">
+		    <![CDATA[ a.consumption_date <= #{endConsumeDate} and]]>
+		</if>
+		<if test="shopId != null">
+			a.shop_id = #{shopId} and 
+		</if>
+		<if test="status != null">
+			a.`status` = #{status} and
+		</if>
+		a.id = b.consumption_id
+		inner join shop_s_consumption_set_detail c on c.consumption_set_id = b.id
+		inner join shop_s_consumption_product_detail d on d.consumption_set_id = c.consumption_set_id and c.buy_type = d.buy_type
+		left join shop_b_activity_info e on e.id = c.activity_id
+		left join shop_b_product_info f on f.id = d.product_id
+		left join oa_employee_info g on g.id = a.maker_id
+		left join shop_s_member_card h on h.id = a.member_card_id
+		left join oa_department_structure i on i.id = a.shop_id
+		
+		union all 
+		
+		select
+		a.id 'bussionessId',
+		b.id 'orderId',
+		a.fail_earn 'failEarn',
+		a.ostype 'osType',
+		a.region 'region',
+		a.consumption_date 'consumptionDate',
+		a.create_date 'createDate',
+		a.shop_id 'shopId',
+		i.`name` 'shopName',
+		h.`phone` 'cardNo',
+		h.`name` 'memberName',
+		h.is_pass 'isPass', 
+		h.pass_time 'passTime', 
+		h.is_introduce 'isIntroduce',
+		g.`name` 'makerName',
+		d.store_pay 'storePay',
+		d.bankcard_pay 'bankcardPay',
+		d.cash_pay 'cashPay',
+		d.buy_owe 'buyOwe',
+		d.is_book 'isBook',
+		d.payment 'payment',
+		d.remark 'remark',
+		b.is_tuoke 'isTuoke',
+		b.is_fail 'isFail',
+		c.buy_number 'buySetNumber',
+		d.buy_number 'buyItemNumber',
+		c.buy_type 'buyTypeSet',
+		d.buy_type 'buyTypeItem',
+		'次' as 'buyUnit',
+		d.price 'buyPrice',
+		c.activity_id 'activityId',
+		e.`name` 'activityName',
+		d.project_id 'itemId',
+		f.`no` 'itemNo',
+		f.`name` 'itemName',
+		d.id 'detailId',
+		'纹绣项目' as 'type'
+		
+		from shop_s_consumption a 
+		inner join shop_s_consumption_set b on 
+		b.is_detail_pay = 1 and
+		<if test="beginConsumeDate != null">
+		    <![CDATA[ a.consumption_date >= #{beginConsumeDate} and]]>
+		</if>
+		<if test="endConsumeDate != null">
+		    <![CDATA[ a.consumption_date <= #{endConsumeDate} and]]>
+		</if>
+		<if test="shopId != null">
+			a.shop_id = #{shopId} and 
+		</if>
+		<if test="status != null">
+			a.`status` = #{status} and
+		</if>
+		a.id = b.consumption_id
+		inner join shop_s_consumption_set_detail c on c.consumption_set_id = b.id
+		inner join shop_s_wx_consumption_project_detail d on d.consumption_set_id = c.consumption_set_id and c.buy_type = d.buy_type
+		left join shop_b_activity_info e on e.id = c.activity_id
+		left join shop_b_wx_project_info f on f.id = d.project_id
+		left join oa_employee_info g on g.id = a.maker_id
+		left join shop_s_member_card h on h.id = a.member_card_id
+		left join oa_department_structure i on i.id = a.shop_id
+    </select>
+
+	<resultMap id="employeeMap" type="com.zive.bi.entity.NewSetBuy">
+		<result property="bussionessId" column="bussionessId"/>
+		<result property="orderId" column="orderId"/>
+		<result property="detailId" column="detailId"/>
+		<collection property="employeeEarnList" column="{consumptionId=bussionessId,orderId=orderId,detailId=detailId}" javaType="list" select="getCustomSalesEmployeeEarn" />
+	</resultMap>
+	
+	<select id="getCustomSalesEmployeeEarn" parameterType="map" resultType="com.zive.bi.entity.EmployeeEarn">
+		SELECT c.name 'employeeStructureName',b.name 'employeeName',a.earn,a.store_earn 'storeEarn'
+		FROM `shop_s_consumption_earn` a 
+		LEFT JOIN `oa_employee_info` b ON a.shoper_id=b.id
+		LEFT JOIN `oa_department_structure` c ON c.id=a.shop_id
+		WHERE
+		a.consumption_id = #{consumptionId}
+		AND a.consumption_type_id = #{orderId}
+		AND	a.detail_id = #{detailId}
+    </select>
+
+	<!-- 查询详细购买合作项目单据 -->
+    <select id="getBuyCooperationOrderDetail" parameterType="map" resultType="com.zive.bi.entity.CooperationBuy">
+        select 
+        g.id 'orderId',
+        g.adviser,
+        g.cosmetologist,
+        g.cosmetologist2,
+		g.cosmetologist3,
+        b.receipt_shop_type 'receiptShopType',
+        b.id 'businessId',
+        (select name from oa_employee_info where id = b.maker_id) 'makerName',
+		a.cooperation_id 'cooperationId',
+		a.coupon 'coupon',
+		c.`name` 'cooperationName',
+		c.`no` 'cooperationNo',
+		c.percent percent,
+		a.activity_id 'activityId',
+		d.`name` 'activityName',
+		a.buy_number 'buyNumber',
+		a.coupon 'coupon',
+		a.member_card_id 'cardId',
+		e.phone 'cardNo',
+		e.`name` 'memberName',
+		e.is_pass 'isPass',
+		e.pass_time 'passTime',
+		a.price 'buyPrice',
+		a.buy_number * a.price 'buyMoney',
+		b.shop_id 'shopId',
+		f.`name` 'shopName',
+		b.consumption_date 'consumeDate',
+		b.`status` 'status', 
+		b.fail_date 'failDate', 
+		b.region 'area',
+		ifnull(g.payment,0) 'shouldPay',
+		ifnull(g.real_payment,0) 'realPay',
+		ifnull(g.store_pay,0) 'store',
+		ifnull(g.bank_card_pay,0) 'pos',
+		ifnull(g.cash_pay,0) 'cash',
+		g.is_book 'isBook',
+		g.remark,
+		g.buy_owe 'owe',
+		GROUP_CONCAT(i.`employee_no`) 'employeeNo',
+		GROUP_CONCAT(i.`name`) 'employeeName',
+		GROUP_CONCAT(ifnull(h.earn,0)) 'earn',
+		GROUP_CONCAT(ifnull(h.store_earn,0)) 'storeEarn'
+		from shop_s_consumption_cooperation_project_detail a 
+		inner join shop_s_consumption b on a.consumption_id = b.id and b.is_cooperation = 1
+		left join shop_b_cooperation_project c on a.cooperation_id = c.id
+		left join shop_b_activity_info d on a.activity_id = d.id
+		left join shop_s_member_card e on e.id = a.member_card_id
+		left join oa_department_structure f on f.id = b.shop_id
+		left join shop_s_consumption_cooperation_project g on g.consumption_id = a.consumption_id
+		left join shop_s_consumption_earn h on h.consumption_id = g.consumption_id
+        left join oa_employee_info i on i.id = h.shoper_id
+		<where>
+		   <if test="cooperationId != null and cooperationId != ''">
+		       and a.cooperation_id = #{cooperationId}
+		   </if>
+		   <if test="shopId != null">
+               and b.shop_id = #{shopId}
+           </if>
+		   <if test="status != null">
+		       and b.`status` = #{status}
+		   </if>
+		   <if test="beginConsumeDate != null">
+		      <![CDATA[ and b.consumption_date >= #{beginConsumeDate}]]>
+		   </if>
+		   <if test="endConsumeDate != null">
+		      <![CDATA[ and b.consumption_date <= #{endConsumeDate}]]>
+		   </if>
+		</where>
+		group by g.id
+    </select>
+
+	<!-- 获取退款单 -->
+	<select id="getRefundOrderDetail" parameterType="map" resultType="com.zive.bi.entity.RefundOrderDetail">
+		<!-- 仅退储值 -->
+		select
+		a.is_reurn_bank 'isReurnBank',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.return_transfer_date
+		'transferDate',
+		ifnull(a.total_money,0) 'totalMoney',
+		ifnull(a.return_pay_money,0) 'returnPayMoney',
+		ifnull(a.return_transfer_money,0) 'returnTransferMoney',
+		a.return_is_service_pay 'returnIsServicePay',
+		a.return_bank
+		'returnBank',
+		a.return_bank_open 'returnBankOpen',
+		a.return_bank_card_number 'returnBankCardNumber',
+		a.return_bank_card_user 'returnBankCardUser',
+		a.return_bank_phone
+		'returnBankPhone',
+		a.check_status 'checkStatus',
+		a.check_date
+		'checkDate',
+		a.reason 'remark',
+		a.shop_id 'shopId',
+		ifnull(a.return_money_store,0) 'returnMoneyStore',
+		ifnull(a.return_store_balance,0)'returnStoreBalance',
+		(SELECT earn+IFNULL(store_earn,0) FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 0,1) AS earn1,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 0,1) AS consumpShop1,
+		(SELECT earn+IFNULL(store_earn,0) FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 1,1) AS earn2,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 1,1) AS consumpShop2,
+		(SELECT earn+IFNULL(store_earn,0) FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 2,1) AS earn3,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 2,1) AS consumpShop3,
+		(SELECT earn+IFNULL(store_earn,0) FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 3,1) AS earn4,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 3,1) AS consumpShop4,
+		(SELECT earn+IFNULL(store_earn,0) FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 4,1) AS earn5,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 4,1) AS consumpShop5,
+		(SELECT earn+IFNULL(store_earn,0) FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 5,1) AS earn6,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 5,1) AS consumpShop6,
+		(SELECT earn+IFNULL(store_earn,0) FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 6,1) AS earn7,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 6,1) AS consumpShop7,
+		(SELECT earn+IFNULL(store_earn,0) FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 7,1) AS earn8,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 7,1) AS consumpShop8,
+		f.`name`
+		'shopName',
+		b.number 'tranferNumber',
+		b.unit 'tranferUnit',
+		b.left_money 'leftMoney',
+		ifnull(b.return_money,0) 'returnMoney',
+		'' as 'buyBusinessId',
+		'' as 'buyOrderId',
+		d.phone 'cardNo',
+		d.`name` 'memberName',
+		d.is_pass 'isPass',
+		d.pass_time
+		'passTime',
+		'' as 'proId',
+		'' as 'proNo',
+		'' as 'proName',
+		1 as percent,
+		'仅退储值' as 'proType'
+		from shop_s_return_transfer a
+		left join shop_s_return_transfer_detail b on a.id = b.return_transfer_id
+		left join shop_s_member_card d on d.id = a.member_card_id
+		left join
+		oa_department_structure f on f.id = a.shop_id
+		<where>
+			a.type= 1 and b.return_transfer_id is null
+			<if test="beginRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date >= #{beginRefundDate}]]>
+			</if>
+			<if test="endRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date  <= #{endRefundDate}]]>
+			</if>
+			<if test="beginCheckDate != null">
+		      <![CDATA[ and a.check_date >= #{beginCheckDate}]]>
+			</if>
+			<if test="endCheckDate != null">
+		      <![CDATA[ and a.check_date  <= #{endCheckDate}]]>
+			</if>
+			<if test="shopId != null">
+				and a.shop_id = #{shopId}
+			</if>
+		</where>
+
+
+		union all
+		<!-- 退项目 -->
+		select
+		a.is_reurn_bank 'isReurnBank',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.return_transfer_date
+		'transferDate',
+		ifnull(a.total_money,0) 'totalMoney',
+		ifnull(a.return_pay_money,0) 'returnPayMoney',
+		ifnull(a.return_transfer_money,0) 'returnTransferMoney',
+		a.return_is_service_pay 'returnIsServicePay',
+		a.return_bank
+		'returnBank',
+		a.return_bank_open 'returnBankOpen',
+		a.return_bank_card_number 'returnBankCardNumber',
+		a.return_bank_card_user 'returnBankCardUser',
+		a.return_bank_phone
+		'returnBankPhone',
+		a.check_status 'checkStatus',
+		a.check_date
+		'checkDate',
+		a.reason 'remark',
+		a.shop_id 'shopId',
+		ifnull(a.return_money_store,0) 'returnMoneyStore',
+		ifnull(a.return_store_balance,0)'returnStoreBalance',
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 0,1) AS earn1,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 0,1) AS consumpShop1,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 1,1) AS earn2,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 1,1) AS consumpShop2,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 2,1) AS earn3,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 2,1) AS consumpShop3,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 3,1) AS earn4,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 3,1) AS consumpShop4,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 4,1) AS earn5,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 4,1) AS consumpShop5,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 5,1) AS earn6,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 5,1) AS consumpShop6,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 6,1) AS earn7,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 6,1) AS consumpShop7,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 7,1) AS earn8,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 7,1) AS consumpShop8,
+		f.`name`
+		'shopName',
+		b.number 'tranferNumber',
+		b.unit 'tranferUnit',
+		b.left_money 'leftMoney',
+		ifnull(b.return_money,0) 'returnMoney',
+		c.consumption_id 'buyBusinessId',
+		c.consumption_project_id 'buyOrderId',
+		d.phone 'cardNo',
+		d.`name`
+		'memberName',
+		d.is_pass 'isPass',
+		d.pass_time 'passTime',
+		e.id 'proId',
+		e.`no` 'proNo',
+		e.`name` 'proName',
+		1 as percent,
+		'退项目' as 'proType'
+		from
+		shop_s_return_transfer a
+		inner join shop_s_return_transfer_detail b on a.type = 1 and b.type = 1 and
+		a.id = b.return_transfer_id
+		left join shop_s_consumption_project_detail
+		c on c.id = b.detail_id
+		left join shop_s_member_card d on d.id =
+		a.member_card_id
+		left join shop_b_project_info e on e.id = c.project_id
+		left join oa_department_structure f on f.id = a.shop_id
+		<where>
+			<if test="beginRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date >= #{beginRefundDate}]]>
+			</if>
+			<if test="endRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date  <= #{endRefundDate}]]>
+			</if>
+			<if test="beginCheckDate != null">
+		      <![CDATA[ and a.check_date >= #{beginCheckDate}]]>
+			</if>
+			<if test="endCheckDate != null">
+		      <![CDATA[ and a.check_date  <= #{endCheckDate}]]>
+			</if>
+			<if test="shopId != null">
+				and a.shop_id = #{shopId}
+			</if>
+		</where>
+
+		union all
+		<!-- 退纹绣 -->
+		select
+		a.is_reurn_bank 'isReurnBank',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.return_transfer_date
+		'transferDate',
+		ifnull(a.total_money,0) 'totalMoney',
+		ifnull(a.return_pay_money,0)
+		'returnPayMoney',
+		ifnull(a.return_transfer_money,0) 'returnTransferMoney',
+		a.return_is_service_pay 'returnIsServicePay',
+		a.return_bank
+		'returnBank',
+		a.return_bank_open 'returnBankOpen',
+		a.return_bank_card_number 'returnBankCardNumber',
+		a.return_bank_card_user 'returnBankCardUser',
+		a.return_bank_phone
+		'returnBankPhone',
+		a.check_status 'checkStatus',
+		a.check_date
+		'checkDate',
+		a.reason 'remark',
+		a.shop_id 'shopId',
+		ifnull(a.return_money_store,0) 'returnMoneyStore',
+		ifnull(a.return_store_balance,0)'returnStoreBalance',
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 0,1) AS earn1,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 0,1) AS consumpShop1,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 1,1) AS earn2,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 1,1) AS consumpShop2,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 2,1) AS earn3,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 2,1) AS consumpShop3,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 3,1) AS earn4,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 3,1) AS consumpShop4,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 4,1) AS earn5,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 4,1) AS consumpShop5,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 5,1) AS earn6,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 5,1) AS consumpShop6,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 6,1) AS earn7,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 6,1) AS consumpShop7,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 7,1) AS earn8,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 7,1) AS consumpShop8,
+		f.`name`
+		'shopName',
+		b.number 'tranferNumber',
+		b.unit 'tranferUnit',
+		b.left_money 'leftMoney',
+		ifnull(b.return_money,0) 'returnMoney',
+		c.consumption_id 'buyBusinessId',
+		c.consumption_project_id 'buyOrderId',
+		d.phone 'cardNo',
+		d.`name`
+		'memberName',
+		d.is_pass 'isPass',
+		d.pass_time 'passTime',
+		e.id 'proId',
+		e.`no` 'proNo',
+		e.`name` 'proName',
+		1 as percent,
+		'退纹绣' as 'proType'
+		from
+		shop_s_return_transfer a
+		inner join shop_s_return_transfer_detail b on a.type = 1 and b.type = 4 and
+		a.id = b.return_transfer_id
+		left join
+		shop_s_wx_consumption_project_detail c on c.id = b.detail_id
+		left join
+		shop_s_member_card d on d.id = a.member_card_id
+		left join
+		shop_b_wx_project_info e on e.id = c.project_id
+		left join
+		oa_department_structure f on f.id = a.shop_id
+		<where>
+			<if test="beginRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date >= #{beginRefundDate}]]>
+			</if>
+			<if test="endRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date  <= #{endRefundDate}]]>
+			</if>
+			<if test="beginCheckDate != null">
+		      <![CDATA[ and a.check_date >= #{beginCheckDate}]]>
+			</if>
+			<if test="endCheckDate != null">
+		      <![CDATA[ and a.check_date  <= #{endCheckDate}]]>
+			</if>
+
+			<if test="shopId != null">
+				and a.shop_id = #{shopId}
+			</if>
+		</where>
+
+		<!-- 退产品 -->
+		union all
+		select
+		a.is_reurn_bank 'isReurnBank',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.return_transfer_date
+		'transferDate',
+		ifnull(a.total_money,0) 'totalMoney',
+		ifnull(a.return_pay_money,0)
+		'returnPayMoney',
+		ifnull(a.return_transfer_money,0) 'returnTransferMoney',
+		a.return_is_service_pay 'returnIsServicePay',
+		a.return_bank
+		'returnBank',
+		a.return_bank_open 'returnBankOpen',
+		a.return_bank_card_number 'returnBankCardNumber',
+		a.return_bank_card_user 'returnBankCardUser',
+		a.return_bank_phone
+		'returnBankPhone',
+		a.check_status 'checkStatus',
+		a.check_date
+		'checkDate',
+		a.reason 'remark',
+		a.shop_id 'shopId',
+		ifnull(a.return_money_store,0)
+		'returnMoneyStore',
+		ifnull(a.return_store_balance,0)
+		'returnStoreBalance',
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 0,1) AS earn1,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 0,1) AS consumpShop1,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 1,1) AS earn2,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 1,1) AS consumpShop2,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 2,1) AS earn3,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 2,1) AS consumpShop3,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 3,1) AS earn4,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 3,1) AS consumpShop4,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 4,1) AS earn5,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 4,1) AS consumpShop5,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 5,1) AS earn6,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 5,1) AS consumpShop6,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 6,1) AS earn7,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 6,1) AS consumpShop7,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 7,1) AS earn8,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 7,1) AS consumpShop8,
+		f.`name` 'shopName',
+		b.number 'tranferNumber',
+		b.unit 'tranferUnit',
+		b.left_money 'leftMoney',
+		ifnull(b.return_money,0) 'returnMoney',
+		c.consumption_id 'buyBusinessId',
+		c.consumption_product_id
+		'buyOrderId',
+		d.phone 'cardNo',
+		d.`name` 'memberName',
+		d.is_pass
+		'isPass',
+		d.pass_time 'passTime',
+		e.id 'proId',
+		e.`no` 'proNo',
+		e.`name`
+		'proName',
+		1 as percent,
+		'退产品' as 'proType'
+		from shop_s_return_transfer a
+		inner join shop_s_return_transfer_detail b on a.type = 1 and b.type = 2 and
+		a.id = b.return_transfer_id
+		left join shop_s_consumption_product_detail
+		c on c.id = b.detail_id
+		left join shop_s_member_card d on d.id =
+		a.member_card_id
+		left join shop_b_product_info e on e.id = c.product_id
+		left join oa_department_structure f on f.id = a.shop_id
+		<where>
+			<if test="beginRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date >= #{beginRefundDate}]]>
+			</if>
+			<if test="endRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date  <= #{endRefundDate}]]>
+			</if>
+			<if test="beginCheckDate != null">
+		      <![CDATA[ and a.check_date >= #{beginCheckDate}]]>
+			</if>
+			<if test="endCheckDate != null">
+		      <![CDATA[ and a.check_date  <= #{endCheckDate}]]>
+			</if>
+			<if test="shopId != null">
+				and a.shop_id = #{shopId}
+			</if>
+		</where>
+
+		<!-- 退合作项目 -->
+		union all
+		select
+		a.is_reurn_bank 'isReurnBank',
+		a.id 'transferId',
+		a.create_date_time 'createDate',
+		a.return_transfer_date
+		'transferDate',
+		ifnull(a.total_money,0) 'totalMoney',
+		ifnull(a.return_pay_money,0)
+		'returnPayMoney',
+		ifnull(a.return_transfer_money,0) 'returnTransferMoney',
+		a.return_is_service_pay 'returnIsServicePay',
+		a.return_bank
+		'returnBank',
+		a.return_bank_open 'returnBankOpen',
+		a.return_bank_card_number 'returnBankCardNumber',
+		a.return_bank_card_user 'returnBankCardUser',
+		a.return_bank_phone
+		'returnBankPhone',
+		a.check_status 'checkStatus',
+		a.check_date
+		'checkDate',
+		a.reason 'remark',
+		a.shop_id 'shopId',
+		ifnull(a.return_money_store,0) 'returnMoneyStore',
+		ifnull(a.return_store_balance,0) 'returnStoreBalance',
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 0,1) AS earn1,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 0,1) AS consumpShop1,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 1,1) AS earn2,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 1,1) AS consumpShop2,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 2,1) AS earn3,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 2,1) AS consumpShop3,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 3,1) AS earn4,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 3,1) AS consumpShop4,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 4,1) AS earn5,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 4,1) AS consumpShop5,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 5,1) AS earn6,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 5,1) AS consumpShop6,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 6,1) AS earn7,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 6,1) AS consumpShop7,
+		(SELECT earn FROM shop_s_consumption_earn e WHERE e.consumption_id=a.id LIMIT 7,1) AS earn8,
+		(SELECT o.name FROM shop_s_consumption_earn e LEFT JOIN oa_department_structure o ON o.id=e.consumption_shop_id WHERE e.consumption_id=a.id LIMIT 7,1) AS consumpShop8,
+		f.`name` 'shopName',
+		b.number 'tranferNumber',
+		b.unit 'tranferUnit',
+		b.left_money 'leftMoney',
+		ifnull(b.return_money,0) 'returnMoney',
+		c.consumption_id 'buyBusinessId',
+		c.consumption_cooperation_id
+		'buyOrderId',
+		d.phone 'cardNo',
+		d.`name` 'memberName',
+		d.is_pass
+		'isPass',
+		d.pass_time 'passTime',
+		e.id 'proId',
+		e.`no` 'proNo',
+		e.`name`
+		'proName',
+		e.percent percent,
+		'退合作项目' as 'proType'
+		from shop_s_return_transfer a
+		inner join shop_s_return_transfer_detail b on a.type = 1 and b.type = 3 and
+		a.id = b.return_transfer_id
+		left join
+		shop_s_consumption_cooperation_project_detail c on c.id = b.detail_id
+		left join shop_s_member_card d on d.id = a.member_card_id
+		left join
+		shop_b_cooperation_project e on e.id = c.cooperation_id
+		left join
+		oa_department_structure f on f.id = a.shop_id
+		<where>
+			<if test="beginRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date >= #{beginRefundDate}]]>
+			</if>
+			<if test="endRefundDate != null">
+		      <![CDATA[ and a.return_transfer_date  <= #{endRefundDate}]]>
+			</if>
+			<if test="beginCheckDate != null">
+		      <![CDATA[ and a.check_date >= #{beginCheckDate}]]>
+			</if>
+			<if test="endCheckDate != null">
+		      <![CDATA[ and a.check_date  <= #{endCheckDate}]]>
+			</if>
+			<if test="shopId != null">
+				and a.shop_id = #{shopId}
+			</if>
+		</where>
+	</select>
+
+	<select id="getResturnOrderDetail" parameterType="map"	resultType="com.zive.bi.entity.ReturnOrderDetail">
+		<!-- 还项目 为区分新旧还款数据 增加detail_id is null判断保证导出新旧还款不重复-->
+		select
+		a.return_consumption_id 'returnOrderId',
+		a.store_pay 'store',
+		a.bankcard_pay 'pos',
+		a.cash_pay
+		'cash',
+		a.shop_id 'shopId',
+		a.is_fail 'isFail',
+		'旧还项目' as 'type',
+		a.return_date 'createDate',
+		b.consumption_project_id 'buyOrderId',
+		c.id
+		'businessId',
+		c.`status`,
+		d.`name` 'shopName',
+		e.`phone` 'cardNo',
+		e.`name` 'memberName',
+		e.is_pass 'isPass',
+		e.pass_time 'passTime',
+		b.buy_number 'itemNumber',
+		f.id 'itemId',
+		f.`no` 'itemNo',
+		f.`name` 'itemName',
+		1 as
+		percent
+		from
+		shop_s_consumption_return a
+		inner join shop_s_consumption_project_detail b on a.type = 'project' and
+		b.consumption_project_id = a.consumption_pro_id and a.detail_id is null
+		inner join shop_s_consumption c on c.id = b.consumption_id
+		left join oa_department_structure d on d.id = a.shop_id
+		left join
+		shop_s_member_card e on e.id = c.member_card_id
+		left join
+		shop_b_project_info f on f.id = b.project_id
+		<where>
+			<if test="beginReturnDate != null">
+		      <![CDATA[ and a.return_date >= #{beginReturnDate}]]>
+			</if>
+			<if test="endReturnDate != null">
+		      <![CDATA[ and a.return_date  <= #{endReturnDate}]]>
+			</if>
+			<if test="isFail != null">
+			    and a.is_fail = #{isFail}
+			</if>
+			<if test="shopId != null">
+				and a.shop_id = #{shopId}
+			</if>
+		</where>
+
+		<!-- 还产品 -->
+		union all
+		select
+		a.return_consumption_id 'returnOrderId',
+		a.store_pay 'store',
+		a.bankcard_pay 'pos',
+		a.cash_pay
+		'cash',
+		a.shop_id 'shopId',
+		a.is_fail 'isFail',
+		'旧还产品' as 'type',
+		a.return_date 'createDate',
+		b.consumption_product_id 'buyOrderId',
+		c.id
+		'businessId',
+		c.`status`,
+		d.`name` 'shopName',
+		e.`phone` 'cardNo',
+		e.`name` 'memberName',
+		e.is_pass 'isPass',
+		e.pass_time 'passTime',
+		b.buy_number 'itemNumber',
+		f.id 'itemId',
+		f.`no` 'itemNo',
+		f.`name` 'itemName',
+		1 as
+		percent
+		from
+		shop_s_consumption_return a
+		inner join shop_s_consumption_product_detail b on a.type = 'product' and
+		b.consumption_product_id = a.consumption_pro_id and a.detail_id is null
+		inner join shop_s_consumption c on c.id = b.consumption_id
+		left join oa_department_structure d on d.id = a.shop_id
+		left join
+		shop_s_member_card e on e.id = c.member_card_id
+		left join
+		shop_b_product_info f on f.id = b.product_id
+		<where>
+			<if test="beginReturnDate != null">
+		      <![CDATA[ and a.return_date >= #{beginReturnDate}]]>
+			</if>
+			<if test="endReturnDate != null">
+		      <![CDATA[ and a.return_date  <= #{endReturnDate}]]>
+			</if>
+			<if test="isFail != null">
+			    and a.is_fail = #{isFail}
+			</if>
+			<if test="shopId != null">
+				and a.shop_id = #{shopId}
+			</if>
+		</where>
+
+		<!-- 还套餐 -->
+		union all
+		select
+		a.return_consumption_id 'returnOrderId',
+		a.store_pay 'store',
+		a.bankcard_pay 'pos',
+		a.cash_pay
+		'cash',
+		a.shop_id 'shopId',
+		a.is_fail 'isFail',
+		(select
+		case act_type
+		when 1 then '旧还项目套餐'
+		when 2 then '旧还产品套餐'
+		when 3 then '旧还合作项目套餐'
+		else '旧未知' end as 'type'
+		from shop_b_activity_info where id =
+		b.activity_id) as 'type',
+		a.return_date 'createDate',
+		b.consumption_set_id 'buyOrderId',
+		c.id 'businessId',
+		c.`status`,
+		d.`name` 'shopName',
+		e.`phone` 'cardNo',
+		e.`name` 'memberName',
+		e.is_pass 'isPass',
+		e.pass_time 'passTime',
+		b.buy_number 'itemNumber',
+		f.id 'itemId',
+		(select no from shop_b_activity_set where activity_id = b.activity_id)
+		'itemNo',
+		f.`name` 'itemName',
+		1 as percent
+		from
+		shop_s_consumption_return a
+		inner join shop_s_consumption_set_detail b on a.type = 'set' and
+		b.consumption_set_id = a.consumption_pro_id and a.detail_id is null
+		inner join shop_s_consumption c on c.id = b.consumption_id
+		left join oa_department_structure d on d.id = a.shop_id
+		left join
+		shop_s_member_card e on e.id = c.member_card_id
+		left join
+		shop_b_activity_info f on f.id = b.activity_id
+		<where>
+			<if test="beginReturnDate != null">
+		      <![CDATA[ and a.return_date >= #{beginReturnDate}]]>
+			</if>
+			<if test="endReturnDate != null">
+		      <![CDATA[ and a.return_date  <= #{endReturnDate}]]>
+			</if>
+			<if test="isFail != null">
+			    and a.is_fail = #{isFail}
+			</if>
+			<if test="shopId != null">
+				and a.shop_id = #{shopId}
+			</if>
+		</where>
+	</select>
+	<!-- 201906之后 还款要区分项目产品 detail_id is not null 区分新旧还款-->
+	<select id="getNewResturnOrderDetail" parameterType="map" resultType="com.zive.bi.entity.ReturnOrderDetail">
+		<!-- 还项目、产品、套餐 -->
+		select 
+		a.return_consumption_id 'returnOrderId',
+		a.adviser,
+		0 AS 'receiptShopType',
+		a.cosmetologist,
+		a.cosmetologist2,
+		a.cosmetologist3,
+		a.store_pay 'store',
+		a.bankcard_pay 'pos',
+		a.cash_pay 'cash',
+		a.shop_id 'shopId',
+		a.is_fail 'isFail',
+	    case 
+		when k.id is not null and k.consumption_set_id is null then '新还项目'
+		when k.id is not null and k.consumption_set_id is not null then '新还套餐项目'
+		when l.id is not null and l.consumption_set_id is null then '新还产品'
+		when l.id is not null and l.consumption_set_id is not null then '新还套餐产品'
+		else '新系统错误？' end as 'type',
+		a.return_date 'createDate',
+		case 
+		when k.id is not null then k.consumption_id
+		when l.id is not null then l.consumption_id
+		else '新系统错误？' end as 'businessId',
+		a.consumption_pro_id 'buyOrderId',
+		d.`name` 'shopName',
+		e.`phone` 'cardNo',
+		e.`name` 'memberName',
+		e.is_pass 'isPass',
+		e.pass_time 'passTime',
+		case 
+		when k.id is not null then k.id
+		when l.id is not null then l.id
+		else '新系统错误？' end as 'itemId',
+		case 
+		when k.id is not null then (select name from shop_b_project_info where id = k.project_id)
+		when l.id is not null then (select name from shop_b_product_info where id = l.product_id)
+		else '新系统错误？' end as 'itemName',
+		1  as 'percent'
+  	    from
+		shop_s_consumption_return a 
+		left join shop_s_consumption_project_detail k on k.id = a.detail_id
+		left join shop_s_consumption_product_detail l on l.id = a.detail_id
+		left join oa_department_structure d on d.id = a.shop_id
+		left join shop_s_member_card e on e.id = a.member_card_id
+		<where>
+		    a.detail_id is not null 
+			<if test="beginReturnDate != null">
+		      <![CDATA[ and a.return_date >= #{beginReturnDate}]]>
+			</if>
+			<if test="endReturnDate != null">
+		      <![CDATA[ and a.return_date  <= #{endReturnDate}]]>
+			</if>
+			<if test="isFail != null">
+			    and a.is_fail = #{isFail}
+			</if>
+			<if test="shopId != null">
+				and a.shop_id = #{shopId}
+			</if>
+		</where>
+		union all
+		<!-- 还合作项目 -->
+		select
+		a.return_consumption_id 'returnOrderId',
+		a.adviser,
+		a.receipt_shop_type 'receiptShopType',
+		a.cosmetologist,
+		a.cosmetologist2,
+		a.cosmetologist3,
+		a.store_pay 'store',
+		a.bankcard_pay 'pos',
+		a.cash_pay
+		'cash',
+		a.shop_id 'shopId',
+		a.is_fail 'isFail',
+		'新还合作项目' as 'type',
+		a.return_date 'createDate',
+		c.id 'businessId',
+		b.consumption_cooperation_id 'buyOrderId',
+		d.`name` 'shopName',
+		e.`phone` 'cardNo',
+		e.`name` 'memberName',
+		e.is_pass 'isPass',
+		e.pass_time 'passTime',
+		f.id 'itemId',
+		f.`name` 'itemName',
+		f.percent as percent
+		from
+		shop_s_consumption_return a
+		inner join shop_s_consumption_cooperation_project_detail b on a.type = 'cooperation_project' and b.consumption_cooperation_id = a.consumption_pro_id
+		inner join shop_s_consumption c on c.id = b.consumption_id
+		left join oa_department_structure d on d.id = a.shop_id
+		left join shop_s_member_card e on e.id = c.member_card_id 
+		left join shop_b_cooperation_project f on f.id = b.cooperation_id
+		<where>
+			<if test="beginReturnDate != null">
+		      <![CDATA[ and a.return_date >= #{beginReturnDate}]]>
+			</if>
+			<if test="endReturnDate != null">
+		      <![CDATA[ and a.return_date  <= #{endReturnDate}]]>
+			</if>
+			<if test="isFail != null">
+			    and a.is_fail = #{isFail}
+			</if>
+			<if test="shopId != null">
+				and a.shop_id = #{shopId}
+			</if>
+		</where>
+	</select>
+
+	<!-- 纹绣项目销售信息 -->
+    <select id="getBuyWenXiuProjectOrderDetail" parameterType="map" resultType="com.zive.bi.entity.ProjectBuy">
+        select 
+        a.id,
+        (CASE WHEN a.consumption_set_id IS NULL THEN a.consumption_project_id ELSE a.consumption_set_id END) 'orderId',
+        b.id 'businessId',
+        (select name from oa_employee_info where id = b.maker_id) 'makerName',
+		a.project_id 'projectId',
+		c.`name` 'projectName',
+		c.`no` 'projectNo',
+		a.activity_id 'activityId',
+		d.`name` 'activityName',
+		a.buy_number 'buyNumber',
+		a.coupon 'coupon',
+		a.is_send 'isSend',
+		a.member_card_id 'cardId',
+		(SELECT name FROM oa_department_structure WHERE id = e.shop_id) 'cardShop',
+		e.phone 'cardNo',
+		e.`name` 'memberName',
+		e.is_pass 'isPass',
+		e.pass_time 'passTime',
+		a.price 'buyPrice',
+		<!-- a.service_time 'serviceTime', -->
+		a.is_count 'isCount',
+		b.shop_id 'shopId',
+		f.`name` 'shopName',
+		b.consumption_date 'consumeDate',
+		b.create_date 'createDate',
+		b.`status` 'status', <!-- 2是作废单，1是正常 -->
+		b.fail_date 'failDate', <!-- 作废日期-->
+		b.region 'area', <!-- 门店区域 -->
+		ifnull(a.payment,0) 'shouldPay',
+		ifnull(a.real_payment,0) 'realPay',
+		ifnull(a.store_pay,0) 'store',
+		ifnull(a.bankcard_pay,0) 'pos',
+		ifnull(a.cash_pay,0) 'cash',
+		ifnull(a.point_pay,0) 'point',
+		a.is_book 'isBook',
+		a.remark,
+<!-- 		g.is_birthday 'isBirthday', -->
+		a.buy_owe 'owe',
+		a.is_cash_coupon 'isCashCoupon'
+		from shop_s_wx_consumption_project_detail a 
+		inner join shop_s_wx_consumption b on a.consumption_id = b.id 
+<!-- 		and a.consumption_set_id is null -->
+		left join shop_b_wx_project_info c on a.project_id = c.id
+		left join shop_b_activity_info d on a.activity_id = d.id
+		left join shop_s_member_card e on e.id = a.member_card_id
+		left join oa_department_structure f on f.id = b.shop_id
+<!-- 		left join shop_s_wx_consumption_project  g on g.consumption_id = a.consumption_id -->
+		<where>
+		   <if test="projectId != null and projectId != ''">
+		       and a.project_id = #{projectId}
+		   </if>
+		   <if test="shopId != null">
+               and b.shop_id = #{shopId}
+           </if>
+		   <if test="status != null">
+		       and b.`status` = #{status}
+		   </if>
+		   <if test="beginConsumeDate != null">
+		      <![CDATA[ and b.consumption_date >= #{beginConsumeDate}]]>
+		   </if>
+		   <if test="endConsumeDate != null">
+		      <![CDATA[ and b.consumption_date <= #{endConsumeDate}]]>
+		   </if>
+		</where>
+    </select>
+
+	<!-- 获取还款单 -->
+	<select id="getWenxiuResturnOrderDetail" parameterType="map" resultType="com.zive.bi.entity.ReturnOrderDetail">
+		select
+		a.id,
+		<!-- a.create_date 'createDate', -->
+		a.return_date 'returnDate',
+		a.detail_id 'detailId',
+		a.return_consumption_id 'returnOrderId',
+		a.store_pay 'store',
+		a.bankcard_pay 'pos',
+		a.cash_pay 'cash',
+		a.shop_id 'shopId',
+		a.is_fail 'isFail',
+		'还纹绣项目' as 'type',
+		a.create_date 'createDate',
+		b.consumption_project_id 'buyOrderId',
+		c.id
+		'businessId',
+		c.`status`,
+		d.`name` 'shopName',
+		e.`phone` 'cardNo',
+		(SELECT name FROM oa_department_structure WHERE id = e.shop_id)
+		'cardShop',
+		e.`name` 'memberName',
+		e.is_pass 'isPass',
+		e.pass_time
+		'passTime',
+		b.buy_number 'itemNumber',
+		f.`no` 'itemNo',
+		f.`name`
+		'itemName'
+		from
+		shop_s_wx_consumption_return a
+		inner join shop_s_wx_consumption_project_detail b on
+		b.consumption_project_id = a.consumption_pro_id
+		inner join shop_s_wx_consumption c on c.id = b.consumption_id
+		left join oa_department_structure d on d.id = a.shop_id
+		left join
+		shop_s_member_card e on e.id = c.member_card_id
+		left join
+		shop_b_wx_project_info f on f.id = b.project_id
+		<where>
+			<if test="beginReturnDate != null">
+		      <![CDATA[ and a.return_date >= #{beginReturnDate}]]>
+			</if>
+			<if test="endReturnDate != null">
+		      <![CDATA[ and a.return_date  <= #{endReturnDate}]]>
+			</if>
+			<if test="shopId != null">
+				and a.shop_id = #{shopId}
+			</if>
+		</where>
+	</select>
+</mapper>
