@@ -49,14 +49,12 @@ public class BiDao extends BaseDao{
 	
 	public static void main(String[] args) throws ParseException, IOException {
 		String beginDateStr = "2020-05-01 00:00:00";
-		String endDateStr = "2020-05-10 23:59:59";
+		String endDateStr = "2020-05-28 23:59:59";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date beginDate = format.parse(beginDateStr);
         Date endDate = format.parse(endDateStr);
         
         
-        String earnStructureId = "";
-		String employeeStructureId = "";
 		String shopId = null;
 		JSONArray itemInfo = new JSONArray();
 		
@@ -98,7 +96,6 @@ public class BiDao extends BaseDao{
 		
 		//退款[准确]
 		List<RefundOrderDetail> buyRefundOrderDetail = getRefundOrderDetail(shopId, beginDate, endDate);
-		System.out.println(JSON.toJSONString(buyRefundOrderDetail));
 		JSONArray itemInfoRefund = getItemInfoForRefund(buyRefundOrderDetail,monthOfTarget);
 		itemInfo.addAll(itemInfoRefund);
 		
