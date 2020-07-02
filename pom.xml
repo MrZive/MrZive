@@ -12,7 +12,7 @@
 		<mybatis.version>3.3.0</mybatis.version>
 		<!-- 用于整合spring和mybatis -->
 		<mybatis.spring.version>1.1.1</mybatis.spring.version>
-		<mysql.connector>5.1.15</mysql.connector>
+		<mysql.connector>8.0.16</mysql.connector>
 		<rocketmq.version>3.5.8</rocketmq.version>
 	</properties>
 
