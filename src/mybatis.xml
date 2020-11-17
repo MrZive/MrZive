@@ -5,7 +5,9 @@
 <configuration>
 	<settings>
 		<setting name="logImpl" value="LOG4J"/>
+<!-- 		<setting name="logImpl" value="STDOUT_LOGGING" /> -->
 	</settings>
+	
 	<typeAliases>
 		<package name="com.zive.pojo" />
 	</typeAliases>
@@ -17,7 +19,7 @@
 			<transactionManager type="JDBC"></transactionManager>
 			<dataSource type="POOLED">
 				<property name="driver" value="com.mysql.jdbc.Driver"/>
-				<property name="url" value="jdbc:mysql://119.23.152.69:3306/qhc_core_2"/>
+				<property name="url" value="jdbc:mysql://47.113.124.18:3306/qhc_core_2"/>
 				<property name="username" value="wang.zw"/>
 				<property name="password" value="wangzw0626@qhc"/>
 			</dataSource>
@@ -53,5 +55,22 @@
 		
 		<!-- bi报表相关 -->
 		<mapper resource="com/zive/bi/mapper/biProjectPrice.xml"/>
+		
+		<!-- 必应店项目转换 -->
+		<mapper resource="com/zive/parseProject/parseProject.xml"/>
+		
+		<!-- 会员剩余次数 -->
+		<mapper resource="com/zive/biying/biying.xml"/>
+		
+		<!-- 物料结存单价 -->
+		<mapper resource="com/zive/materialPrice/materialPrice.xml"/>
+		
+		<!-- 自定义更新 -->
+		<mapper resource="com/zive/mapper/update.xml"/>
+		
+		<!-- 386会员信息 -->
+		<mapper resource="com/zive/member386Plan/memberCard386Plan.xml"/>
+		<!-- 会员状态信息 -->
+		<mapper resource="com/zive/member386Plan/memberStatus.xml"/>
 	</mappers>
 </configuration>

@@ -112,7 +112,7 @@ public class QinchunShuiYanTest {
 	}
 }
 
-@TableName("3月水漾订单最终版")
+@TableName("5月线上ProjectQC")
 class ProjectQC{
 	@FieldName("门店名")
 	private String shopName;

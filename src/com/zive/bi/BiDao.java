@@ -9,8 +9,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,30 +28,16 @@ import com.zive.bi.entity.ProductBuy;
 import com.zive.bi.entity.ProjectBuy;
 import com.zive.bi.entity.RefundOrderDetail;
 import com.zive.bi.entity.ReturnOrderDetail;
+import com.zive.dataOut.entity.Shop;
 import com.zive.dataOut.java.BaseDao;
 import com.zive.dataOut.java.ExcelUtilForDO;
 import com.zive.pojo.EmployeeEarn;
 
 public class BiDao extends BaseDao{
-
-	static public List<EmployeeEarn> getEmployeeEarnList(String earnStructureId,String employeeStructureId,Date beginDate,Date endDate){
-		Map<String,Object> map = new HashMap<String,Object>(){{
-			//业绩门店查
-			put("earnStructureId", earnStructureId);
-			//顾问门店查
-			put("employeeStructureId", employeeStructureId);
-			put("beginDate", beginDate);
-			put("endDate", endDate);
-			put("isFail", 0);
-		}};
-		List<EmployeeEarn> employeeEarns = getSession().selectList("com.zive.bi.getNewEmployeeEarns",map);
-		
-		return employeeEarns;
-	}
 	
 	public static void main(String[] args) throws ParseException, IOException {
-		String beginDateStr = "2020-05-01 00:00:00";
-		String endDateStr = "2020-05-28 23:59:59";
+		String beginDateStr = "2020-08-01 00:00:00";
+		String endDateStr = "2020-08-27 23:59:59";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date beginDate = format.parse(beginDateStr);
         Date endDate = format.parse(endDateStr);
@@ -121,16 +109,67 @@ public class BiDao extends BaseDao{
 		
 		//输出详情
 		ExcelUtilForDO.toFile(itemInfo, ItemInfo.class);
+		//合并门店
+		itemInfo = passSameShopData(itemInfo);
+		ExcelUtilForDO.toFile(itemInfo, ItemInfo.class);
+		
 		//去除重复项目后累加
 		itemInfo = passSameData(itemInfo);
 		ExcelUtilForDO.toFile(itemInfo, ItemInfo.class);
 	}
 	
+	private static JSONArray passSameShopData(JSONArray itemInfo) {
+		JSONArray jsonArray = new JSONArray();
+		JSONObject jsonShopMap = new JSONObject();
+		for (int i = 0; i < itemInfo.size(); i++) {
+			JSONObject object = itemInfo.getJSONObject(i);
+			
+			String shopId = object.getString("shopId");
+			String string = object.getString("itemName");
+			BigDecimal stringPrice = object.getBigDecimal("price");
+			
+			if(jsonShopMap.containsKey(shopId)){
+				JSONArray jsonsmallList = jsonShopMap.getJSONArray(shopId);
+				
+				boolean flagsmall = false;
+				for (int j = 0; j < jsonsmallList.size(); j++) {
+					JSONObject jsonObject = jsonsmallList.getJSONObject(j);
+					
+					if(jsonObject.getString("itemName").equals(string)){
+						BigDecimal bigDecimal = jsonObject.getBigDecimal("price");
+						jsonObject.put("price", bigDecimal.add(stringPrice));
+						
+						flagsmall = true;
+						break;
+					}
+				}
+				
+				if(!flagsmall){
+					jsonsmallList.add(object);
+				}
+			}else{
+				JSONArray jsonShopMapList = new JSONArray();
+				Shop shopById = getShopById(shopId);
+				object.put("shopName", shopById.getName());
+				jsonShopMapList.add(object);
+				jsonShopMap.put(shopId, jsonShopMapList);
+			}
+		}
+		
+		//把所有门店的数据加入到新的list
+		Iterator<Entry<String, Object>> iterator = jsonShopMap.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Entry<String, Object> next = iterator.next();
+			JSONArray value =  (JSONArray)next.getValue();
+			jsonArray.addAll(value);
+		}
+		return jsonArray;
+	}
+
 	private static JSONArray passSameData(JSONArray itemInfo) {
 		JSONArray jsonArray = new JSONArray();
 		for (int i = 0; i < itemInfo.size(); i++) {
 			JSONObject object = itemInfo.getJSONObject(i);
-			
 			String string = object.getString("itemName");
 			BigDecimal stringPrice = object.getBigDecimal("price");
 			boolean flag = false;
@@ -198,6 +237,7 @@ public class BiDao extends BaseDao{
 				continue;
 			}
 			
+			String shopId = projectBuy.getShopId();
 			String itemId = projectBuy.getProjectId();
 			String itemName = projectBuy.getProjectName();
 			BigDecimal realPay = BigDecimal.valueOf(projectBuy.getCash()).add(BigDecimal.valueOf(projectBuy.getPos()));
@@ -205,7 +245,9 @@ public class BiDao extends BaseDao{
 			for (int i=0;i<json.size();i++) {
 				JSONObject object = json.getJSONObject(i);
 				String string = object.getString("itemName");
-				if(string.equals(itemName)){
+				String string2 = object.getString("shopId");
+				
+				if(string2.equals(shopId) && string.equals(itemName)){
 					object.put("price", object.getBigDecimal("price").add(realPay));
 					flag = true;
 					break;
@@ -213,6 +255,7 @@ public class BiDao extends BaseDao{
 			}
 			if(!flag){
 				JSONObject object = new JSONObject();
+				object.put("shopId", shopId);
 				object.put("itemId", itemId);
 				object.put("itemName", itemName);
 				object.put("price", realPay);
@@ -264,6 +307,7 @@ public class BiDao extends BaseDao{
 				continue;
 			}
 			
+			String shopId = projectBuy.getShopId();
 			String itemId = projectBuy.getProductId();
 			String itemName = projectBuy.getProductName();
 			BigDecimal realPay = BigDecimal.valueOf(projectBuy.getCash()).add(BigDecimal.valueOf(projectBuy.getPos()));
@@ -271,7 +315,9 @@ public class BiDao extends BaseDao{
 			for (int i=0;i<json.size();i++) {
 				JSONObject object = json.getJSONObject(i);
 				String string = object.getString("itemName");
-				if(string.equals(itemName)){
+				String string2 = object.getString("shopId");
+				
+				if(string2.equals(shopId) && string.equals(itemName)){
 					object.put("price", object.getBigDecimal("price").add(realPay));
 					flag = true;
 					break;
@@ -279,6 +325,7 @@ public class BiDao extends BaseDao{
 			}
 			if(!flag){
 				JSONObject object = new JSONObject();
+				object.put("shopId", shopId);
 				object.put("itemId", itemId);
 				object.put("itemName", itemName);
 				object.put("price", realPay);
@@ -326,6 +373,7 @@ public class BiDao extends BaseDao{
 				continue;
 			}
 			
+			String shopId = projectBuy.getShopId();
 			String itemId = projectBuy.getItemId();
 			String itemName = projectBuy.getItemName();
 			String itemType = projectBuy.getType();
@@ -334,7 +382,9 @@ public class BiDao extends BaseDao{
 			for (int i=0;i<json.size();i++) {
 				JSONObject object = json.getJSONObject(i);
 				String string = object.getString("itemName");
-				if(string.equals(itemName)){
+				String string2 = object.getString("shopId");
+				
+				if(string2.equals(shopId) && string.equals(itemName)){
 					object.put("price", object.getBigDecimal("price").add(realPay));
 					flag = true;
 					break;
@@ -342,6 +392,7 @@ public class BiDao extends BaseDao{
 			}
 			if(!flag){
 				JSONObject object = new JSONObject();
+				object.put("shopId", shopId);
 				object.put("itemId", itemId);
 				object.put("itemName", itemName);
 				object.put("price", realPay);
@@ -374,7 +425,7 @@ public class BiDao extends BaseDao{
 		Double store = 0d;
 		for (CooperationBuy projectBuy : buyProjectOrderDetail) {
 			realPay += projectBuy.getRealPay();
-//			point += projectBuy.getPoint();
+//				point += projectBuy.getPoint();
 			cash += projectBuy.getCash();
 			pos += projectBuy.getPos();
 			store += projectBuy.getStore();
@@ -393,14 +444,17 @@ public class BiDao extends BaseDao{
 				continue;
 			}
 			
+			String shopId = projectBuy.getShopId();
 			String itemId = projectBuy.getCooperationId();
 			String itemName = projectBuy.getCooperationName();
 			BigDecimal realPay = BigDecimal.valueOf(projectBuy.getCash()).add(BigDecimal.valueOf(projectBuy.getPos()));
 			boolean flag = false;
 			for (int i=0;i<json.size();i++) {
 				JSONObject object = json.getJSONObject(i);
+				String shopId2 = object.getString("shopId");
 				String string = object.getString("itemName");
-				if(string.equals(itemName)){
+				
+				if(shopId2.equals(shopId) && string.equals(itemName)){
 					object.put("price", object.getBigDecimal("price").add(realPay));
 					flag = true;
 					break;
@@ -408,6 +462,7 @@ public class BiDao extends BaseDao{
 			}
 			if(!flag){
 				JSONObject object = new JSONObject();
+				object.put("shopId", shopId);
 				object.put("itemId", itemId);
 				object.put("itemName", itemName);
 				object.put("price", realPay);
@@ -466,6 +521,7 @@ public class BiDao extends BaseDao{
 				continue;
 			}
 			
+			String shopId = projectBuy.getShopId();
 			String itemId = projectBuy.getProId();
 			String itemName = projectBuy.getProName();
 			String type = projectBuy.getProType();
@@ -481,7 +537,9 @@ public class BiDao extends BaseDao{
 				JSONObject object = json.getJSONObject(i);
 				String string = object.getString("itemName");
 				String stringType = object.getString("type");
-				if(string.equals(itemName) && stringType.equals(projectBuy.getProType())){
+				String string2 = object.getString("shopId");
+				
+				if(string2.equals(shopId) && string.equals(itemName) && stringType.equals(projectBuy.getProType())){
 					object.put("price", object.getBigDecimal("price").add(realPay));
 					flag = true;
 					break;
@@ -489,6 +547,7 @@ public class BiDao extends BaseDao{
 			}
 			if(!flag){
 				JSONObject object = new JSONObject();
+				object.put("shopId", shopId);
 				object.put("itemId", itemId);
 				object.put("itemName", itemName);
 				object.put("type", type);
@@ -539,6 +598,7 @@ public class BiDao extends BaseDao{
 				continue;
 			}
 			
+			String shopId = projectBuy.getShopId();
 			String itemId = projectBuy.getItemId();
 			String itemName = projectBuy.getItemName();
 			String type = projectBuy.getType();
@@ -548,7 +608,9 @@ public class BiDao extends BaseDao{
 				JSONObject object = json.getJSONObject(i);
 				String string = object.getString("itemName");
 				String stringType = object.getString("type");
-				if(string.equals(itemName) && stringType.equals(type)){
+				String string2 = object.getString("shopId");
+				
+				if(string2.equals(shopId) && string.equals(itemName) && stringType.equals(type)){
 					object.put("price", object.getBigDecimal("price").add(realPay));
 					flag = true;
 					break;
@@ -556,6 +618,7 @@ public class BiDao extends BaseDao{
 			}
 			if(!flag){
 				JSONObject object = new JSONObject();
+				object.put("shopId", shopId);
 				object.put("itemId", itemId==null?"旧未知id":itemId);
 				object.put("itemName", itemName==null?"旧未知项目还款":itemName);
 				object.put("type", type);
@@ -607,6 +670,7 @@ public class BiDao extends BaseDao{
 				continue;
 			}
 			
+			String shopId = projectBuy.getShopId();
 			String itemId = projectBuy.getItemId();
 			String itemName = projectBuy.getItemName();
 			String type = projectBuy.getType();
@@ -616,7 +680,9 @@ public class BiDao extends BaseDao{
 				JSONObject object = json.getJSONObject(i);
 				String string = object.getString("itemName");
 				String stringType = object.getString("type");
-				if(string.equals(itemName) && stringType.equals(type)){
+				String string2 = object.getString("shopId");
+				
+				if(string2.equals(shopId) && string.equals(itemName) && stringType.equals(type)){
 					object.put("price", object.getBigDecimal("price").add(realPay));
 					flag = true;
 					break;
@@ -624,6 +690,7 @@ public class BiDao extends BaseDao{
 			}
 			if(!flag){
 				JSONObject object = new JSONObject();
+				object.put("shopId", shopId);
 				object.put("itemId", itemId==null?"新未知id":itemId);
 				object.put("itemName", itemName==null?"新未知项目还款":itemName);
 				object.put("type", type);
@@ -675,6 +742,7 @@ public class BiDao extends BaseDao{
 				continue;
 			}
 			
+			String shopId = projectBuy.getShopId();
 			String itemId = projectBuy.getProjectId();
 			String itemName = projectBuy.getProjectName();
 			BigDecimal realPay = BigDecimal.valueOf(projectBuy.getCash()).add(BigDecimal.valueOf(projectBuy.getPos()));
@@ -682,7 +750,9 @@ public class BiDao extends BaseDao{
 			for (int i=0;i<json.size();i++) {
 				JSONObject object = json.getJSONObject(i);
 				String string = object.getString("itemName");
-				if(string.equals(itemName)){
+				String string2 = object.getString("shopId");
+				
+				if(string2.equals(shopId) && string.equals(itemName)){
 					object.put("price", object.getBigDecimal("price").add(realPay));
 					flag = true;
 					break;
@@ -690,6 +760,7 @@ public class BiDao extends BaseDao{
 			}
 			if(!flag){
 				JSONObject object = new JSONObject();
+				object.put("shopId", shopId);
 				object.put("itemId", itemId);
 				object.put("itemName", itemName);
 				object.put("price", realPay);
@@ -760,6 +831,7 @@ public class BiDao extends BaseDao{
 				continue;
 			}
 			
+			String shopId = projectBuy.getShopId();
 			String itemId = projectBuy.getItemId();
 			String itemName = projectBuy.getItemName();
 			String type = projectBuy.getType();
@@ -769,7 +841,9 @@ public class BiDao extends BaseDao{
 				JSONObject object = json.getJSONObject(i);
 				String string = object.getString("itemName");
 				String stringType = object.getString("type");
-				if(string.equals(itemName) && stringType.equals(type)){
+				String string2 = object.getString("shopId");
+				
+				if(string2.equals(shopId) && string.equals(itemName) && stringType.equals(type)){
 					object.put("price", object.getBigDecimal("price").add(realPay));
 					flag = true;
 					break;
@@ -777,6 +851,7 @@ public class BiDao extends BaseDao{
 			}
 			if(!flag){
 				JSONObject object = new JSONObject();
+				object.put("shopId", shopId);
 				object.put("itemId", itemId);
 				object.put("itemName", itemName);
 				object.put("type", type);

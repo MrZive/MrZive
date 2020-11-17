@@ -3,7 +3,7 @@ package com.zive.dataOut.entity;
 import java.sql.Date;
 
 /**
- * 产品消费明细记录
+ * 消费明细记录
  * 
  * @author hcxue
  *

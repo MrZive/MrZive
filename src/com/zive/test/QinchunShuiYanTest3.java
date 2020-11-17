@@ -57,9 +57,13 @@ public class QinchunShuiYanTest3 {
 			//类型
 			String type = String.valueOf(excelCells.get(1).getValue());
 			//门店
-			String shopName = String.valueOf(excelCells.get(11).getValue())+String.valueOf(excelCells.get(10).getValue());
+			String no = String.valueOf(excelCells.get(5).getValue());
+			if(no.contains(".")){
+				no = no.substring(0,no.indexOf("."));
+			}
+			String shopName = no + String.valueOf(excelCells.get(4).getValue());
 			//业绩
-			BigDecimal earn = new BigDecimal(String.valueOf(excelCells.get(1).getValue()));
+			BigDecimal earn = new BigDecimal(String.valueOf(excelCells.get(10).getValue()));
 			
 			if(type.equals("项目")){
 				if(projectMap.containsKey(shopName)){
@@ -151,77 +155,5 @@ public class QinchunShuiYanTest3 {
 		
 		ExcelUtilForDO.toFile(projectJsonArray, ProjectQC.class);
 		ExcelUtilForDO.toFile(productJsonArray, ProductQC.class);
-	}
-}
-
-@TableName("5月水漾订单项目统计")
-class ProjectQC{
-	@FieldName("门店名")
-	private String shopName;
-	
-	@FieldName("NO")
-	private String shopNo;
-	
-	@FieldName("业绩总和")
-	private String earn;
-
-	public String getShopName() {
-		return shopName;
-	}
-
-	public void setShopName(String shopName) {
-		this.shopName = shopName;
-	}
-
-	public String getShopNo() {
-		return shopNo;
-	}
-
-	public void setShopNo(String shopNo) {
-		this.shopNo = shopNo;
-	}
-
-	public String getEarn() {
-		return earn;
-	}
-
-	public void setEarn(String earn) {
-		this.earn = earn;
-	}
-}
-
-@TableName("5月水漾订单产品统计")
-class ProductQC{
-	@FieldName("门店名")
-	private String shopName;
-	
-	@FieldName("NO")
-	private String shopNo;
-	
-	@FieldName("业绩总和")
-	private String earn;
-
-	public String getShopName() {
-		return shopName;
-	}
-
-	public void setShopName(String shopName) {
-		this.shopName = shopName;
-	}
-
-	public String getShopNo() {
-		return shopNo;
-	}
-
-	public void setShopNo(String shopNo) {
-		this.shopNo = shopNo;
-	}
-
-	public String getEarn() {
-		return earn;
-	}
-
-	public void setEarn(String earn) {
-		this.earn = earn;
 	}
 }

@@ -7,6 +7,12 @@ import com.zive.dataOut.annotaion.TableName;
 
 @TableName("所有收款项目金额")
 public class ItemInfo {
+
+	@FieldName("门店id")
+	private String shopId;
+	
+	@FieldName("门店名称")
+	private String shopName;
 	
 	@FieldName("项目id")
 	private String itemId;
@@ -19,6 +25,24 @@ public class ItemInfo {
 	
 	@FieldName("收款金额")
 	private BigDecimal price;
+
+	
+	
+	public String getShopId() {
+		return shopId;
+	}
+
+	public void setShopId(String shopId) {
+		this.shopId = shopId;
+	}
+
+	public String getShopName() {
+		return shopName;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
 
 	public String getItemId() {
 		return itemId;

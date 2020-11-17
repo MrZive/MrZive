@@ -62,6 +62,7 @@
 		is_pass 'isPass',
 		is_abandon 'isAbandon',
 		pass_shop_id 'passShopId',
+		new_pass_shop_id 'newPassShopId',
 		is_active 'isActive',
 		is_introduce 'isIntroduce',
 		is_sleep 'isSleep',
@@ -73,6 +74,10 @@
 		treatment_balance 'treatmentBalance',
 		stock_balance 'stockBalance',
 		owe_balance 'oweBalance',
+		is_new_pass 'isNewPass',
+		new_pass_time 'newPassTime',
+		new_pass_shop_id 'newPassShopId',
+		new_pass_consumption_id 'newPassConsumptionId',
 		create_date 'createDate'
 		from shop_s_member_card
 		<where>
@@ -90,6 +95,63 @@
 			</if>
 		</where>
 	</select>
+	
+	
+	<select id="getMaterial" parameterType="com.zive.dataOut.entity.MaterialInfo" resultType="com.zive.dataOut.entity.MaterialInfo">
+		SELECT
+		    id,
+		    no,
+		    name,
+		    small_unit smallUnit,
+		    big_unit bigUnit,
+		    number,
+		    status,
+		    type,
+		    remark,
+		    create_date_time createDateTime,
+		    isapply isApply,
+		    ischeck isCheck,
+		    price,
+		    boxes_price boxesPrice,
+		    form,
+		    tax,
+		    tax_price taxPrice,
+		    deliver_unit deliverUnit,
+		    picture_path picturePath,
+		    packet,
+		    yongyou_id yongyouId
+		FROM
+		    shop_b_material_info
+		<where>
+			<if test ='null != no'>AND no = #{no}</if>
+            <if test ='null != name'>AND name = #{name}</if>
+            <if test ='null != status'>AND status = #{status}</if>
+            <if test ='null != type'>AND type = #{type}</if>
+            <if test ='null != isApply'>AND isapply = #{isApply}</if>
+            <if test ='null != isCheck'>AND ischeck = #{isCheck}</if>
+            <if test ='null != yongyouId'>AND yongyou_id = #{yongyouId}</if>
+		</where>
+	</select>
+	
+	<select id="getMaterialInventory" parameterType="com.zive.dataOut.entity.MaterialInventory" resultType="com.zive.dataOut.entity.MaterialInventory">
+		SELECT
+		    inventory_id inventoryId,      
+		    material_id materialId,
+		    material_price materialPrice,
+		    shop_id shopId,
+		    usable_inventory usableInventory,
+		    check_inventory checkInventory,
+		    alert_inventory alertInventory,
+		    create_time createTime
+		FROM
+		    shop_b_material_inventory
+		<where>
+			<if test ='null != inventoryId'>AND inventory_id = #{inventoryId}</if>
+	        <if test ='null != materialId'>AND material_id = #{materialId}</if>
+	        <if test ='null != shopId'>AND shop_id = #{shopId}</if>
+		</where>
+	</select>
+	
 
 	<select id="getProductInfo" resultType="com.zive.dataOut.entity.ProductInfo" parameterType="com.zive.dataOut.entity.ProductInfo">
 		SELECT
@@ -230,6 +292,28 @@
        			AND shop_id = #{shopId}
        		</if>
        	</where>
+	</select>
+	
+	
+	<select id="getCanDoneMemberProjectNumber" resultType="map" parameterType="string">
+		SELECT 
+		c.id,
+		c.name,
+		a.buy_number 'buyNumber',
+		a.number 'leftNumber',
+		a.is_book 'isBook',
+		a.owe,
+		a.price,
+		a.real_payment 'realPayment'
+		FROM shop_s_consumption_project_detail a
+		INNER JOIN shop_s_consumption b ON a.consumption_id = b.id AND b.is_cooperation = 0
+		INNER JOIN shop_b_project_info c ON a.project_id = c.id
+		LEFT JOIN shop_s_consumption_project  g ON g.consumption_id = a.consumption_id
+		WHERE
+		b.`status` = 1
+		and (a.number > 0 or a.is_count = 0)
+		and a.is_fail = 0
+		and b.member_card_id = #{memberCardId}
 	</select>
 
 </mapper>

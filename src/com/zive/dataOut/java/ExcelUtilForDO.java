@@ -23,6 +23,7 @@ import com.zive.pub.ExcelSheet;
 import com.zive.pub.OfficeUtil;
 
 public class ExcelUtilForDO {
+	static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
 	public static <T> void toFile(final JSONArray jsonArray, Class<T> clazz) throws IOException{
 		
@@ -82,7 +83,7 @@ public class ExcelUtilForDO {
 					}});
 				}});
 			}});
-			String fileName = tableName + new Date().getTime()+".xlsx";
+			String fileName = tableName + new Date().getTime() +"当前日期" +df.format(new Date())+".xlsx";
 			String virPath = "c:/download/" + fileName;
 			byte[] bytes = OfficeUtil.createExcel(OfficeUtil.ExcelVersion.Version2007, excel);
 			

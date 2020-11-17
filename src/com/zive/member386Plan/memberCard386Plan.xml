@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zive.member386Plan.MemberCard386PlanDao">
+
+	<resultMap id="BaseResultMap" type="com.zive.member386Plan.entity.MemberCard386Plan" >
+                <result column="id" property="id" />
+                <result column="member_card_id" property="memberCardId" />
+                <result column="is_386_tuoke" property="is386Tuoke" />
+                <result column="tuoke_386_consumption_id" property="tuoke386ConsumptionId" />
+                <result column="tuoke_386_shop_id" property="tuoke386ShopId" />
+                <result column="tuoke_386_time" property="tuoke386Time" />
+                <result column="is_386_first" property="is386First" />
+                <result column="first_386_consumption_id" property="first386ConsumptionId" />
+                <result column="first_386_shop_id" property="first386ShopId" />
+                <result column="first_386_time" property="first386Time" />
+                <result column="is_386_second" property="is386Second" />
+                <result column="second_386_consumption_id" property="second386ConsumptionId" />
+                <result column="second_386_shop_id" property="second386ShopId" />
+                <result column="second_386_time" property="second386Time" />
+                <result column="is_386_pass" property="is386Pass" />
+                <result column="is_386_abandon" property="is386Abandon" />
+                <result column="is_386_sleep" property="is386Sleep" />
+                <result column="pass_386_shop_id" property="pass386ShopId" />
+                <result column="pass_386_time" property="pass386Time" />
+                <result column="pass_386_consumption_id" property="pass386ConsumptionId" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                id,
+                member_card_id,
+                is_386_tuoke,
+                tuoke_386_consumption_id,
+                tuoke_386_shop_id,
+                tuoke_386_time,
+                is_386_first,
+                first_386_consumption_id,
+                first_386_shop_id,
+                first_386_time,
+                is_386_second,
+                second_386_consumption_id,
+                second_386_shop_id,
+                second_386_time,
+                is_386_pass,
+                is_386_abandon,
+                is_386_sleep,
+                pass_386_shop_id,
+                pass_386_time,
+                pass_386_consumption_id
+    </sql>
+
+    <insert id="add" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.zive.member386Plan.entity.MemberCard386Plan">
+        INSERT INTO shop_s_member_card_386_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                        <if test ='null != memberCardId'>
+                        member_card_id,
+                        </if>
+                        <if test ='null != is386Tuoke'>
+                        is_386_tuoke,
+                        </if>
+                        <if test ='null != tuoke386ConsumptionId'>
+                        tuoke_386_consumption_id,
+                        </if>
+                        <if test ='null != tuoke386ShopId'>
+                        tuoke_386_shop_id,
+                        </if>
+                        <if test ='null != tuoke386Time'>
+                        tuoke_386_time,
+                        </if>
+                        <if test ='null != is386First'>
+                        is_386_first,
+                        </if>
+                        <if test ='null != first386ConsumptionId'>
+                        first_386_consumption_id,
+                        </if>
+                        <if test ='null != first386ShopId'>
+                        first_386_shop_id,
+                        </if>
+                        <if test ='null != first386Time'>
+                        first_386_time,
+                        </if>
+                        <if test ='null != is386Second'>
+                        is_386_second,
+                        </if>
+                        <if test ='null != second386ConsumptionId'>
+                        second_386_consumption_id,
+                        </if>
+                        <if test ='null != second386ShopId'>
+                        second_386_shop_id,
+                        </if>
+                        <if test ='null != second386Time'>
+                        second_386_time,
+                        </if>
+                        <if test ='null != is386Pass'>
+                        is_386_pass,
+                        </if>
+                        <if test ='null != is386Abandon'>
+                        is_386_abandon,
+                        </if>
+                        <if test ='null != is386Sleep'>
+                        is_386_sleep,
+                        </if>
+                        <if test ='null != pass386ShopId'>
+                        pass_386_shop_id,
+                        </if>
+                        <if test ='null != pass386Time'>
+                        pass_386_time,
+                        </if>
+                        <if test ='null != pass386ConsumptionId'>
+                        pass_386_consumption_id
+                        </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                        <if test ='null != memberCardId'>
+                        #{memberCardId},
+                        </if>
+                        <if test ='null != is386Tuoke'>
+                        #{is386Tuoke},
+                        </if>
+                        <if test ='null != tuoke386ConsumptionId'>
+                        #{tuoke386ConsumptionId},
+                        </if>
+                        <if test ='null != tuoke386ShopId'>
+                        #{tuoke386ShopId},
+                        </if>
+                        <if test ='null != tuoke386Time'>
+                        #{tuoke386Time},
+                        </if>
+                        <if test ='null != is386First'>
+                        #{is386First},
+                        </if>
+                        <if test ='null != first386ConsumptionId'>
+                        #{first386ConsumptionId},
+                        </if>
+                        <if test ='null != first386ShopId'>
+                        #{first386ShopId},
+                        </if>
+                        <if test ='null != first386Time'>
+                        #{first386Time},
+                        </if>
+                        <if test ='null != is386Second'>
+                        #{is386Second},
+                        </if>
+                        <if test ='null != second386ConsumptionId'>
+                        #{second386ConsumptionId},
+                        </if>
+                        <if test ='null != second386ShopId'>
+                        #{second386ShopId},
+                        </if>
+                        <if test ='null != second386Time'>
+                        #{second386Time},
+                        </if>
+                        <if test ='null != is386Pass'>
+                        #{is386Pass},
+                        </if>
+                        <if test ='null != is386Abandon'>
+                        #{is386Abandon},
+                        </if>
+                        <if test ='null != is386Sleep'>
+                        #{is386Sleep},
+                        </if>
+                        <if test ='null != pass386ShopId'>
+                        #{pass386ShopId},
+                        </if>
+                        <if test ='null != pass386Time'>
+                        #{pass386Time},
+                        </if>
+                        <if test ='null != pass386ConsumptionId'>
+                        #{pass386ConsumptionId}
+                        </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM shop_s_member_card_386_plan
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.zive.member386Plan.entity.MemberCard386Plan">
+        UPDATE shop_s_member_card_386_plan
+        <set>
+                    <if test ='null != memberCardId'>member_card_id = #{memberCardId},</if>
+                    <if test ='null != is386Tuoke'>is_386_tuoke = #{is386Tuoke},</if>
+                    <if test ='null != tuoke386ConsumptionId'>tuoke_386_consumption_id = #{tuoke386ConsumptionId},</if>
+                    <if test ='null != tuoke386ShopId'>tuoke_386_shop_id = #{tuoke386ShopId},</if>
+                    <if test ='null != tuoke386Time'>tuoke_386_time = #{tuoke386Time},</if>
+                    <if test ='null != is386First'>is_386_first = #{is386First},</if>
+                    <if test ='null != first386ConsumptionId'>first_386_consumption_id = #{first386ConsumptionId},</if>
+                    <if test ='null != first386ShopId'>first_386_shop_id = #{first386ShopId},</if>
+                    <if test ='null != first386Time'>first_386_time = #{first386Time},</if>
+                    <if test ='null != is386Second'>is_386_second = #{is386Second},</if>
+                    <if test ='null != second386ConsumptionId'>second_386_consumption_id = #{second386ConsumptionId},</if>
+                    <if test ='null != second386ShopId'>second_386_shop_id = #{second386ShopId},</if>
+                    <if test ='null != second386Time'>second_386_time = #{second386Time},</if>
+                    <if test ='null != is386Pass'>is_386_pass = #{is386Pass},</if>
+                    <if test ='null != is386Abandon'>is_386_abandon = #{is386Abandon},</if>
+                    <if test ='null != is386Sleep'>is_386_sleep = #{is386Sleep},</if>
+                    <if test ='null != pass386ShopId'>pass_386_shop_id = #{pass386ShopId},</if>
+                    <if test ='null != pass386Time'>pass_386_time = #{pass386Time},</if>
+                    <if test ='null != pass386ConsumptionId'>pass_386_consumption_id = #{pass386ConsumptionId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="getByMemberCardId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM shop_s_member_card_386_plan
+        WHERE member_card_id = #{memberCardId}
+    </select>
+
+    <select id="getList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM shop_s_member_card_386_plan
+        <include refid="condition"></include>
+    </select>
+
+    <select id="getListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM shop_s_member_card_386_plan
+        <include refid="condition"></include>
+    </select>
+    
+    <sql id="condition">
+    	<if test ='null != memberCardId'>AND member_card_id = #{memberCardId}</if>
+        <if test ='null != is386Tuoke'>AND is_386_tuoke = #{is386Tuoke}</if>
+        <if test ='null != tuoke386ConsumptionId'>AND tuoke_386_consumption_id = #{tuoke386ConsumptionId}</if>
+        <if test ='null != tuoke386ShopId'>AND tuoke_386_shop_id = #{tuoke386ShopId}</if>
+        <if test ='null != is386First'>AND is_386_first = #{is386First}</if>
+        <if test ='null != first386ConsumptionId'>AND first_386_consumption_id = #{first386ConsumptionId}</if>
+        <if test ='null != first386ShopId'>AND first_386_shop_id = #{first386ShopId}</if>
+        <if test ='null != is386Second'>AND is_386_second = #{is386Second}</if>
+        <if test ='null != second386ConsumptionId'>AND second_386_consumption_id = #{second386ConsumptionId}</if>
+        <if test ='null != second386ShopId'>AND second_386_shop_id = #{second386ShopId}</if>
+        <if test ='null != is386Pass'>AND is_386_pass = #{is386Pass}</if>
+        <if test ='null != is386Abandon'>AND is_386_abandon = #{is386Abandon}</if>
+        <if test ='null != is386Sleep'>AND is_386_sleep = #{is386Sleep}</if>
+        <if test ='null != pass386ShopId'>AND pass_386_shop_id = #{pass386ShopId}</if>
+        <if test ='null != pass386ConsumptionId'>AND pass_386_consumption_id = #{pass386ConsumptionId}</if>
+    </sql>
+</mapper>

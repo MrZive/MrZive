@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zive.member386Plan.MemberStatusDao">
+	<resultMap id="BaseResultMap" type="com.zive.member386Plan.entity.MemberPassStatus" >
+                <result column="id" property="id" />
+                <result column="member_card_id" property="memberCardId" />
+                <result column="is_pass" property="isPass" />
+                <result column="is_abandon" property="isAbandon" />
+                <result column="is_sleep" property="isSleep" />
+                <result column="pass_shop_id" property="passShopId" />
+                <result column="pass_consumption_id" property="passConsumptionId" />
+                <result column="pass_time" property="passTime" />
+                <result column="is_new_pass" property="isNewPass" />
+                <result column="is_new_abandon" property="isNewAbandon" />
+                <result column="is_new_sleep" property="isNewSleep" />
+                <result column="new_pass_shop_id" property="newPassShopId" />
+                <result column="new_pass_consumption_id" property="newPassConsumptionId" />
+                <result column="new_pass_time" property="newPassTime" />
+                <result column="is_386_tuoke" property="is386Tuoke" />
+                <result column="tuoke_386_consumption_id" property="tuoke386ConsumptionId" />
+                <result column="tuoke_386_shop_id" property="tuoke386ShopId" />
+                <result column="tuoke_386_time" property="tuoke386Time" />
+                <result column="is_386_first" property="is386First" />
+                <result column="first_386_consumption_id" property="first386ConsumptionId" />
+                <result column="first_386_shop_id" property="first386ShopId" />
+                <result column="first_386_time" property="first386Time" />
+                <result column="is_386_second" property="is386Second" />
+                <result column="second_386_consumption_id" property="second386ConsumptionId" />
+                <result column="second_386_shop_id" property="second386ShopId" />
+                <result column="second_386_time" property="second386Time" />
+                <result column="is_386_pass" property="is386Pass" />
+                <result column="is_386_abandon" property="is386Abandon" />
+                <result column="is_386_sleep" property="is386Sleep" />
+                <result column="pass_386_shop_id" property="pass386ShopId" />
+                <result column="pass_386_time" property="pass386Time" />
+                <result column="pass_386_consumption_id" property="pass386ConsumptionId" />
+                <result column="type" property="type" />
+                <result column="create_date" property="createDate" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                id,
+                member_card_id,
+                is_pass,
+                is_abandon,
+                is_sleep,
+                pass_shop_id,
+                pass_consumption_id,
+                pass_time,
+                is_new_pass,
+                is_new_abandon,
+                is_new_sleep,
+                new_pass_shop_id,
+                new_pass_consumption_id,
+                new_pass_time,
+                is_386_tuoke,
+                tuoke_386_consumption_id,
+                tuoke_386_shop_id,
+                tuoke_386_time,
+                is_386_first,
+                first_386_consumption_id,
+                first_386_shop_id,
+                first_386_time,
+                is_386_second,
+                second_386_consumption_id,
+                second_386_shop_id,
+                second_386_time,
+                is_386_pass,
+                is_386_abandon,
+                is_386_sleep,
+                pass_386_shop_id,
+                pass_386_time,
+                pass_386_consumption_id,
+                type,
+                create_date
+    </sql>
+
+    <insert id="add" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO shop_s_member_pass_status
+        (
+	        member_card_id,
+	        is_pass,
+	        is_abandon,
+	        is_sleep,
+	        pass_shop_id,
+	        pass_consumption_id,
+	        pass_time,
+	        is_new_pass,
+	        is_new_abandon,
+	        is_new_sleep,
+	        new_pass_shop_id,
+	        new_pass_consumption_id,
+	        new_pass_time,
+            is_386_tuoke,
+            tuoke_386_consumption_id,
+            tuoke_386_shop_id,
+            tuoke_386_time,
+            is_386_first,
+            first_386_consumption_id,
+            first_386_shop_id,
+            first_386_time,
+            is_386_second,
+            second_386_consumption_id,
+            second_386_shop_id,
+            second_386_time,
+            is_386_pass,
+            is_386_abandon,
+            is_386_sleep,
+            pass_386_shop_id,
+            pass_386_time,
+            pass_386_consumption_id,
+	        type,
+	        create_date
+	    )
+        values
+        (
+			#{memberCardId},
+			#{isPass},
+			#{isAbandon},
+			#{isSleep},
+			#{passShopId},
+			#{passConsumptionId},
+			#{passTime},
+			#{isNewPass},
+			#{isNewAbandon},
+			#{isNewSleep},
+			#{newPassShopId},
+			#{newPassConsumptionId},
+			#{newPassTime},
+            #{is386Tuoke},
+            #{tuoke386ConsumptionId},
+            #{tuoke386ShopId},
+            #{tuoke386Time},
+            #{is386First},
+            #{first386ConsumptionId},
+            #{first386ShopId},
+            #{first386Time},
+            #{is386Second},
+            #{second386ConsumptionId},
+            #{second386ShopId},
+            #{second386Time},
+            #{is386Pass},
+            #{is386Abandon},
+            #{is386Sleep},
+            #{pass386ShopId},
+            #{pass386Time},
+            #{pass386ConsumptionId},
+			#{type},
+			#{createDate}
+        )
+    </insert>
+
+    <select id="getList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM shop_s_member_pass_status
+        <where>
+        	<if test ='null != memberCardId'> AND member_card_id = #{memberCardId}</if>
+            <if test ='null != isPass'> AND is_pass = #{isPass}</if>
+            <if test ='null != isAbandon'> AND is_abandon = #{isAbandon}</if>
+            <if test ='null != isSleep'> AND is_sleep = #{isSleep}</if>
+            <if test ='null != passShopId'> AND pass_shop_id = #{passShopId}</if>
+            <if test ='null != passConsumptionId'> AND pass_consumption_id = #{passConsumptionId}</if>
+            <if test ='null != passTime'> AND pass_time = #{passTime}</if>
+            <if test ='null != isNewPass'> AND is_new_pass = #{isNewPass}</if>
+            <if test ='null != isNewAbandon'> AND is_new_abandon = #{isNewAbandon}</if>
+            <if test ='null != isNewSleep'> AND is_new_sleep = #{isNewSleep}</if>
+            <if test ='null != newPassShopId'> AND new_pass_shop_id = #{newPassShopId}</if>
+            <if test ='null != newPassConsumptionId'> AND new_pass_consumption_id = #{newPassConsumptionId}</if>
+            <if test ='null != newPassTime'> AND new_pass_time = #{newPassTime}</if>
+            <if test ='null != type'> AND type = #{type}</if>
+            <if test="startCreateDate != null">
+            	<![CDATA[AND create_date >= #{startCreateDate}]]>
+            </if>
+            <if test="endCreateDate != null">
+            	<![CDATA[AND create_date <= #{endCreateDate}]]>
+            </if>
+        </where>
+    </select>
+</mapper>

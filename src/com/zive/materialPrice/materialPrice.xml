@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zive.materialPrice">
+	 <update id="updateMaterialInventoryPrice" parameterType="com.zive.dataOut.entity.MaterialInfo">
+	 	UPDATE shop_b_material_inventory SET material_price = #{materialPrice} WHERE shop_id = #{shopId} AND material_id = #{materialId}
+	 </update>
+</mapper>

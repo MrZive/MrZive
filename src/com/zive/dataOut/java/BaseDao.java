@@ -2,7 +2,11 @@ package com.zive.dataOut.java;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -11,6 +15,8 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import com.zive.dataOut.entity.Consumption;
 import com.zive.dataOut.entity.CooperationProject;
+import com.zive.dataOut.entity.MaterialInfo;
+import com.zive.dataOut.entity.MaterialInventory;
 import com.zive.dataOut.entity.MemberCard;
 import com.zive.dataOut.entity.ProductInfo;
 import com.zive.dataOut.entity.ProjectInfo;
@@ -24,7 +30,7 @@ public class BaseDao {
 		try {
 			InputStream is = Resources.getResourceAsStream("mybatis.xml");
 			SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(is);
-			session = factory.openSession();
+			session = factory.openSession();//openSession(true)自动提交事务
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -68,6 +74,40 @@ public class BaseDao {
 	
 	static public List<MemberCard> getMemberCard(MemberCard memberCard){
 		List<MemberCard> list = getSession().selectList("com.zive.dataOut.common.getMemberCard", memberCard);
+		return list;
+	}
+	
+	//物料------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	static public MaterialInfo getMaterialById(String id){
+		MaterialInfo materialInfo = new MaterialInfo();
+		materialInfo.setId(id);
+		MaterialInfo one = getSession().selectOne("com.zive.dataOut.common.getMaterial", materialInfo);
+		return one;
+	}
+
+	static public MaterialInfo getMaterialByNo(String no){
+		MaterialInfo materialInfo = new MaterialInfo();
+		materialInfo.setNo(no);
+		MaterialInfo one = getSession().selectOne("com.zive.dataOut.common.getMaterial", materialInfo);
+		return one;
+	}
+	
+	static public List<MaterialInfo> getMaterial(MaterialInfo materialInfo){
+		List<MaterialInfo> list = getSession().selectList("com.zive.dataOut.common.getMaterial", materialInfo);
+		return list;
+	}
+	
+	//库存------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	static public MaterialInventory getMaterialInventoryByIdAndShopId(String materialId,String shopId){
+		MaterialInventory materialInventory = new MaterialInventory();
+		materialInventory.setMaterialId(materialId);
+		materialInventory.setShopId(shopId);
+		MaterialInventory one = getSession().selectOne("com.zive.dataOut.common.getMaterialInventory", materialInventory);
+		return one;
+	}
+
+	static public List<MaterialInventory> getMaterialInventory(MaterialInventory materialInventory){
+		List<MaterialInventory> list = getSession().selectList("com.zive.dataOut.common.getMaterialInventory", materialInventory);
 		return list;
 	}
 	
@@ -142,5 +182,35 @@ public class BaseDao {
 	static public List<Consumption> getConsumption(Consumption Consumption){
 		List<Consumption> list = getSession().selectList("com.zive.dataOut.common.getConsumption", Consumption);
 		return list;
+	}
+	
+	//获取会员剩余项目----------------------------------------------------------------------------------------------------------------------------------------------------------
+	static public List<Map<String,Object>> getCanDoneMemberProjectNumber(String memberCardId){
+		List<Map<String, Object>> memberProjectNumber = getSession().selectList("com.zive.dataOut.common.getCanDoneMemberProjectNumber", memberCardId);
+		
+		Iterator<Map<String, Object>> iterator = memberProjectNumber.iterator();
+		
+		while(iterator.hasNext()){
+			Map<String, Object> map = iterator.next();
+			int isBook = map.get("isBook")==null?0:Integer.valueOf(map.get("isBook").toString());
+			double owe = map.get("owe")==null?0d:Double.valueOf(map.get("owe").toString());
+			int leftNumber = map.get("leftNumber")==null?0:Integer.valueOf(map.get("leftNumber").toString());
+			int buyNumber = map.get("buyNumber")==null?0:Integer.valueOf(map.get("buyNumber").toString());
+			int doneNumebr = buyNumber - leftNumber;
+			BigDecimal price = map.get("price")==null?BigDecimal.ZERO:new BigDecimal(map.get("price").toString());
+			BigDecimal realPayment = map.get("realPayment")==null?BigDecimal.ZERO:new BigDecimal(map.get("realPayment").toString());
+			
+			if(isBook>0 && owe>0 && price.doubleValue()>0D){
+				BigDecimal leftDonePrice = realPayment.subtract(price.multiply(new BigDecimal(doneNumebr)));
+				BigDecimal number = leftDonePrice.divide(price, 4, RoundingMode.HALF_UP);
+				//BigDecimal number = leftDonePrice.divide(price);
+				
+				if(number.doubleValue()<1){
+					iterator.remove();
+				}
+			}
+		}
+		
+		return memberProjectNumber;
 	}
 }

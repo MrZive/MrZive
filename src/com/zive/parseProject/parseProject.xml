@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zive.parseProject">
+	 <select id="getProjectList" parameterType="string" resultType="com.alibaba.fastjson.JSONObject">
+		SELECT 
+		a.id,
+		a.consumption_id 'consumptionId',
+		a.consumption_project_id 'consumptionProjectId',
+		b.shop_id 'shopId',
+		f.name shopName,
+		a.member_card_id memberCardId,
+		e.name memberCardName,
+		c.id projectId,
+		c.no projectNo,
+		c.name projectName,
+		a.buy_number 'buyNumber',
+		a.number
+		FROM shop_s_consumption_project_detail a 
+		INNER JOIN shop_s_consumption b ON a.consumption_id = b.id AND b.is_cooperation = 0
+		INNER JOIN shop_b_project_info c ON a.project_id = c.id AND NO IN ("10100051" , "00000304" , "00000303" , "00000302" , "00000301" , "10100042_1" , "10100042_1")
+		LEFT JOIN shop_s_member_card e ON e.id = a.member_card_id
+		LEFT JOIN shop_s_consumption_project  g ON g.consumption_id = a.consumption_id
+		LEFT JOIN oa_department_structure f ON f.id = b.shop_id
+		WHERE
+		b.`status` = 1
+		AND a.is_fail = 0
+		AND a.number> 0
+		AND b.`shop_id` IN ("e33d5f72-5097-4112-8b43-e7df0ddb64e7","190330","16654ccd-c0aa-4a8b-a7b5-5979acb883a2")
+	 </select>
+	 
+	 <insert id="addConsumption" parameterType="com.zive.dataOut.entity.Consumption">
+		INSERT INTO
+		shop_s_consumption
+		(
+		id,
+		receipt_shop_type,
+		fail_earn,
+		member_card_id,
+		shop_id,
+		region,
+		consumption_date,
+		status,
+		is_link_fail,
+		fail_id,
+		create_user_id,
+		create_date,
+		is_cooperation,
+		is_over_fail,
+		ostype,
+		is_tuoke,
+		<if test="isDetailPay != null">is_detail_pay,</if>
+		maker_id
+		)VALUES(
+		#{id},
+		#{receiptShopType},
+		#{failEarn},
+		#{memberCardId},
+		#{shopId},
+		#{region},
+		#{consumptionDate},
+		#{status},
+		#{isLinkFail},
+		#{failId},
+		#{createUserId},
+		now(),
+		#{isCooperation},
+		0,
+		#{ostype},
+		#{isTuoke},
+		<if test="isDetailPay != null">#{isDetailPay},</if>
+		#{makerId}
+		)
+	</insert>
+	
+	<insert id="addProjectConsumption" parameterType="com.zive.shop.entity.ProjectConsumption">
+		INSERT INTO
+		shop_s_consumption_project
+		(
+		id,
+		consumption_id,
+		wechat_pay,
+		ali_pay,
+		store_pay,
+		bankcard_pay,
+		cash_pay,
+		point_pay,
+		is_book,
+		payment,
+		effective_earn,
+		real_payment,
+		owe,
+		buy_owe,
+		member_card_id,
+		remark,
+		is_birthday,
+		is_cash_coupon,
+		cash_coupon,
+		create_date,
+		<if test="isDetailPay != null">is_detail_pay, </if>
+		is_fail
+		)VALUES(
+		#{id},
+		#{consumptionId},
+		#{weChatPay},
+		#{aliPay},
+		#{storePay},
+		#{bankCardPay},
+		#{cashPay},
+		#{pointPay},
+		#{isBook},
+		#{payment},
+		#{effectiveEarn},
+		#{realPayment},
+		#{owe},
+		#{owe},
+		#{memberCardId},
+		#{remark},
+		#{isBirthday},
+		#{isCashCoupon},
+		#{cashCoupon},
+		now(),
+		<if test="isDetailPay != null">#{isDetailPay}, </if>
+		0
+		)
+	</insert>
+	
+	<insert id="addProjectDetailConsumption" parameterType="com.zive.shop.entity.ProjectDetailConsumption">
+		INSERT INTO
+		shop_s_consumption_project_detail
+		(
+		id,
+		channel_id,
+		consumption_id,
+		consumption_project_id,
+		consumption_set_id,
+		member_card_id,
+		project_id,
+		activity_id,
+		buy_number,
+		number,
+		coupon,
+		is_send,
+		create_date,
+		end_date,
+		price,
+		service_time,
+		is_count,
+		shop_id,
+		is_fail,
+		buy_type,
+		experience_price,
+		market_price,
+		promotion_price,
+		payment,
+		store_pay,
+		bankcard_pay,
+		cash_pay,
+		point_pay,
+		is_book,
+		owe,
+		buy_owe,
+		effective_earn,
+		real_payment,
+		is_pay
+		)VALUES(
+		#{id},
+		#{channelId},
+		#{consumptionId},
+		#{consumptionProjectId},
+		#{consumptionSetId},
+		#{memberCardId},
+		#{projectId},
+		#{activityId},
+		#{buyNumber},
+		#{number},
+		#{coupon},
+		#{isSend},
+		<if test="createDate!=null">
+			#{createDate}
+		</if>
+		<if test="createDate==null">
+			now()
+		</if>
+		,
+		#{endDate},
+		#{price},
+		#{serviceTime},
+		<if test="isCount!=null">
+			#{isCount}
+		</if>
+		<if test="isCount==null">
+			1
+		</if>
+		,
+		#{shopId},
+		0,
+		#{buyType},
+		#{experiencePrice},
+		#{marketPrice},
+		#{promotionPrice},
+		#{payment},
+		#{storePay},
+		#{bankCardPay},
+		#{cashPay},
+		#{pointPay},
+		#{isBook},
+		#{owe},
+		#{buyOwe},
+		#{effectiveEarn},
+		#{realPayment},
+		#{isPay}
+		)
+	</insert>
+	
+	<update id="updateConsumptionProjectDetail" parameterType = "map">
+		UPDATE shop_s_consumption_project_detail SET 
+		<if test="buyNumber!=null and number!=null">
+			buy_number = #{buyNumber} , number = #{number} 
+		</if>
+		<if test="projectId!=null">
+			project_id = #{projectId}
+		</if>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getConsumptionProjectDetailList" resultType="com.zive.shop.entity.ProjectDetailConsumption" parameterType="map">
+		SELECT id,consumption_id 'consumptionId',consumption_project_id 'consumptionProjectId',project_id 'projectId',buy_number 'buyNumber',number,member_card_id 'memberCardId',shop_id 'shopId' FROM shop_s_consumption_project_detail
+		<where>
+			<if test="null != id">
+				AND id = #{id}
+			</if>
+			<if test="null != consumptionId">
+				AND consumption_id = #{consumptionId}
+			</if>
+			<if test="null != consumptionIdLike">
+				AND consumption_id LIKE CONCAT('%' , #{consumptionIdLike} , '%')
+			</if>
+			<if test="null != consumptionProjectId">
+				AND consumption_project_id = #{consumptionProjectId}
+			</if>
+			<if test="null != projectId">
+				AND project_id = #{projectId}
+			</if>
+			<if test="null != memberCardId">
+				AND member_card_id = #{memberCardId}
+			</if>
+			<if test="null != shopId">
+				AND shop_id = #{shopId}
+			</if>
+		</where>
+	</select>
+</mapper>

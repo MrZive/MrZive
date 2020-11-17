@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 public class xxxx {
 
@@ -39,5 +40,8 @@ public class xxxx {
 		set.add("a");
 		System.out.println(set.toString());
 		System.out.println(set.toArray());
+		
+		
+		System.out.println(UUID.randomUUID());
 	}
 }
