@@ -7,5 +7,24 @@
 	<update id="updateProjectDetailDone" parameterType="com.zive.dataOut.entity.ProjectDoneDetail">
 		update shop_s_consumption_project_done set done_service_time = 90 where order_id = #{orderId} and project_detail_id = #{projectDetailId}
 	</update>
+	
+	<!-- 更新会员 -->
+	<update id="updateMemberCardPass" parameterType="com.zive.dataOut.entity.MemberCard">
+		UPDATE shop_s_member_card SET 
+		<if test="isPass != null and isPass != ''">
+			is_pass=#{isPass},
+		</if>
+		<if test="passTime != null">
+			pass_time=#{passTime},
+		</if>
+		<if test="passShopId != null and passShopId != ''">
+			pass_shop_id=#{passShopId},
+		</if>
+		<if test="passConsumptionId != null and passConsumptionId != ''">
+			pass_consumption_id=#{passConsumptionId},
+		</if>
+		last_update_time=NOW()
+		WHERE id=#{id}
+	</update>
 
 </mapper>

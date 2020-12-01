@@ -33,11 +33,16 @@ import com.zive.dataOut.java.BaseDao;
 import com.zive.dataOut.java.ExcelUtilForDO;
 import com.zive.pojo.EmployeeEarn;
 
+/**
+ * 导出bi所有项目收款
+ * @author Administrator
+ *
+ */
 public class BiDao extends BaseDao{
 	
 	public static void main(String[] args) throws ParseException, IOException {
-		String beginDateStr = "2020-08-01 00:00:00";
-		String endDateStr = "2020-08-27 23:59:59";
+		String beginDateStr = "2020-11-01 00:00:00";
+		String endDateStr = "2020-11-30 23:59:59";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date beginDate = format.parse(beginDateStr);
         Date endDate = format.parse(endDateStr);

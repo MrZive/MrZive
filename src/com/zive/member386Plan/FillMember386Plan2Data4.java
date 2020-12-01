@@ -15,6 +15,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.rocketmq.shade.com.alibaba.fastjson.JSON;
 import com.zive.dataOut.annotaion.FieldName;
 import com.zive.dataOut.annotaion.TableName;
 import com.zive.dataOut.entity.MemberCard;
@@ -28,6 +30,8 @@ import com.zive.dataOut.java.ExcelUtilForDO;
 import com.zive.dataOut.java.ProjectDoneDao;
 import com.zive.dataOut.java.ProjectSellDao;
 import com.zive.member386Plan.entity.MemberCard386Plan;
+import com.zive.member386Plan.entity.MemberPassStatus;
+import com.zive.member386Plan.entity.MemberPassStatus.EnumType;
 import com.zive.pub.Excel;
 import com.zive.pub.ExcelCell;
 import com.zive.pub.ExcelRow;
@@ -35,14 +39,14 @@ import com.zive.pub.ExcelSheet;
 import com.zive.pub.OfficeUtil;
 
 /**
- * 修改项目手工工时
+ * 修改成老会员
  * @author Administrator
  *
  */
-public class FillMember386Plan extends BaseDao{
+public class FillMember386Plan2Data4 extends BaseDao{
 
 	public static void main(String[] args) throws IOException, ParseException {
-		File file = new File("E:\\操作数据\\拓客套餐10月1号到11月17号所有会员.xlsx");
+		File file = new File("C:\\Users\\Administrator\\Desktop\\小罐艾\\通络净颜20个新客名单1120.xlsx");
 		
 		Excel excel = null;
 		try {
@@ -56,53 +60,45 @@ public class FillMember386Plan extends BaseDao{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		ExcelSheet excelSheet = excel.getSheets().get(0);
 		
-		Map<String,BigDecimal> map = new HashMap<>();
-		
-		BigDecimal all = BigDecimal.ZERO;
-		
 		for(int i = 1; i < excelSheet.getRows().size();i++){
 			excelRow = excelSheet.getRows().get(i);
 			excelCells = excelRow.getCells();
-			String memberCardId = excelCells.get(1).getValue().toString();
-			String shopId = excelCells.get(3).getValue().toString();
-			String consumptionId = excelCells.get(4).getValue().toString();
-			String dateStr = excelCells.get(5).getValue().toString();
-			Date consumptionDate = sdf.parse(dateStr);
+			String shopName = excelCells.get(0).getValue().toString();
+			String consumptionId = excelCells.get(1).getValue().toString();
+			String phone = excelCells.get(6).getValue().toString();
+			String memberName = excelCells.get(7).getValue().toString();
+			String consumptionDateStr = excelCells.get(13).getValue().toString();
+			Date consumptionDate = sdf.parse(consumptionDateStr);
 			
-			MemberCard memberCard = BaseDao.getMemberCardById(memberCardId);
-			MemberCard386Plan plan = MemberCard386PlanDao.getByMemberCardId(memberCardId);
+			Shop shop = new Shop();
+			shop.setName(shopName);
+			shop = BaseDao.getShop(shop).get(0);
+			
+			MemberCard memberCard = BaseDao.getMemberCardByPhone(phone);
+			MemberCard386Plan plan = MemberCard386PlanDao.getByMemberCardId(memberCard.getId());
 			if(plan==null){
-				plan = MemberCard386Plan.init(memberCardId);
+				plan = MemberCard386Plan.init(memberCard.getId());
 			}
+//			memberCard.setMemberCard386Plan(plan);
 			
-			boolean update = false;
 			
-			//老会员
-			if((memberCard.getIsPass()!=null && memberCard.getIsPass()==1) || (memberCard.getIsNewPass()!=null && memberCard.getIsNewPass()==1)){
-				if(plan.getTuoke386ConsumptionId()==null || plan.getTuoke386ConsumptionId().length()==0){
-//					plan.setIs386Tuoke(0);
-					plan.setTuoke386ConsumptionId(consumptionId);
-					plan.setTuoke386ShopId(shopId);
-					plan.setTuoke386Time(consumptionDate);
-					update = true;
-				}
-			}else if(plan.getIs386Tuoke()==null || plan.getIs386Tuoke()==0){
-				plan.setIs386Tuoke(1);
-				plan.setTuoke386ConsumptionId(consumptionId);
-				plan.setTuoke386ShopId(shopId);
-				plan.setTuoke386Time(consumptionDate);
-				update = true;
-			}
+			memberCard.setIsPass(1);
+			memberCard.setIsAbandon(0);
+			memberCard.setIsSleep(0);
+			memberCard.setPassConsumptionId(consumptionId);
+			memberCard.setPassShopId(shop.getId());
+			memberCard.setPassTime(consumptionDate);
 			
-			if(update){
-				if(plan.getId()==null){
-					MemberCard386PlanDao.add(plan);
-				}else{
-					MemberCard386PlanDao.update(plan);
-				}
-			}
+			System.out.println(JSON.toJSONString(memberCard));
+			
+			
+//			updateMemberCardPass(memberCard);
 		}
-		getSession().commit();
+//		getSession().commit();
+	}
+	
+	static public int updateMemberCardPass(MemberCard member) {
+		return getSession().insert("com.zive.update.updateMemberCardPass", member);
 	}
 	
 }

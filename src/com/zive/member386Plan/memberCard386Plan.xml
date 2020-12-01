@@ -211,13 +211,17 @@
     <select id="getList" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
         FROM shop_s_member_card_386_plan
-        <include refid="condition"></include>
+        <where>
+        	<include refid="condition"></include>
+        </where>
     </select>
 
     <select id="getListCount" resultType="java.lang.Integer">
         SELECT count(1)
         FROM shop_s_member_card_386_plan
-        <include refid="condition"></include>
+        <where>
+        	<include refid="condition"></include>
+        </where>
     </select>
     
     <sql id="condition">
