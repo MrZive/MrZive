@@ -74,4 +74,14 @@ public class ProjectSellDao extends BaseDao{
 		ProjectDetailConsumption one = getSession().selectOne("com.zive.dataOut.project.getProjectDetailConsumption", detail);
 		return one;
 	}
+	
+	static public int addProjectDetailConsumption(ProjectDetailConsumption projectDetail){
+		int insert = getSession().insert("com.zive.dataOut.project.addProjectDetailConsumption", projectDetail);
+		return insert;
+	}
+	
+	static public int updateProjectDetailConsumption(ProjectDetailConsumption projectDetail){
+		int insert = getSession().update("com.zive.dataOut.project.updateProjectDetailConsumption", projectDetail);
+		return insert;
+	}
 }

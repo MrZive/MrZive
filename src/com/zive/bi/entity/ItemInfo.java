@@ -7,7 +7,13 @@ import com.zive.dataOut.annotaion.TableName;
 
 @TableName("所有收款项目金额")
 public class ItemInfo {
-
+	
+	@FieldName("orderId")
+	private String orderId;
+	
+	@FieldName("businessId")
+	private String businessId;
+	
 	@FieldName("门店id")
 	private String shopId;
 	
@@ -28,6 +34,22 @@ public class ItemInfo {
 
 	
 	
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getBusinessId() {
+		return businessId;
+	}
+
+	public void setBusinessId(String businessId) {
+		this.businessId = businessId;
+	}
+
 	public String getShopId() {
 		return shopId;
 	}

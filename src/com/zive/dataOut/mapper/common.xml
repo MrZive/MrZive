@@ -44,6 +44,7 @@
 				and is_shop = #{isShop}
 			</if>
 		</where>
+		ORDER BY create_date_time ASC
 	</select>
 
 	<select id="getMemberCard" parameterType="com.zive.dataOut.entity.MemberCard" resultType="com.zive.dataOut.entity.MemberCard">
@@ -62,7 +63,7 @@
 		is_pass 'isPass',
 		is_abandon 'isAbandon',
 		pass_shop_id 'passShopId',
-		new_pass_shop_id 'newPassShopId',
+		pass_consumption_id 'passConsumptionId',
 		is_active 'isActive',
 		is_introduce 'isIntroduce',
 		is_sleep 'isSleep',
@@ -95,6 +96,97 @@
 			</if>
 		</where>
 	</select>
+	
+	<update id="updateMemberCard" parameterType="com.zive.dataOut.entity.MemberCard">
+        UPDATE shop_s_member_card
+        <set>
+                    <if test ='null != phone'>phone = #{phone},</if>
+                    <if test ='null != name'>name = #{name},</if>
+                    <if test ='null != activateDate'>activate_date = #{activateDate},</if>
+                    <if test ='null != birthday'>birthday = #{birthday},</if>
+                    <if test ='null != shopId'>shop_id = #{shopId},</if>
+                    <if test ='null != gender'>gender = #{gender},</if>
+                    <if test ='null != ages'>ages = #{ages},</if>
+                    <if test ='null != fromType'>from_type = #{fromType},</if>
+                    <if test ='null != job'>job = #{job},</if>
+                    <if test ='null != addr'>addr = #{addr},</if>
+                    <if test ='null != remark'>remark = #{remark},</if>
+                    <if test ='null != noPhone'>no_phone = #{noPhone},</if>
+                    <if test ='null != createUserId'>create_user_id = #{createUserId},</if>
+                    <if test ='null != createDate'>create_date = #{createDate},</if>
+                    <if test ='null != status'>status = #{status},</if>
+                    <if test ='null != isPass'>is_pass = #{isPass},</if>
+                    <if test ='null != passTime'>pass_time = #{passTime},</if>
+                    <if test ='null != isActive'>is_active = #{isActive},</if>
+                    <if test ='null != isAbandon'>is_abandon = #{isAbandon},</if>
+                    <if test ='null != isSleep'>is_sleep = #{isSleep},</if>
+                    <if test ='null != storeBalance'>store_balance = #{storeBalance},</if>
+                    <if test ='null != pointBalance'>point_balance = #{pointBalance},</if>
+                    <if test ='null != treatmentBalance'>treatment_balance = #{treatmentBalance},</if>
+                    <if test ='null != stockBalance'>stock_balance = #{stockBalance},</if>
+                    <if test ='null != wenxiuBalance'>wenxiu_balance = #{wenxiuBalance},</if>
+                    <if test ='null != oweBalance'>owe_balance = #{oweBalance},</if>
+                    <if test ='null != isIntroduce'>is_introduce = #{isIntroduce},</if>
+                    <if test ='null != introducer'>introducer = #{introducer},</if>
+                    <if test ='null != isStandard'>is_standard = #{isStandard},</if>
+                    <if test ='null != standardTime'>standard_time = #{standardTime},</if>
+                    <if test ='null != passShopId'>pass_shop_id = #{passShopId},</if>
+                    <if test ='null != passConsumptionId'>pass_consumption_id = #{passConsumptionId},</if>
+                    <if test ='null != leftTotal'>left_total = #{leftTotal},</if>
+                    <if test ='null != channelId'>channel_id = #{channelId},</if>
+                    <if test ='null != lastUpdateTime'>last_update_time = #{lastUpdateTime},</if>
+                    <if test ='null != error'>error = #{error},</if>
+                    <if test ='null != label'>label = #{label},</if>
+                    <if test ='null != period'>period = #{period},</if>
+                    <if test ='null != freeStart'>free_start = #{freeStart},</if>
+                    <if test ='null != freeEnd'>free_end = #{freeEnd},</if>
+                    <if test ='null != remindType'>remind_type = #{remindType},</if>
+                    <if test ='null != isNewPass'>is_new_pass = #{isNewPass},</if>
+                    <if test ='null != isNewSleep'>is_new_sleep = #{isNewSleep},</if>
+                    <if test ='null != isNewAbandon'>is_new_abandon = #{isNewAbandon},</if>
+                    <if test ='null != newPassConsumptionId'>new_pass_consumption_id = #{newPassConsumptionId},</if>
+                    <if test ='null != newPassShopId'>new_pass_shop_id = #{newPassShopId},</if>
+                    <if test ='null != newPassTime'>new_pass_time = #{newPassTime},</if>
+                    <if test ='null != isNewTuoke'>is_new_tuoke = #{isNewTuoke},</if>
+                    <if test ='null != newTuokeConsumptionId'>new_tuoke_consumption_id = #{newTuokeConsumptionId},</if>
+                    <if test ='null != newTuokeShopId'>new_tuoke_shop_id = #{newTuokeShopId},</if>
+                    <if test ='null != newTuokeTime'>new_tuoke_time = #{newTuokeTime},</if>
+                    <if test ='null != openId'>open_id = #{openId},</if>
+                    <if test ='null != isSign'>is_sign = #{isSign}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+	
+	<select id="getUserAccount" parameterType = "map" resultType = "com.zive.dataOut.entity.UserAccountModel">
+	   SELECT
+	      id,
+	      account_no 'accountNo',
+	      name,
+	      create_date 'createDate',
+	      create_time 'createTime',
+	      role_id 'roleId',
+	      structure_id 'structureId',
+	      storehouse_ids 'storehouseIds',
+	      storehouse_own_id 'storehouseOwnId',
+	      open_date 'openDate',
+	      status,
+	      type,
+	      phone,
+	      phone_user_id 'phoneUserId',
+	      shop_phone 'shopPhone',
+	      remark,
+	      address,
+	      open_date 'openDate'
+	   FROM
+	      user_account
+	   <where>
+	   		<if test="id != null">AND id = #{id}</if>
+	   		<if test="accountNo != null">AND account_no = #{accountNo}</if>
+	   		<if test="name != null">AND name = #{name}</if>
+	   		<if test="structureId != null">AND structure_id = #{structureId}</if>
+	   		<if test="status != null">AND status = #{status}</if>
+	   </where>
+   </select>
 	
 	
 	<select id="getMaterial" parameterType="com.zive.dataOut.entity.MaterialInfo" resultType="com.zive.dataOut.entity.MaterialInfo">

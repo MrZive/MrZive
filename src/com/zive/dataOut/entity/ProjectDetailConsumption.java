@@ -10,195 +10,212 @@ import java.sql.Date;
  */
 public class ProjectDetailConsumption {
 
-	/**
-	 * id
-	 */
-	private String id;
+	private static final long serialVersionUID = 1L;
 
-	/**
-	 * consumption_id
-	 */
-	private String consumptionId;
+    /**
+    * id
+    */
+    private String id;
 
-	/**
-	 * consumption_project_id
-	 */
-	private String consumptionProjectId;
+    /**
+    * consumption_id
+    */
+    private String consumptionId;
 
-	/**
-	 * project_id
-	 */
-	private String projectId;
+    /**
+    * consumption_project_id
+    */
+    private String consumptionProjectId;
 
-	/**
-	 * activity_id
-	 */
-	private String activityId;
+    /**
+    * project_id
+    */
+    private String projectId;
 
-	/**
-	 * 购买数量
-	 */
-	private Integer buyNumber;
+    /**
+    * activity_id
+    */
+    private String activityId;
 
-	/**
-	 * 实际数量，做服务后剩余的数量
-	 */
-	private Integer number;
+    /**
+    * 购买数量
+    */
+    private Integer buyNumber;
 
-	/**
-	 * 优惠码
-	 */
-	private String coupon;
+    /**
+    * 实际数量，做服务后剩余的数量
+    */
+    private Integer number;
 
-	/**
-	 * 是否是赠送，1是，0不是
-	 */
-	private Integer isSend;
+    /**
+    * 优惠码
+    */
+    private String coupon;
 
-	/**
-	 * create_date
-	 */
-	private Date createDate;
+    /**
+    * 是否是赠送，1是，0不是
+    */
+    private Integer isSend;
 
-	/**
-	 * end_date
-	 */
-	private Date endDate;
+    /**
+    * create_date
+    */
+    private Date createDate;
 
-	/**
-	 * member_card_id
-	 */
-	private String memberCardId;
+    /**
+    * end_date
+    */
+    private Date endDate;
 
-	/**
-	 * consumption_set_id
-	 */
-	private String consumptionSetId;
+    /**
+    * member_card_id
+    */
+    private String memberCardId;
 
-	/**
-	 * 单价
-	 */
-	private Double price;
+    /**
+    * consumption_set_id
+    */
+    private String consumptionSetId;
 
-	/**
-	 * 服务时长
-	 */
-	private Integer serviceTime;
+    /**
+    * 单价
+    */
+    private Double price;
 
-	/**
-	 * 是否计次
-	 */
-	private Integer isCount;
+    /**
+    * 服务时长
+    */
+    private Integer serviceTime;
 
-	/**
-	 * shop_id
-	 */
-	private String shopId;
+    /**
+    * 是否计次
+    */
+    private Integer isCount;
 
-	/**
-	 * is_fail
-	 */
-	private Integer isFail;
+    /**
+    * shop_id
+    */
+    private String shopId;
 
-	/**
-	 * 体验价
-	 */
-	private Double experiencePrice;
+    /**
+    * 0作废，1正常，886不能消耗不能退
+    */
+    private Integer isFail;
 
-	/**
-	 * 推广价
-	 */
-	private Double promotionPrice;
+    /**
+    * 体验价
+    */
+    private Double experiencePrice;
 
-	/**
-	 * 原价
-	 */
-	private Double marketPrice;
+    /**
+    * 推广价
+    */
+    private Double promotionPrice;
 
-	/**
-	 * 如果使用了优惠活动用以区分是否是同一个购买的数据
-	 */
-	private String buyType;
+    /**
+    * 原价
+    */
+    private Double marketPrice;
 
-	/**
-	 * 0青花资 1线上 2天使之纹 3丘山医美 4其他
-	 */
-	private Integer channelId;
+    /**
+    * buy_type
+    */
+    private String buyType;
 
-	/**
-	 * payment
-	 */
-	private Double payment;
+    /**
+    * 0青花资 1线上 2天使之纹 3丘山医美 4其他
+    */
+    private Integer channelId;
 
-	/**
-	 * store_pay
-	 */
-	private Double storePay;
+    /**
+    * payment
+    */
+    private Double payment;
 
-	/**
-	 * bankcard_pay
-	 */
-	private Double bankcardPay;
+    /**
+    * store_pay
+    */
+    private Double storePay;
 
-	/**
-	 * cash_pay
-	 */
-	private Double cashPay;
+    /**
+    * bankcard_pay
+    */
+    private Double bankcardPay;
 
-	/**
-	 * point_pay
-	 */
-	private Double pointPay;
+    /**
+    * cash_pay
+    */
+    private Double cashPay;
 
-	/**
-	 * is_book
-	 */
-	private Integer isBook;
+    /**
+    * point_pay
+    */
+    private Double pointPay;
 
-	/**
-	 * owe
-	 */
-	private Double owe;
+    /**
+    * is_book
+    */
+    private Integer isBook;
 
-	/**
-	 * buy_owe
-	 */
-	private Double buyOwe;
+    /**
+    * owe
+    */
+    private Double owe;
 
-	/**
-	 * effective_earn
-	 */
-	private Double effectiveEarn;
+    /**
+    * buy_owe
+    */
+    private Double buyOwe;
 
-	/**
-	 * real_payment
-	 */
-	private Double realPayment;
+    /**
+    * effective_earn
+    */
+    private Double effectiveEarn;
 
-	/**
-	 * is_pay
-	 */
-	private Integer isPay;
+    /**
+    * real_payment
+    */
+    private Double realPayment;
 
-	/**
-	 * remark
-	 */
-	private String remark;
+    /**
+    * is_pay
+    */
+    private Integer isPay;
 
-	/**
-	 * 是否使用现金券，1是0不是
-	 */
-	private Integer isCashCoupon;
+    /**
+    * remark
+    */
+    private String remark;
 
-	/**
-	 * is_tuoke
-	 */
-	private Integer isTuoke;
+    /**
+    * 是否使用现金券，1是0不是
+    */
+    private Integer isCashCoupon;
 
-	/**
-	 * 服务类型，0可以服务，1不可以服务
-	 */
-	private Integer serviceType;
+    /**
+    * is_tuoke
+    */
+    private Integer isTuoke;
+
+    /**
+    * 服务类型，0可以服务，1不可以服务
+    */
+    private Integer serviceType;
+
+    /**
+    * 微信支付
+    */
+    private Double wechatPay;
+
+    /**
+    * 支付宝支付
+    */
+    private Double aliPay;
+
+    /**
+    * 应品牌要求处理过期项目，原失效次数存至此处
+    */
+    private Integer invalidNumber;
 
 	public String getId() {
 		return id;
@@ -502,6 +519,30 @@ public class ProjectDetailConsumption {
 
 	public void setServiceType(Integer serviceType) {
 		this.serviceType = serviceType;
+	}
+
+	public Double getWechatPay() {
+		return wechatPay;
+	}
+
+	public void setWechatPay(Double wechatPay) {
+		this.wechatPay = wechatPay;
+	}
+
+	public Double getAliPay() {
+		return aliPay;
+	}
+
+	public void setAliPay(Double aliPay) {
+		this.aliPay = aliPay;
+	}
+
+	public Integer getInvalidNumber() {
+		return invalidNumber;
+	}
+
+	public void setInvalidNumber(Integer invalidNumber) {
+		this.invalidNumber = invalidNumber;
 	}
 	
 	

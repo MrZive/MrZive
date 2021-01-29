@@ -9,10 +9,6 @@
 
 
 
-
-
-
-
 	<!-- 查询详细购买项目单据 -->
     <select id="getBuyProjectOrderDetail" parameterType="map" resultType="map">
         select 
@@ -223,6 +219,308 @@
 	</select>
 	
 	
+	 
+    <insert id="addProjectDetailConsumption" parameterType="com.zive.dataOut.entity.ProjectDetailConsumption">
+        INSERT INTO shop_s_consumption_project_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        				<if test ='null != id'>
+                        id,
+                        </if>
+                        <if test ='null != consumptionId'>
+                        consumption_id,
+                        </if>
+                        <if test ='null != consumptionProjectId'>
+                        consumption_project_id,
+                        </if>
+                        <if test ='null != projectId'>
+                        project_id,
+                        </if>
+                        <if test ='null != activityId'>
+                        activity_id,
+                        </if>
+                        <if test ='null != buyNumber'>
+                        buy_number,
+                        </if>
+                        <if test ='null != number'>
+                        number,
+                        </if>
+                        <if test ='null != coupon'>
+                        coupon,
+                        </if>
+                        <if test ='null != isSend'>
+                        is_send,
+                        </if>
+                        <if test ='null != createDate'>
+                        create_date,
+                        </if>
+                        <if test ='null != endDate'>
+                        end_date,
+                        </if>
+                        <if test ='null != memberCardId'>
+                        member_card_id,
+                        </if>
+                        <if test ='null != consumptionSetId'>
+                        consumption_set_id,
+                        </if>
+                        <if test ='null != price'>
+                        price,
+                        </if>
+                        <if test ='null != serviceTime'>
+                        service_time,
+                        </if>
+                        <if test ='null != isCount'>
+                        is_count,
+                        </if>
+                        <if test ='null != shopId'>
+                        shop_id,
+                        </if>
+                        <if test ='null != isFail'>
+                        is_fail,
+                        </if>
+                        <if test ='null != experiencePrice'>
+                        experience_price,
+                        </if>
+                        <if test ='null != promotionPrice'>
+                        promotion_price,
+                        </if>
+                        <if test ='null != marketPrice'>
+                        market_price,
+                        </if>
+                        <if test ='null != buyType'>
+                        buy_type,
+                        </if>
+                        <if test ='null != channelId'>
+                        channel_id,
+                        </if>
+                        <if test ='null != payment'>
+                        payment,
+                        </if>
+                        <if test ='null != storePay'>
+                        store_pay,
+                        </if>
+                        <if test ='null != bankcardPay'>
+                        bankcard_pay,
+                        </if>
+                        <if test ='null != cashPay'>
+                        cash_pay,
+                        </if>
+                        <if test ='null != pointPay'>
+                        point_pay,
+                        </if>
+                        <if test ='null != isBook'>
+                        is_book,
+                        </if>
+                        <if test ='null != owe'>
+                        owe,
+                        </if>
+                        <if test ='null != buyOwe'>
+                        buy_owe,
+                        </if>
+                        <if test ='null != effectiveEarn'>
+                        effective_earn,
+                        </if>
+                        <if test ='null != realPayment'>
+                        real_payment,
+                        </if>
+                        <if test ='null != isPay'>
+                        is_pay,
+                        </if>
+                        <if test ='null != remark'>
+                        remark,
+                        </if>
+                        <if test ='null != isCashCoupon'>
+                        is_cash_coupon,
+                        </if>
+                        <if test ='null != isTuoke'>
+                        is_tuoke,
+                        </if>
+                        <if test ='null != serviceType'>
+                        service_type,
+                        </if>
+                        <if test ='null != wechatPay'>
+                        wechat_pay,
+                        </if>
+                        <if test ='null != aliPay'>
+                        ali_pay,
+                        </if>
+                        <if test ='null != invalidNumber'>
+                        invalid_number
+                        </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        				<if test ='null != id'>
+                        #{id},
+                        </if>
+                        <if test ='null != consumptionId'>
+                        #{consumptionId},
+                        </if>
+                        <if test ='null != consumptionProjectId'>
+                        #{consumptionProjectId},
+                        </if>
+                        <if test ='null != projectId'>
+                        #{projectId},
+                        </if>
+                        <if test ='null != activityId'>
+                        #{activityId},
+                        </if>
+                        <if test ='null != buyNumber'>
+                        #{buyNumber},
+                        </if>
+                        <if test ='null != number'>
+                        #{number},
+                        </if>
+                        <if test ='null != coupon'>
+                        #{coupon},
+                        </if>
+                        <if test ='null != isSend'>
+                        #{isSend},
+                        </if>
+                        <if test ='null != createDate'>
+                        #{createDate},
+                        </if>
+                        <if test ='null != endDate'>
+                        #{endDate},
+                        </if>
+                        <if test ='null != memberCardId'>
+                        #{memberCardId},
+                        </if>
+                        <if test ='null != consumptionSetId'>
+                        #{consumptionSetId},
+                        </if>
+                        <if test ='null != price'>
+                        #{price},
+                        </if>
+                        <if test ='null != serviceTime'>
+                        #{serviceTime},
+                        </if>
+                        <if test ='null != isCount'>
+                        #{isCount},
+                        </if>
+                        <if test ='null != shopId'>
+                        #{shopId},
+                        </if>
+                        <if test ='null != isFail'>
+                        #{isFail},
+                        </if>
+                        <if test ='null != experiencePrice'>
+                        #{experiencePrice},
+                        </if>
+                        <if test ='null != promotionPrice'>
+                        #{promotionPrice},
+                        </if>
+                        <if test ='null != marketPrice'>
+                        #{marketPrice},
+                        </if>
+                        <if test ='null != buyType'>
+                        #{buyType},
+                        </if>
+                        <if test ='null != channelId'>
+                        #{channelId},
+                        </if>
+                        <if test ='null != payment'>
+                        #{payment},
+                        </if>
+                        <if test ='null != storePay'>
+                        #{storePay},
+                        </if>
+                        <if test ='null != bankcardPay'>
+                        #{bankcardPay},
+                        </if>
+                        <if test ='null != cashPay'>
+                        #{cashPay},
+                        </if>
+                        <if test ='null != pointPay'>
+                        #{pointPay},
+                        </if>
+                        <if test ='null != isBook'>
+                        #{isBook},
+                        </if>
+                        <if test ='null != owe'>
+                        #{owe},
+                        </if>
+                        <if test ='null != buyOwe'>
+                        #{buyOwe},
+                        </if>
+                        <if test ='null != effectiveEarn'>
+                        #{effectiveEarn},
+                        </if>
+                        <if test ='null != realPayment'>
+                        #{realPayment},
+                        </if>
+                        <if test ='null != isPay'>
+                        #{isPay},
+                        </if>
+                        <if test ='null != remark'>
+                        #{remark},
+                        </if>
+                        <if test ='null != isCashCoupon'>
+                        #{isCashCoupon},
+                        </if>
+                        <if test ='null != isTuoke'>
+                        #{isTuoke},
+                        </if>
+                        <if test ='null != serviceType'>
+                        #{serviceType},
+                        </if>
+                        <if test ='null != wechatPay'>
+                        #{wechatPay},
+                        </if>
+                        <if test ='null != aliPay'>
+                        #{aliPay},
+                        </if>
+                        <if test ='null != invalidNumber'>
+                        #{invalidNumber}
+                        </if>
+        </trim>
+    </insert>
+    <update id="updateProjectDetailConsumption" parameterType="com.zive.dataOut.entity.ProjectDetailConsumption">
+        UPDATE shop_s_consumption_project_detail
+        <set>
+                    <if test ='null != consumptionId'>consumption_id = #{consumptionId},</if>
+                    <if test ='null != consumptionProjectId'>consumption_project_id = #{consumptionProjectId},</if>
+                    <if test ='null != projectId'>project_id = #{projectId},</if>
+                    <if test ='null != activityId'>activity_id = #{activityId},</if>
+                    <if test ='null != buyNumber'>buy_number = #{buyNumber},</if>
+                    <if test ='null != number'>number = #{number},</if>
+                    <if test ='null != coupon'>coupon = #{coupon},</if>
+                    <if test ='null != isSend'>is_send = #{isSend},</if>
+                    <if test ='null != createDate'>create_date = #{createDate},</if>
+                    <if test ='null != endDate'>end_date = #{endDate},</if>
+                    <if test ='null != memberCardId'>member_card_id = #{memberCardId},</if>
+                    <if test ='null != consumptionSetId'>consumption_set_id = #{consumptionSetId},</if>
+                    <if test ='null != price'>price = #{price},</if>
+                    <if test ='null != serviceTime'>service_time = #{serviceTime},</if>
+                    <if test ='null != isCount'>is_count = #{isCount},</if>
+                    <if test ='null != shopId'>shop_id = #{shopId},</if>
+                    <if test ='null != isFail'>is_fail = #{isFail},</if>
+                    <if test ='null != experiencePrice'>experience_price = #{experiencePrice},</if>
+                    <if test ='null != promotionPrice'>promotion_price = #{promotionPrice},</if>
+                    <if test ='null != marketPrice'>market_price = #{marketPrice},</if>
+                    <if test ='null != buyType'>buy_type = #{buyType},</if>
+                    <if test ='null != channelId'>channel_id = #{channelId},</if>
+                    <if test ='null != payment'>payment = #{payment},</if>
+                    <if test ='null != storePay'>store_pay = #{storePay},</if>
+                    <if test ='null != bankcardPay'>bankcard_pay = #{bankcardPay},</if>
+                    <if test ='null != cashPay'>cash_pay = #{cashPay},</if>
+                    <if test ='null != pointPay'>point_pay = #{pointPay},</if>
+                    <if test ='null != isBook'>is_book = #{isBook},</if>
+                    <if test ='null != owe'>owe = #{owe},</if>
+                    <if test ='null != buyOwe'>buy_owe = #{buyOwe},</if>
+                    <if test ='null != effectiveEarn'>effective_earn = #{effectiveEarn},</if>
+                    <if test ='null != realPayment'>real_payment = #{realPayment},</if>
+                    <if test ='null != isPay'>is_pay = #{isPay},</if>
+                    <if test ='null != remark'>remark = #{remark},</if>
+                    <if test ='null != isCashCoupon'>is_cash_coupon = #{isCashCoupon},</if>
+                    <if test ='null != isTuoke'>is_tuoke = #{isTuoke},</if>
+                    <if test ='null != serviceType'>service_type = #{serviceType},</if>
+                    <if test ='null != wechatPay'>wechat_pay = #{wechatPay},</if>
+                    <if test ='null != aliPay'>ali_pay = #{aliPay},</if>
+                    <if test ='null != invalidNumber'>invalid_number = #{invalidNumber}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+	
+	
 	<select id="getProjectDone" parameterType="com.zive.dataOut.entity.ProjectDone" resultType="com.zive.dataOut.entity.ProjectDone">
 		SELECT
         id,
@@ -286,5 +584,9 @@
         	</if>
         </where>
     </select>
+    
+    
+    
+   
 
 </mapper>

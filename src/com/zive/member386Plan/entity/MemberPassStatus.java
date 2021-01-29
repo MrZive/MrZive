@@ -28,7 +28,9 @@ public class MemberPassStatus {
 		is386Abandon,
 		is386Sleep,
 		is386Change,
-		no386Pass
+		no386Pass,
+		is386Second,
+		no386Second
 	}
 
 	/**

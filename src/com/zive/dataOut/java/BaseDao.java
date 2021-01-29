@@ -21,6 +21,7 @@ import com.zive.dataOut.entity.MemberCard;
 import com.zive.dataOut.entity.ProductInfo;
 import com.zive.dataOut.entity.ProjectInfo;
 import com.zive.dataOut.entity.Shop;
+import com.zive.dataOut.entity.UserAccountModel;
 
 public class BaseDao {
 
@@ -74,6 +75,24 @@ public class BaseDao {
 	
 	static public List<MemberCard> getMemberCard(MemberCard memberCard){
 		List<MemberCard> list = getSession().selectList("com.zive.dataOut.common.getMemberCard", memberCard);
+		return list;
+	}
+	
+	static public int updateMemberCard(MemberCard memberCard){
+		int update = getSession().update("com.zive.dataOut.common.updateMemberCard", memberCard);
+		return update;
+	}
+	
+	//账户------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	static public UserAccountModel getAccountById(String id){
+		UserAccountModel account = new UserAccountModel();
+		account.setId(id);
+		UserAccountModel one = getSession().selectOne("com.zive.dataOut.common.getUserAccount", account);
+		return one;
+	}
+
+	static public List<UserAccountModel> getAccount(UserAccountModel account){
+		List<UserAccountModel> list = getSession().selectList("com.zive.dataOut.common.getUserAccount", account);
 		return list;
 	}
 	

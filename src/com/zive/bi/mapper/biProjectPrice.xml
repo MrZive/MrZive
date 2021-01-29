@@ -324,7 +324,7 @@
 		e.`name` 'memberName',
 		e.is_pass 'isPass',
 		e.pass_time 'passTime',
-		a.price 'buyPrice',
+		g.real_payment 'buyPrice',
 		<!-- a.service_time 'serviceTime', -->
 		a.is_count 'isCount',
 		b.shop_id 'shopId',
@@ -390,7 +390,7 @@
 		e.`name` 'memberName',
 		e.is_pass 'isPass',
 		e.pass_time 'passTime',
-		a.price 'buyPrice',
+		g.real_payment 'buyPrice',
 		a.buy_unit 'buyUnit',
 		b.shop_id 'shopId',
 		f.`name` 'shopName',

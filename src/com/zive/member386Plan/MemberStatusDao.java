@@ -42,7 +42,9 @@ public class MemberStatusDao extends BaseDao{
 		return getSession().selectList("com.zive.member386Plan.MemberStatusDao.getList", plan);
 	}
 	static public int add(MemberPassStatus plan) {
-		plan.setCreateDate(new Date());
+		if(plan.getCreateDate()==null){
+			plan.setCreateDate(new Date());
+		}
 		return getSession().insert("com.zive.member386Plan.MemberStatusDao.add", plan);
 	}
 	//----------------------------------------------------------------------------------自定义方法-----------------------------------------------------------------------------
