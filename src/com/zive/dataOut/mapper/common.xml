@@ -277,6 +277,9 @@
 			<if test="no != null">
 				a.no = #{no}
 			</if>
+			<if test="name != null and name.length() gt 0">
+				and name = #{name}
+			</if>
 			<if test="status != null">
 				a.status = #{status}
 			</if>
@@ -307,6 +310,9 @@
 			</if>
 			<if test="no != null">
 				AND no = #{no}
+			</if>
+			<if test="name != null and name.length() gt 0">
+				and name = #{name}
 			</if>
 			<if test="status != null">
 				AND status = #{status}
@@ -342,6 +348,9 @@
 			</if>
 			<if test="no != null">
 				AND no = #{no}
+			</if>
+			<if test="name != null and name.length() gt 0">
+				and name = #{name}
 			</if>
 			<if test="status != null">
 				AND status = #{status}

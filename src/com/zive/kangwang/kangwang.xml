@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zive.kangwang">
+	<update id="updateMemberToError" parameterType="com.zive.dataOut.entity.MemberCard">
+		update shop_s_member_card set error = #{error} where id = #{id}
+	</update>
+	
+	
+	
+	<select id="getProjectDetailLeft" parameterType="map" resultType="map">
+		SELECT
+		a.service_type 'serviceType',
+		a.consumption_id 'consumptionId',
+		a.id 'projectDetailId',
+		a.project_id,
+		a.shop_id,
+		b.no,
+		b.name,
+		a.buy_number,
+		a.number,
+		a.market_price,
+		a.is_send,
+		a.create_date,
+		a.end_date,
+		a.price,
+		a.service_time ,
+		a.is_count 'isCount',
+		b.type,
+		a.remark
+		FROM
+		shop_s_consumption_project_detail a
+		LEFT JOIN
+		shop_b_project_info b
+		ON
+		b.id = a.project_id
+		<where>
+		    <if test="memberCardId != null and memberCardId != ''">
+		        and a.member_card_id = #{memberCardId}
+		    </if>
+			AND	a.is_fail = 0
+			and (a.number > 0 OR a.is_count = 0)
+		</where>
+	</select>
+	
+	<select id="getProductDetailLeft" parameterType = "map" resultType = "map">
+		SELECT 
+	 	a.id 'productDetailId',
+	 	a.product_id,
+	 	b.no,
+	 	b.name,
+	 	a.buy_number,
+	 	a.left_number,
+	 	a.market_price,
+	 	a.experience_price,
+	 	a.promotion_price,
+	 	a.is_send,
+	 	b.standard,
+	 	a.create_date,
+	 	a.buy_unit,
+	 	a.left_unit,
+	 	b.bulk_unit ,
+	 	b.boxes_unit,
+	 	a.price,
+	 	b.num 'unitChangeNumber'
+		FROM
+			shop_s_consumption_product_detail a 
+		LEFT JOIN 
+			shop_b_product_info b 
+		ON 
+			b.id = a.product_id 
+		WHERE 
+			a.member_card_id = #{memberCardId}
+		AND 
+			a.left_number > 0
+		AND 
+			a.is_fail = 0
+		AND a.channel_id &lt;&gt; 5
+	</select>
+	
+	<update id="updateProjectDetailSecondName" parameterType="map">
+		update shop_s_consumption_project_detail set second_name = #{secondName} where id = #{id}
+	</update>
+</mapper>
