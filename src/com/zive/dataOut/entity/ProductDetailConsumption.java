@@ -121,6 +121,18 @@ public class ProductDetailConsumption {
 //	产品的实际最小单位
 	private String actualUnit;
 	
+	private Integer isIntroduce;
+	
+	private String introducer;
+	
+	public Integer getIsIntroduce() {
+		return isIntroduce;
+	}
+
+	public void setIsIntroduce(Integer isIntroduce) {
+		this.isIntroduce = isIntroduce;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -203,6 +215,14 @@ public class ProductDetailConsumption {
 	}
 
 	
+
+	public String getIntroducer() {
+		return introducer;
+	}
+
+	public void setIntroducer(String introducer) {
+		this.introducer = introducer;
+	}
 
 	public Double getPrice() {
 		return price;

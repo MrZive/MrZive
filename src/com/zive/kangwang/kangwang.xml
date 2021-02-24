@@ -63,7 +63,8 @@
 	 	b.bulk_unit ,
 	 	b.boxes_unit,
 	 	a.price,
-	 	b.num 'unitChangeNumber'
+	 	b.num 'unitChangeNumber',
+	 	a.remark
 		FROM
 			shop_s_consumption_product_detail a 
 		LEFT JOIN 

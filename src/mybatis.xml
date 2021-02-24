@@ -17,18 +17,18 @@
 		<environment id="default">
 			<!-- 使用原生JDBC事务 -->
 			<transactionManager type="JDBC"></transactionManager>
-<!-- 			<dataSource type="POOLED"> -->
-<!-- 				<property name="driver" value="com.mysql.jdbc.Driver"/> -->
-<!-- 				<property name="url" value="jdbc:mysql://47.113.124.18:3306/qhc_core_2"/> -->
-<!-- 				<property name="username" value="wang.zw"/> -->
-<!-- 				<property name="password" value="wangzw0626@qhc"/> -->
-<!-- 			</dataSource> -->
 			<dataSource type="POOLED">
 				<property name="driver" value="com.mysql.jdbc.Driver"/>
-				<property name="url" value="jdbc:mysql://121.33.191.117:13306/qhc_core"/>
-				<property name="username" value="root"/>
-				<property name="password" value="Mysql"/>
+				<property name="url" value="jdbc:mysql://47.113.124.18:3306/qhc_core_2"/>
+				<property name="username" value="wang.zw"/>
+				<property name="password" value="wangzw0626@qhc"/>
 			</dataSource>
+<!-- 			<dataSource type="POOLED"> -->
+<!-- 				<property name="driver" value="com.mysql.jdbc.Driver"/> -->
+<!-- 				<property name="url" value="jdbc:mysql://121.33.191.117:13306/qhc_core"/> -->
+<!-- 				<property name="username" value="root"/> -->
+<!-- 				<property name="password" value="Mysql"/> -->
+<!-- 			</dataSource> -->
 		</environment>
 	</environments>
 	<mappers>

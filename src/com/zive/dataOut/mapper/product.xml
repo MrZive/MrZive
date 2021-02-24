@@ -145,6 +145,52 @@
 	</select>
 	
 	
+	<update id="updateProductDetailConsumption" parameterType="com.zive.dataOut.entity.ProductDetailConsumption">
+        UPDATE shop_s_consumption_product_detail
+        <set>
+                    <if test ='null != consumptionId'>consumption_id = #{consumptionId},</if>
+                    <if test ='null != consumptionProductId'>consumption_product_id = #{consumptionProductId},</if>
+                    <if test ='null != productId'>product_id = #{productId},</if>
+                    <if test ='null != activityId'>activity_id = #{activityId},</if>
+                    <if test ='null != buyNumber'>buy_number = #{buyNumber},</if>
+                    <if test ='null != leftNumber'>left_number = #{leftNumber},</if>
+                    <if test ='null != coupon'>coupon = #{coupon},</if>
+                    <if test ='null != isIntroduce'>is_introduce = #{isIntroduce},</if>
+                    <if test ='null != introducer'>introducer = #{introducer},</if>
+                    <if test ='null != memberCardId'>member_card_id = #{memberCardId},</if>
+                    <if test ='null != createDate'>create_date = #{createDate},</if>
+                    <if test ='null != isSend'>is_send = #{isSend},</if>
+                    <if test ='null != buyUnit'>buy_unit = #{buyUnit},</if>
+                    <if test ='null != consumptionSetId'>consumption_set_id = #{consumptionSetId},</if>
+                    <if test ='null != price'>price = #{price},</if>
+                    <if test ='null != shopId'>shop_id = #{shopId},</if>
+                    <if test ='null != isFail'>is_fail = #{isFail},</if>
+                    <if test ='null != experiencePrice'>experience_price = #{experiencePrice},</if>
+                    <if test ='null != promotionPrice'>promotion_price = #{promotionPrice},</if>
+                    <if test ='null != marketPrice'>market_price = #{marketPrice},</if>
+                    <if test ='null != leftUnit'>left_unit = #{leftUnit},</if>
+                    <if test ='null != buyType'>buy_type = #{buyType},</if>
+                    <if test ='null != expressType'>express_type = #{expressType},</if>
+                    <if test ='null != channelId'>channel_id = #{channelId},</if>
+                    <if test ='null != payment'>payment = #{payment},</if>
+                    <if test ='null != storePay'>store_pay = #{storePay},</if>
+                    <if test ='null != bankCardPay'>bankcard_pay = #{bankCardPay},</if>
+                    <if test ='null != cashPay'>cash_pay = #{cashPay},</if>
+                    <if test ='null != isBook'>is_book = #{isBook},</if>
+                    <if test ='null != owe'>owe = #{owe},</if>
+                    <if test ='null != buyOwe'>buy_owe = #{buyOwe},</if>
+                    <if test ='null != effectiveEarn'>effective_earn = #{effectiveEarn},</if>
+                    <if test ='null != realPayment'>real_payment = #{realPayment},</if>
+                    <if test ='null != isPay'>is_pay = #{isPay},</if>
+                    <if test ='null != remark'>remark = #{remark},</if>
+                    <if test ='null != actualNumber'>actual_number = #{actualNumber},</if>
+                    <if test ='null != actualPrice'>actual_price = #{actualPrice},</if>
+                    <if test ='null != actualUnit'>actual_unit = #{actualUnit}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+	
+	
 	<select id="getProductGet" parameterType="com.zive.dataOut.entity.ProductGet" resultType="com.zive.dataOut.entity.ProductGet">
 		SELECT
 		id,
