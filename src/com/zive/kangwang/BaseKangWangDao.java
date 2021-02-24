@@ -3,18 +3,22 @@ package com.zive.kangwang;
 import java.io.File;
 import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
-import com.alibaba.fastjson.JSONArray;
+import com.zive.dataOut.entity.Consumption;
 import com.zive.dataOut.entity.CooperationProject;
 import com.zive.dataOut.entity.ProductInfo;
+import com.zive.dataOut.entity.ProjectCooperationConsumption;
+import com.zive.dataOut.entity.ProjectCooperationDetailConsumption;
 import com.zive.dataOut.entity.ProjectDetailConsumption;
 import com.zive.dataOut.entity.ProjectInfo;
 import com.zive.dataOut.java.BaseDao;
-import com.zive.dataOut.java.ExcelUtilForDO;
+import com.zive.dataOut.java.ProjectCooperationSellDao;
+import com.zive.dataOut.java.ProjectSellDao;
 import com.zive.pub.Excel;
 import com.zive.pub.ExcelCell;
 import com.zive.pub.ExcelRow;
@@ -28,8 +32,18 @@ import com.zive.pub.OfficeUtil;
  */
 public class BaseKangWangDao extends BaseDao{
 	
+	public static String getSecondName(String oldName){
+		if(oldName.contains("旧项目")){
+			if(oldName.contains("（")){
+				String secondName = oldName.substring(oldName.indexOf("（")+1, oldName.lastIndexOf("）"));
+				return secondName;
+			}
+		}
+		return oldName;
+	}
+	
 	public static Map<String,NameToSystemName> getKangWangName() {
-		File file = new File("F:\\公司数据\\操作数据\\康王店\\没对应的项目名称当前日期20210203.xlsx");
+		File file = new File("D:\\公司数据\\操作数据\\康王店\\没对应的项目名称当前日期20210203.xlsx");
 		
 		Excel excel = null;
 		try {
@@ -106,50 +120,61 @@ public class BaseKangWangDao extends BaseDao{
 		return map;
 	}
 	
-	static public void addProjectDetail(){
+	static public void addProjectDetail(String memberCardId,String projectId,String secondName,Integer buyNumber,Integer number,Integer serviceTime,String remark){
+		addProjectDetail(memberCardId, projectId, secondName, 0D, buyNumber, number, serviceTime, 0D, 0D, 0D, 0D, remark);
+	}
+	
+	static public void addProjectDetail(String memberCardId,String projectId,String secondName,Double price,Integer buyNumber,Integer number,Integer serviceTime,Double storePay,Double bankcardPay,Double cashPay,Double owe,String remark){
 		ProjectDetailConsumption detail = new ProjectDetailConsumption();
-		detail.setActivityId(null);
+		Date date = new Date();
+		detail.setActivityId("");
 		detail.setAliPay(0D);
+		detail.setBuyType("init");
+		detail.setChannelId(0);
+		detail.setConsumptionId("Init"+date.getTime());
+		detail.setConsumptionProjectId("Init"+date.getTime());
+		detail.setConsumptionSetId("");
+		detail.setCoupon("");
+		detail.setCreateDate(date);
+		detail.setEffectiveEarn(null);
+		detail.setEndDate(null);
+		detail.setId(UUID.randomUUID().toString());
+		detail.setInvalidNumber(null);
+		detail.setIsBook(0);
+		detail.setIsCashCoupon(null);
+		detail.setIsCount(1);
+		detail.setIsFail(0);
+		detail.setIsPay(1);
+		detail.setIsSend(0);
+		detail.setIsTuoke(0);
+		detail.setMarketPrice(0D);
+		detail.setPointPay(0D);
+		detail.setRemark("康王纸质档案录入系统，分类：不明来源，备注："+remark);
+		detail.setServiceType(0);
+		detail.setShopId("110103");
+		detail.setWechatPay(0D);
+		detail.setExperiencePrice(0D);
+		detail.setPromotionPrice(0D);
+		
+		detail.setStorePay(storePay);
 		detail.setBankcardPay(bankcardPay);
 		detail.setBuyNumber(buyNumber);
-		detail.setBuyOwe(buyOwe);
-		detail.setBuyType(buyType);
+		detail.setBuyOwe(owe);
 		detail.setCashPay(cashPay);
-		detail.setChannelId(channelId);
-		detail.setConsumptionId(consumptionId);
-		detail.setConsumptionProjectId(consumptionProjectId);
-		detail.setConsumptionSetId(consumptionSetId);
-		detail.setCoupon(coupon);
-		detail.setCreateDate(createDate);
-		detail.setEffectiveEarn(effectiveEarn);
-		detail.setEndDate(endDate);
-		detail.setExperiencePrice(experiencePrice);
-		detail.setId(id);
-		detail.setInvalidNumber(invalidNumber);
-		detail.setIsBook(isBook);
-		detail.setIsCashCoupon(isCashCoupon);
-		detail.setIsCount(isCount);
-		detail.setIsFail(isFail);
-		detail.setIsPay(isPay);
-		detail.setIsSend(isSend);
-		detail.setIsTuoke(isTuoke);
-		detail.setMarketPrice(marketPrice);
 		detail.setMemberCardId(memberCardId);
 		detail.setNumber(number);
 		detail.setOwe(owe);
-		detail.setPayment(payment);
-		detail.setPointPay(pointPay);
+		detail.setPayment(price * buyNumber);
 		detail.setPrice(price);
 		detail.setProjectId(projectId);
-		detail.setPromotionPrice(promotionPrice);
-		detail.setRealPayment(realPayment);
-		detail.setRemark(remark);
+		detail.setRealPayment(detail.getPayment() - detail.getOwe());
 		detail.setSecondName(secondName);
 		detail.setServiceTime(serviceTime);
-		detail.setServiceType(serviceType);
-		detail.setShopId(shopId);
-		detail.setStorePay(storePay);
-		detail.setWechatPay(wechatPay);
+		
+		int addProjectDetailConsumption = ProjectSellDao.addProjectDetailConsumption(detail);
+		if(addProjectDetailConsumption==0){
+			throw new RuntimeException("新增项目错误");
+		}
 	}
 	
 	
@@ -165,6 +190,110 @@ public class BaseKangWangDao extends BaseDao{
 		map.put("memberCardId", memberCardId);
 		List<Map<String,Object>> selectList = getSession().selectList("com.zive.kangwang.getProductDetailLeft", map);
 		return selectList;
+	}
+	
+	
+	
+	static public void addCooperationConsumption(String memberCardId,String cooperationId,Double price,Integer buyNumber,Integer leftNumber,Double storePay,Double bankCardPay,Double cashPay,Double owe,String remark){
+		Date date = new Date();
+		String consumptionId = "Init"+date.getTime();
+		ProjectCooperationConsumption detail = new ProjectCooperationConsumption();
+		detail.setActivityId("");
+		detail.setAdviser("");
+		detail.setBankCardPay(bankCardPay);
+		detail.setBuyOwe(owe);
+		detail.setBuyType("init");
+		detail.setCashPay(cashPay);
+		detail.setConsumptionId(consumptionId);
+		detail.setCreateDate(date);
+		detail.setEffectiveEarn(0D);
+		detail.setId(consumptionId);
+		detail.setIsBook(0);
+		detail.setIsFail(0);
+		detail.setMemberCardId(memberCardId);
+		detail.setOwe(owe);
+		detail.setPayment(buyNumber * price);
+		detail.setRealPayment(detail.getPayment() - detail.getOwe());
+		detail.setRemark("康王纸质档案录入系统，分类：不明来源，备注："+remark);
+		detail.setShopid("110103");
+		detail.setStatus(owe>0?1:0);
+		detail.setStorePay(storePay);
+		
+		int addProjectCooperationDetailConsumption = ProjectCooperationSellDao.addProjectCooperationConsumption(detail);
+		if(addProjectCooperationDetailConsumption==0){
+			throw new RuntimeException("新增项目错误");
+		}
+		
+		int addCooperationDetail = addCooperationDetail(memberCardId, cooperationId, consumptionId, price, buyNumber, leftNumber);
+		if(addCooperationDetail==0){
+			throw new RuntimeException("新增项目错误");
+		}
+		
+		
+		addConsumption(memberCardId, consumptionId, date, 1);
+	}
+	
+	static public int addConsumption(String memberCardId,String consumptionId,Date date,Integer isCooperation){
+		Consumption detail = new Consumption();
+		detail.setConsumptionDate(date);
+		detail.setCreateDate(date);
+		detail.setCreateUserId("100");
+		detail.setFailDate(null);
+		detail.setFailEarn(null);
+		detail.setFailId(null);
+		detail.setFailUserId(null);
+		detail.setId(consumptionId);
+		detail.setIsCooperation(isCooperation);
+		detail.setIsDetailPay(1);
+		detail.setIsLinkFail(0);
+		detail.setIsOverFail(0);
+		detail.setIsTuoke(0);
+		detail.setMakerId("100");
+		detail.setMemberCardId(memberCardId);
+		detail.setOstype("");
+		detail.setReceiptShopType(0);
+		detail.setRegion("广州");
+		detail.setShopId("110103");
+		detail.setStatus(1);
+		detail.setIsOnline(0);
+		
+		int addProjectCooperationDetailConsumption = addConsumption(detail);
+		if(addProjectCooperationDetailConsumption==0){
+			throw new RuntimeException("新增项目错误");
+		}
+		return addProjectCooperationDetailConsumption;
+	}
+	
+	static public int addCooperationDetail(String memberCardId,String cooperationId,String consumptionId,Double price,Integer buyNumber,Integer leftNumber){
+		Date date = new Date();
+		ProjectCooperationDetailConsumption detail = new ProjectCooperationDetailConsumption();
+		detail.setActivityId("");
+		detail.setBuyNumber(buyNumber);
+		detail.setBuyType("init");
+		detail.setChannelId(null);
+		detail.setConsumptionCooperationId(consumptionId);
+		detail.setConsumptionDate(date);
+		detail.setConsumptionId(consumptionId);
+		detail.setConsumptionSetId("");
+		detail.setCooperationId(cooperationId);
+		detail.setCoupon("");
+		detail.setId(UUID.randomUUID().toString());
+		detail.setIsFail(0);
+		detail.setLeftNumber(leftNumber);
+		detail.setLeftStoreEarn(0D);
+		detail.setMemberCardId(memberCardId);
+		detail.setPrice(price);
+		detail.setShopid(null);
+		detail.setSort(null);
+		detail.setStatus(1);
+		detail.setUnit("次");
+		detail.setLeftEarn(0D);
+		
+		int addProjectCooperationDetailConsumption = ProjectCooperationSellDao.addProjectCooperationDetailConsumption(detail);
+		if(addProjectCooperationDetailConsumption==0){
+			throw new RuntimeException("新增项目错误");
+		}
+		return addProjectCooperationDetailConsumption;
 	}
 }
 

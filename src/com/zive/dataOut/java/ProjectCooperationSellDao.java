@@ -54,20 +54,40 @@ public class ProjectCooperationSellDao extends BaseDao{
 //		closeSession();
 	}
 	
-	static List<ProjectCooperationConsumption> getProjectCooperationConsumption(ProjectCooperationConsumption detail){
+	static public List<ProjectCooperationConsumption> getProjectCooperationConsumption(ProjectCooperationConsumption detail){
 		List<ProjectCooperationConsumption> list = getSession().selectList("com.zive.dataOut.project.getProjectCooperationConsumption", detail);
 		return list;
 	}
 	
-	static List<ProjectCooperationDetailConsumption> getProjectCooperationDetailConsumption(ProjectCooperationDetailConsumption detail){
+	static public List<ProjectCooperationDetailConsumption> getProjectCooperationDetailConsumption(ProjectCooperationDetailConsumption detail){
 		List<ProjectCooperationDetailConsumption> list = getSession().selectList("com.zive.dataOut.project.getProjectCooperationDetailConsumption", detail);
 		return list;
 	}
 	
-	static ProjectCooperationDetailConsumption getProjectCooperationDetailConsumptionById(String id){
+	static public ProjectCooperationDetailConsumption getProjectCooperationDetailConsumptionById(String id){
 		ProjectCooperationDetailConsumption detail = new ProjectCooperationDetailConsumption();
 		detail.setId(id);
 		ProjectCooperationDetailConsumption one = getSession().selectOne("com.zive.dataOut.project.getProjectCooperationDetailConsumption", detail);
 		return one;
+	}
+	
+	static public int addProjectCooperationConsumption(ProjectCooperationConsumption info){
+		int add = getSession().insert("com.zive.dataOut.project.addProjectCooperationConsumption", info);
+		return add;
+	}
+	
+	static public int addProjectCooperationDetailConsumption(ProjectCooperationDetailConsumption detail){
+		int add = getSession().insert("com.zive.dataOut.project.addProjectCooperationDetailConsumption", detail);
+		return add;
+	}
+	
+	static public int updateProjectCooperationConsumption(ProjectCooperationConsumption info){
+		int add = getSession().update("com.zive.dataOut.project.updateProjectCooperationConsumption", info);
+		return add;
+	}
+	
+	static public int updateProjectCooperationDetailConsumption(ProjectCooperationDetailConsumption detail){
+		int add = getSession().update("com.zive.dataOut.project.updateProjectCooperationDetailConsumption", detail);
+		return add;
 	}
 }

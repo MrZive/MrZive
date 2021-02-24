@@ -321,6 +321,26 @@
 	</select>
 	
 	
+	<select id="getProjectInfoDetail" resultType="com.zive.dataOut.entity.ProjectInfoDetail" parameterType="com.zive.dataOut.entity.ProjectInfoDetail">
+        SELECT
+        id,
+        shop_id shopId,
+        project_id projectId,
+        service_time serviceTime,
+        promotion_price promotionPrice,
+        market_price marketPrice,
+        experience_price experiencePrice,
+        create_date_time createDateTime,
+        create_user_id createUserId
+        FROM
+        shop_b_project_details
+        <where>
+	        <if test="shopId != null">AND shop_id = #{shopId}</if>
+	        <if test="projectId != null">AND project_id = #{projectId}</if>
+        </where>
+	</select>
+	
+	
 	<select id="getCooperationProject" resultType="com.zive.dataOut.entity.CooperationProject" parameterType="com.zive.dataOut.entity.CooperationProject">
 		SELECT
   		id,
@@ -357,6 +377,165 @@
 			</if>
 		</where>
 	</select>
+	
+	
+	<insert id="addConsumption" parameterType="com.zive.dataOut.entity.Consumption">
+        INSERT INTO shop_s_consumption
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        				<if test ='null != id'>
+                        id,
+                        </if>
+                        <if test ='null != memberCardId'>
+                        member_card_id,
+                        </if>
+                        <if test ='null != shopId'>
+                        shop_id,
+                        </if>
+                        <if test ='null != consumptionDate'>
+                        consumption_date,
+                        </if>
+                        <if test ='null != createUserId'>
+                        create_user_id,
+                        </if>
+                        <if test ='null != createDate'>
+                        create_date,
+                        </if>
+                        <if test ='null != status'>
+                        status,
+                        </if>
+                        <if test ='null != isLinkFail'>
+                        is_link_fail,
+                        </if>
+                        <if test ='null != failId'>
+                        fail_id,
+                        </if>
+                        <if test ='null != failDate'>
+                        fail_date,
+                        </if>
+                        <if test ='null != isOverFail'>
+                        is_over_fail,
+                        </if>
+                        <if test ='null != isCooperation'>
+                        is_cooperation,
+                        </if>
+                        <if test ='null != region'>
+                        region,
+                        </if>
+                        <if test ='null != makerId'>
+                        maker_id,
+                        </if>
+                        <if test ='null != ostype'>
+                        ostype,
+                        </if>
+                        <if test ='null != failUserId'>
+                        fail_user_id,
+                        </if>
+                        <if test ='null != isTuoke'>
+                        is_tuoke,
+                        </if>
+                        <if test ='null != failEarn'>
+                        fail_earn,
+                        </if>
+                        <if test ='null != isDetailPay'>
+                        is_detail_pay,
+                        </if>
+                        <if test ='null != receiptShopType'>
+                        receipt_shop_type,
+                        </if>
+                        <if test ='null != payId'>
+                        pay_id,
+                        </if>
+                        <if test ='null != isOnline'>
+                        is_online,
+                        </if>
+                        <if test ='null != payTime'>
+                        pay_time,
+                        </if>
+                        <if test ='null != payMoney'>
+                        pay_money,
+                        </if>
+                        <if test ='null != isInvoice'>
+                        is_invoice
+                        </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        				<if test ='null != id'>
+                        #{id},
+                        </if>
+                        <if test ='null != memberCardId'>
+                        #{memberCardId},
+                        </if>
+                        <if test ='null != shopId'>
+                        #{shopId},
+                        </if>
+                        <if test ='null != consumptionDate'>
+                        #{consumptionDate},
+                        </if>
+                        <if test ='null != createUserId'>
+                        #{createUserId},
+                        </if>
+                        <if test ='null != createDate'>
+                        #{createDate},
+                        </if>
+                        <if test ='null != status'>
+                        #{status},
+                        </if>
+                        <if test ='null != isLinkFail'>
+                        #{isLinkFail},
+                        </if>
+                        <if test ='null != failId'>
+                        #{failId},
+                        </if>
+                        <if test ='null != failDate'>
+                        #{failDate},
+                        </if>
+                        <if test ='null != isOverFail'>
+                        #{isOverFail},
+                        </if>
+                        <if test ='null != isCooperation'>
+                        #{isCooperation},
+                        </if>
+                        <if test ='null != region'>
+                        #{region},
+                        </if>
+                        <if test ='null != makerId'>
+                        #{makerId},
+                        </if>
+                        <if test ='null != ostype'>
+                        #{ostype},
+                        </if>
+                        <if test ='null != failUserId'>
+                        #{failUserId},
+                        </if>
+                        <if test ='null != isTuoke'>
+                        #{isTuoke},
+                        </if>
+                        <if test ='null != failEarn'>
+                        #{failEarn},
+                        </if>
+                        <if test ='null != isDetailPay'>
+                        #{isDetailPay},
+                        </if>
+                        <if test ='null != receiptShopType'>
+                        #{receiptShopType},
+                        </if>
+                        <if test ='null != payId'>
+                        #{payId},
+                        </if>
+                        <if test ='null != isOnline'>
+                        #{isOnline},
+                        </if>
+                        <if test ='null != payTime'>
+                        #{payTime},
+                        </if>
+                        <if test ='null != payMoney'>
+                        #{payMoney},
+                        </if>
+                        <if test ='null != isInvoice'>
+                        #{isInvoice}
+                        </if>
+        </trim>
+    </insert>
 	
 	<select id="getConsumption" resultType="com.zive.dataOut.entity.Consumption" parameterType="com.zive.dataOut.entity.Consumption">
 		SELECT

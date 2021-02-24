@@ -91,6 +91,361 @@
 			</if>
 		</where>
 	</select>
+	
+	
+	
+	<insert id="addProjectCooperationConsumption" parameterType="com.zive.dataOut.entity.ProjectCooperationConsumption">
+        INSERT INTO shop_s_consumption_cooperation_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        				<if test ='null != id'>
+                        id,
+                        </if>
+                        <if test ='null != consumptionId'>
+                        consumption_id,
+                        </if>
+                        <if test ='null != memberCardId'>
+                        member_card_id,
+                        </if>
+                        <if test ='null != payment'>
+                        payment,
+                        </if>
+                        <if test ='null != storePay'>
+                        store_pay,
+                        </if>
+                        <if test ='null != bankCardPay'>
+                        bank_card_pay,
+                        </if>
+                        <if test ='null != cashPay'>
+                        cash_pay,
+                        </if>
+                        <if test ='null != owe'>
+                        owe,
+                        </if>
+                        <if test ='null != buyOwe'>
+                        buy_owe,
+                        </if>
+                        <if test ='null != buyType'>
+                        buy_type,
+                        </if>
+                        <if test ='null != status'>
+                        status,
+                        </if>
+                        <if test ='null != isBook'>
+                        is_book,
+                        </if>
+                        <if test ='null != effectiveEarn'>
+                        effective_earn,
+                        </if>
+                        <if test ='null != realPayment'>
+                        real_payment,
+                        </if>
+                        <if test ='null != remark'>
+                        remark,
+                        </if>
+                        <if test ='null != isFail'>
+                        is_fail,
+                        </if>
+                        <if test ='null != shopid'>
+                        shopid,
+                        </if>
+                        <if test ='null != activityId'>
+                        activity_id,
+                        </if>
+                        <if test ='null != createDate'>
+                        create_date,
+                        </if>
+                        <if test ='null != adviser'>
+                        adviser,
+                        </if>
+                        <if test ='null != cosmetologist'>
+                        cosmetologist,
+                        </if>
+                        <if test ='null != cosmetologist2'>
+                        cosmetologist2,
+                        </if>
+                        <if test ='null != cosmetologist3'>
+                        cosmetologist3,
+                        </if>
+                        <if test ='null != isTransfer'>
+                        is_transfer,
+                        </if>
+                        <if test ='null != cost'>
+                        cost
+                        </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        				<if test ='null != id'>
+                        #{id},
+                        </if>
+                        <if test ='null != consumptionId'>
+                        #{consumptionId},
+                        </if>
+                        <if test ='null != memberCardId'>
+                        #{memberCardId},
+                        </if>
+                        <if test ='null != payment'>
+                        #{payment},
+                        </if>
+                        <if test ='null != storePay'>
+                        #{storePay},
+                        </if>
+                        <if test ='null != bankCardPay'>
+                        #{bankCardPay},
+                        </if>
+                        <if test ='null != cashPay'>
+                        #{cashPay},
+                        </if>
+                        <if test ='null != owe'>
+                        #{owe},
+                        </if>
+                        <if test ='null != buyOwe'>
+                        #{buyOwe},
+                        </if>
+                        <if test ='null != buyType'>
+                        #{buyType},
+                        </if>
+                        <if test ='null != status'>
+                        #{status},
+                        </if>
+                        <if test ='null != isBook'>
+                        #{isBook},
+                        </if>
+                        <if test ='null != effectiveEarn'>
+                        #{effectiveEarn},
+                        </if>
+                        <if test ='null != realPayment'>
+                        #{realPayment},
+                        </if>
+                        <if test ='null != remark'>
+                        #{remark},
+                        </if>
+                        <if test ='null != isFail'>
+                        #{isFail},
+                        </if>
+                        <if test ='null != shopid'>
+                        #{shopid},
+                        </if>
+                        <if test ='null != activityId'>
+                        #{activityId},
+                        </if>
+                        <if test ='null != createDate'>
+                        #{createDate},
+                        </if>
+                        <if test ='null != adviser'>
+                        #{adviser},
+                        </if>
+                        <if test ='null != cosmetologist'>
+                        #{cosmetologist},
+                        </if>
+                        <if test ='null != cosmetologist2'>
+                        #{cosmetologist2},
+                        </if>
+                        <if test ='null != cosmetologist3'>
+                        #{cosmetologist3},
+                        </if>
+                        <if test ='null != isTransfer'>
+                        #{isTransfer},
+                        </if>
+                        <if test ='null != cost'>
+                        #{cost}
+                        </if>
+        </trim>
+    </insert>
+	
+	
+	<insert id="addProjectCooperationDetailConsumption" parameterType="com.zive.dataOut.entity.ProjectCooperationDetailConsumption">
+        INSERT INTO shop_s_consumption_cooperation_project_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        				<if test ='null != id'>
+                        id,
+                        </if>
+                        <if test ='null != consumptionId'>
+                        consumption_id,
+                        </if>
+                        <if test ='null != consumptionCooperationId'>
+                        consumption_cooperation_id,
+                        </if>
+                        <if test ='null != buyNumber'>
+                        buy_number,
+                        </if>
+                        <if test ='null != unit'>
+                        unit,
+                        </if>
+                        <if test ='null != sort'>
+                        sort,
+                        </if>
+                        <if test ='null != leftNumber'>
+                        left_number,
+                        </if>
+                        <if test ='null != status'>
+                        status,
+                        </if>
+                        <if test ='null != activityId'>
+                        activity_id,
+                        </if>
+                        <if test ='null != cooperationId'>
+                        cooperation_id,
+                        </if>
+                        <if test ='null != memberCardId'>
+                        member_card_id,
+                        </if>
+                        <if test ='null != isFail'>
+                        is_fail,
+                        </if>
+                        <if test ='null != shopid'>
+                        shopid,
+                        </if>
+                        <if test ='null != coupon'>
+                        coupon,
+                        </if>
+                        <if test ='null != consumptionDate'>
+                        consumption_date,
+                        </if>
+                        <if test ='null != price'>
+                        price,
+                        </if>
+                        <if test ='null != leftEarn'>
+                        left_earn,
+                        </if>
+                        <if test ='null != leftStoreEarn'>
+                        left_store_earn,
+                        </if>
+                        <if test ='null != channelId'>
+                        channel_id,
+                        </if>
+                        <if test ='null != consumptionSetId'>
+                        consumption_set_id,
+                        </if>
+                        <if test ='null != buyType'>
+                        buy_type
+                        </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        				<if test ='null != id'>
+                        #{id},
+                        </if>
+                        <if test ='null != consumptionId'>
+                        #{consumptionId},
+                        </if>
+                        <if test ='null != consumptionCooperationId'>
+                        #{consumptionCooperationId},
+                        </if>
+                        <if test ='null != buyNumber'>
+                        #{buyNumber},
+                        </if>
+                        <if test ='null != unit'>
+                        #{unit},
+                        </if>
+                        <if test ='null != sort'>
+                        #{sort},
+                        </if>
+                        <if test ='null != leftNumber'>
+                        #{leftNumber},
+                        </if>
+                        <if test ='null != status'>
+                        #{status},
+                        </if>
+                        <if test ='null != activityId'>
+                        #{activityId},
+                        </if>
+                        <if test ='null != cooperationId'>
+                        #{cooperationId},
+                        </if>
+                        <if test ='null != memberCardId'>
+                        #{memberCardId},
+                        </if>
+                        <if test ='null != isFail'>
+                        #{isFail},
+                        </if>
+                        <if test ='null != shopid'>
+                        #{shopid},
+                        </if>
+                        <if test ='null != coupon'>
+                        #{coupon},
+                        </if>
+                        <if test ='null != consumptionDate'>
+                        #{consumptionDate},
+                        </if>
+                        <if test ='null != price'>
+                        #{price},
+                        </if>
+                        <if test ='null != leftEarn'>
+                        #{leftEarn},
+                        </if>
+                        <if test ='null != leftStoreEarn'>
+                        #{leftStoreEarn},
+                        </if>
+                        <if test ='null != channelId'>
+                        #{channelId},
+                        </if>
+                        <if test ='null != consumptionSetId'>
+                        #{consumptionSetId},
+                        </if>
+                        <if test ='null != buyType'>
+                        #{buyType}
+                        </if>
+        </trim>
+    </insert>
+    
+    
+    <update id="updateProjectCooperationDetailConsumption" parameterType="com.zive.dataOut.entity.ProjectCooperationDetailConsumption">
+        UPDATE shop_s_consumption_cooperation_project_detail
+        <set>
+                    <if test ='null != consumptionId'>consumption_id = #{consumptionId},</if>
+                    <if test ='null != consumptionCooperationId'>consumption_cooperation_id = #{consumptionCooperationId},</if>
+                    <if test ='null != buyNumber'>buy_number = #{buyNumber},</if>
+                    <if test ='null != unit'>unit = #{unit},</if>
+                    <if test ='null != sort'>sort = #{sort},</if>
+                    <if test ='null != leftNumber'>left_number = #{leftNumber},</if>
+                    <if test ='null != status'>status = #{status},</if>
+                    <if test ='null != activityId'>activity_id = #{activityId},</if>
+                    <if test ='null != cooperationId'>cooperation_id = #{cooperationId},</if>
+                    <if test ='null != memberCardId'>member_card_id = #{memberCardId},</if>
+                    <if test ='null != isFail'>is_fail = #{isFail},</if>
+                    <if test ='null != shopid'>shopid = #{shopid},</if>
+                    <if test ='null != coupon'>coupon = #{coupon},</if>
+                    <if test ='null != consumptionDate'>consumption_date = #{consumptionDate},</if>
+                    <if test ='null != price'>price = #{price},</if>
+                    <if test ='null != leftEarn'>left_earn = #{leftEarn},</if>
+                    <if test ='null != leftStoreEarn'>left_store_earn = #{leftStoreEarn},</if>
+                    <if test ='null != channelId'>channel_id = #{channelId},</if>
+                    <if test ='null != consumptionSetId'>consumption_set_id = #{consumptionSetId},</if>
+                    <if test ='null != buyType'>buy_type = #{buyType}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    
+    <update id="updateProjectCooperationConsumption" parameterType="com.zive.dataOut.entity.ProjectCooperationConsumption">
+        UPDATE shop_s_consumption_cooperation_project
+        <set>
+                    <if test ='null != consumptionId'>consumption_id = #{consumptionId},</if>
+                    <if test ='null != memberCardId'>member_card_id = #{memberCardId},</if>
+                    <if test ='null != payment'>payment = #{payment},</if>
+                    <if test ='null != storePay'>store_pay = #{storePay},</if>
+                    <if test ='null != bankCardPay'>bank_card_pay = #{bankCardPay},</if>
+                    <if test ='null != cashPay'>cash_pay = #{cashPay},</if>
+                    <if test ='null != owe'>owe = #{owe},</if>
+                    <if test ='null != buyOwe'>buy_owe = #{buyOwe},</if>
+                    <if test ='null != buyType'>buy_type = #{buyType},</if>
+                    <if test ='null != status'>status = #{status},</if>
+                    <if test ='null != isBook'>is_book = #{isBook},</if>
+                    <if test ='null != effectiveEarn'>effective_earn = #{effectiveEarn},</if>
+                    <if test ='null != realPayment'>real_payment = #{realPayment},</if>
+                    <if test ='null != remark'>remark = #{remark},</if>
+                    <if test ='null != isFail'>is_fail = #{isFail},</if>
+                    <if test ='null != shopid'>shopid = #{shopid},</if>
+                    <if test ='null != activityId'>activity_id = #{activityId},</if>
+                    <if test ='null != createDate'>create_date = #{createDate},</if>
+                    <if test ='null != adviser'>adviser = #{adviser},</if>
+                    <if test ='null != cosmetologist'>cosmetologist = #{cosmetologist},</if>
+                    <if test ='null != cosmetologist2'>cosmetologist2 = #{cosmetologist2},</if>
+                    <if test ='null != cosmetologist3'>cosmetologist3 = #{cosmetologist3},</if>
+                    <if test ='null != isTransfer'>is_transfer = #{isTransfer},</if>
+                    <if test ='null != cost'>cost = #{cost}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
 
 	
 	

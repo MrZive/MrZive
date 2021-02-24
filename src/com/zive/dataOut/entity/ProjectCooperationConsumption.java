@@ -1,6 +1,6 @@
 package com.zive.dataOut.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * 产品消费明细记录
@@ -125,7 +125,9 @@ public class ProjectCooperationConsumption {
     */
     private String cosmetologist3;
     
+    private Integer isTransfer;
     
+    private String cost;
 
 	public String getId() {
 		return id;
@@ -309,5 +311,21 @@ public class ProjectCooperationConsumption {
 
 	public void setCosmetologist3(String cosmetologist3) {
 		this.cosmetologist3 = cosmetologist3;
+	}
+
+	public Integer getIsTransfer() {
+		return isTransfer;
+	}
+
+	public void setIsTransfer(Integer isTransfer) {
+		this.isTransfer = isTransfer;
+	}
+
+	public String getCost() {
+		return cost;
+	}
+
+	public void setCost(String cost) {
+		this.cost = cost;
 	}
 }

@@ -110,8 +110,40 @@ public class Consumption {
 	 */
 	private Integer receiptShopType;
 	
+	private String payId;
 	
+	private Integer isOnline;
 	
+	private Date payTime;
+	
+	private Double payMoney;
+	
+	private Integer isInvoice;
+	
+
+	public Integer getIsInvoice() {
+		return isInvoice;
+	}
+
+	public void setIsInvoice(Integer isInvoice) {
+		this.isInvoice = isInvoice;
+	}
+
+	public Double getPayMoney() {
+		return payMoney;
+	}
+
+	public void setPayMoney(Double payMoney) {
+		this.payMoney = payMoney;
+	}
+
+	public Date getPayTime() {
+		return payTime;
+	}
+
+	public void setPayTime(Date payTime) {
+		this.payTime = payTime;
+	}
 
 	public String getId() {
 		return id;
@@ -159,6 +191,14 @@ public class Consumption {
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+
+	public String getPayId() {
+		return payId;
+	}
+
+	public void setPayId(String payId) {
+		this.payId = payId;
 	}
 
 	public Integer getStatus() {
@@ -271,6 +311,14 @@ public class Consumption {
 
 	public void setReceiptShopType(Integer receiptShopType) {
 		this.receiptShopType = receiptShopType;
+	}
+
+	public Integer getIsOnline() {
+		return isOnline;
+	}
+
+	public void setIsOnline(Integer isOnline) {
+		this.isOnline = isOnline;
 	}
 	
 }

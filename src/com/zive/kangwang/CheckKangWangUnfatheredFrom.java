@@ -15,6 +15,7 @@ import com.zive.dataOut.entity.CooperationProject;
 import com.zive.dataOut.entity.MemberCard;
 import com.zive.dataOut.entity.ProductInfo;
 import com.zive.dataOut.entity.ProjectInfo;
+import com.zive.dataOut.entity.ProjectInfoDetail;
 import com.zive.dataOut.java.BaseDao;
 import com.zive.pub.Excel;
 import com.zive.pub.ExcelCell;
@@ -31,7 +32,7 @@ public class CheckKangWangUnfatheredFrom extends BaseKangWangDao{
 
 	public static void main(String[] args) throws IOException {
 		
-		File file = new File("F:\\公司数据\\操作数据\\康王店\\整理\\003康王店会员筛选 - 不明来源.xlsx");
+		File file = new File("D:\\公司数据\\操作数据\\康王店\\整理\\003康王店会员筛选 - 不明来源.xlsx");
 		
 		Excel excel = null;
 		try {
@@ -51,7 +52,18 @@ public class CheckKangWangUnfatheredFrom extends BaseKangWangDao{
 			System.out.println("当前行数："+ i);
 			excelRow = excelSheet.getRows().get(i);
 			excelCells = excelRow.getCells();
+			String phone = excelCells.get(2).getValue().toString();
 			String name = excelCells.get(3).getValue().toString();
+			Integer buyNumber = Double.valueOf(excelCells.get(4).getValue().toString()).intValue();
+			Integer leftNumber = Double.valueOf(excelCells.get(9).getValue().toString()).intValue();
+			String buyDate = excelCells.get(10).getValue().toString().length() > 2 ? excelCells.get(10).getValue().toString() : "未知";
+			String remark = excelCells.get(13).getValue() == null ? "无" : excelCells.get(13).getValue().toString();
+			remark = remark.length()==0 ? "无" : remark;
+			
+			MemberCard memberCard = getMemberCardByPhone(phone);
+			if(memberCard == null){
+				throw new RuntimeException("手机号不存在");
+			}
 			
 			ProductInfo productInfo = new ProductInfo();
 			productInfo.setName(name);
@@ -65,6 +77,9 @@ public class CheckKangWangUnfatheredFrom extends BaseKangWangDao{
 			List<ProjectInfo> projectList = getProjectInfo(projectInfo);
 			
 			if(projectList.size()>0){
+				ProjectInfo info = projectList.get(0);
+				ProjectInfoDetail projectInfoDetail = getProjectInfoDetail("110103", info.getId());
+				addProjectDetail(memberCard.getId(), info.getId(), "", buyNumber, leftNumber, projectInfoDetail.getServiceTime().intValue(), remark + "，购买日期："+buyDate);
 				continue;
 			}
 			
@@ -73,17 +88,49 @@ public class CheckKangWangUnfatheredFrom extends BaseKangWangDao{
 			List<CooperationProject> cooList = getCooperationProject(cooInfo);
 			
 			if(cooList.size()>0){
+				CooperationProject info = cooList.get(0);
+				addCooperationConsumption(memberCard.getId(), info.getId(), 0D, buyNumber, leftNumber, 0D, 0D, 0D, 0D, remark + "，购买日期："+buyDate);
 				continue;
 			}
 			
-			if(kangWangName.containsKey(name) && kangWangName.get(name).getType() != null){
-				continue;
+			//查询对应的名称
+			if(kangWangName.containsKey(name)){
+				NameToSystemName nameToSystemName = kangWangName.get(name);
+				String secondName = "";
+				Integer time = nameToSystemName.getTime();
+				if(nameToSystemName.getNewName().equals("旧项目")){
+					secondName = getSecondName(nameToSystemName.getOldName());
+				}
+				if(nameToSystemName.getType().equals("project")){
+					projectInfo.setName(nameToSystemName.getNewName());
+					projectList = getProjectInfo(projectInfo);
+					if(projectList.size()>0){
+						ProjectInfo info = projectList.get(0);
+						if(time == null || time == 0){
+							ProjectInfoDetail projectInfoDetail = getProjectInfoDetail("110103", info.getId());
+							time = projectInfoDetail.getServiceTime().intValue();
+						}
+						addProjectDetail(memberCard.getId(), info.getId(), secondName, buyNumber, leftNumber, time, remark + "，购买日期："+buyDate);
+						continue;
+					}
+				}
+				if(nameToSystemName.getType().equals("coo")){
+					cooInfo.setName(nameToSystemName.getNewName());
+					cooList = getCooperationProject(cooInfo);
+					if(cooList.size()>0){
+						CooperationProject info = cooList.get(0);
+						addCooperationConsumption(memberCard.getId(), info.getId(), 0D, buyNumber, leftNumber, 0D, 0D, 0D, 0D, remark + "，购买日期："+buyDate);
+						continue;
+					}
+				}
+				
+				throw new RuntimeException("找不到项目信息");
 			}
 			
 			System.out.println(name);
-			
+			throw new RuntimeException("找不到项目信息");
 		}
 		
-//		getSession().commit();
+		getSession().commit();
 	}
 }

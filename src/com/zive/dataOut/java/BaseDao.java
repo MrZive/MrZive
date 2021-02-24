@@ -20,6 +20,7 @@ import com.zive.dataOut.entity.MaterialInventory;
 import com.zive.dataOut.entity.MemberCard;
 import com.zive.dataOut.entity.ProductInfo;
 import com.zive.dataOut.entity.ProjectInfo;
+import com.zive.dataOut.entity.ProjectInfoDetail;
 import com.zive.dataOut.entity.Shop;
 import com.zive.dataOut.entity.UserAccountModel;
 
@@ -170,6 +171,14 @@ public class BaseDao {
 		return list;
 	}
 	
+	static public ProjectInfoDetail getProjectInfoDetail(String shopId,String projectId){
+		ProjectInfoDetail detail = new ProjectInfoDetail();
+		detail.setShopId(shopId);
+		detail.setProjectId(projectId);
+		ProjectInfoDetail one = getSession().selectOne("com.zive.dataOut.common.getProjectInfoDetail", detail);
+		return one;
+	}
+	
 	//合作項目------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	static public CooperationProject getCooperationProjectById(String id){
 		CooperationProject CooperationProject = new CooperationProject();
@@ -201,6 +210,11 @@ public class BaseDao {
 	static public List<Consumption> getConsumption(Consumption Consumption){
 		List<Consumption> list = getSession().selectList("com.zive.dataOut.common.getConsumption", Consumption);
 		return list;
+	}
+	
+	static public int addConsumption(Consumption Consumption){
+		int add = getSession().insert("com.zive.dataOut.common.addConsumption", Consumption);
+		return add;
 	}
 	
 	//获取会员剩余项目----------------------------------------------------------------------------------------------------------------------------------------------------------

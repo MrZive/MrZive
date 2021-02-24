@@ -1,6 +1,6 @@
 package com.zive.dataOut.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * 产品消费明细记录
