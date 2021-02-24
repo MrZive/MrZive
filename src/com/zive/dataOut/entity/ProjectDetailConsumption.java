@@ -36,6 +36,8 @@ public class ProjectDetailConsumption {
     * activity_id
     */
     private String activityId;
+    
+    private String secondName;
 
     /**
     * 购买数量
@@ -543,6 +545,14 @@ public class ProjectDetailConsumption {
 
 	public void setInvalidNumber(Integer invalidNumber) {
 		this.invalidNumber = invalidNumber;
+	}
+
+	public String getSecondName() {
+		return secondName;
+	}
+
+	public void setSecondName(String secondName) {
+		this.secondName = secondName;
 	}
 	
 	

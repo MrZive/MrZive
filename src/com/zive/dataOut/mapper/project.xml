@@ -238,6 +238,9 @@
                         <if test ='null != activityId'>
                         activity_id,
                         </if>
+                        <if test ='null != secondName'>
+                        second_name,
+                        </if>
                         <if test ='null != buyNumber'>
                         buy_number,
                         </if>
@@ -362,6 +365,9 @@
                         </if>
                         <if test ='null != activityId'>
                         #{activityId},
+                        </if>
+                        <if test ='null != secondName'>
+                        #{secondName},
                         </if>
                         <if test ='null != buyNumber'>
                         #{buyNumber},

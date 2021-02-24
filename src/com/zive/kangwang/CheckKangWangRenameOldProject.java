@@ -101,21 +101,6 @@ public class CheckKangWangRenameOldProject extends BaseDao{
 		getSession().commit();
 	}
 	
-	static public List<Map<String,Object>> getProjectDetailLeft(String memberCardId){
-		Map<String,Object> map = new HashMap<>();
-		map.put("memberCardId", memberCardId);
-		List<Map<String,Object>> selectList = getSession().selectList("com.zive.kangwang.getProjectDetailLeft", map);
-		return selectList;
-	}
-	
-	static public List<Map<String,Object>> getProductDetailLeft(String memberCardId){
-		Map<String,Object> map = new HashMap<>();
-		map.put("memberCardId", memberCardId);
-		List<Map<String,Object>> selectList = getSession().selectList("com.zive.kangwang.getProductDetailLeft", map);
-		return selectList;
-	}
-	
-	
 	static public int updateProjectDetailSecondName(Map<String,Object> map){
 		int update = getSession().update("com.zive.kangwang.updateProjectDetailSecondName", map);
 		return update;
