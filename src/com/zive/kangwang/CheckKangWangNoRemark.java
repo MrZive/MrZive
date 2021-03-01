@@ -3,16 +3,13 @@ package com.zive.kangwang;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.zive.dataOut.entity.MemberCard;
-import com.zive.dataOut.java.BaseDao;
 import com.zive.pub.Excel;
 import com.zive.pub.ExcelCell;
 import com.zive.pub.ExcelRow;
@@ -24,7 +21,7 @@ import com.zive.pub.OfficeUtil;
  * @author Administrator
  *
  */
-public class CheckKangWangNoRemark extends BaseDao{
+public class CheckKangWangNoRemark extends BaseKangWangDao{
 
 	public static void main(String[] args) throws IOException {
 		File file = new File("D:\\公司数据\\操作数据\\康王店\\003康王店会员筛选 - 无备注.xlsx");

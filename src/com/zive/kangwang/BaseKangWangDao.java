@@ -11,14 +11,17 @@ import java.util.UUID;
 
 import com.zive.dataOut.entity.Consumption;
 import com.zive.dataOut.entity.CooperationProject;
+import com.zive.dataOut.entity.ProductDetailConsumption;
 import com.zive.dataOut.entity.ProductInfo;
 import com.zive.dataOut.entity.ProjectCooperationConsumption;
 import com.zive.dataOut.entity.ProjectCooperationDetailConsumption;
 import com.zive.dataOut.entity.ProjectDetailConsumption;
 import com.zive.dataOut.entity.ProjectInfo;
 import com.zive.dataOut.java.BaseDao;
+import com.zive.dataOut.java.ProductSellDao;
 import com.zive.dataOut.java.ProjectCooperationSellDao;
 import com.zive.dataOut.java.ProjectSellDao;
+import com.zive.kangwang.entity.NameToSystemName;
 import com.zive.pub.Excel;
 import com.zive.pub.ExcelCell;
 import com.zive.pub.ExcelRow;
@@ -109,6 +112,7 @@ public class BaseKangWangDao extends BaseDao{
 					}
 					
 					if(!flag){
+						entity.setType("");
 //						System.out.println(entity.getNewName());
 					}
 				}
@@ -120,11 +124,16 @@ public class BaseKangWangDao extends BaseDao{
 		return map;
 	}
 	
-	static public void addProjectDetail(String memberCardId,String projectId,String secondName,Integer buyNumber,Integer number,Integer serviceTime,String remark){
-		addProjectDetail(memberCardId, projectId, secondName, 0D, buyNumber, number, serviceTime, 0D, 0D, 0D, 0D, remark);
+	
+	static public int addProjectDetail(String memberCardId,String projectId,String secondName,Double price,Integer buyNumber,Integer number,Integer serviceTime,String remark){
+		 return addProjectDetail(memberCardId, projectId, secondName, price, buyNumber, number, serviceTime, 0D, 0D, 0D, 0D, remark);
 	}
 	
-	static public void addProjectDetail(String memberCardId,String projectId,String secondName,Double price,Integer buyNumber,Integer number,Integer serviceTime,Double storePay,Double bankcardPay,Double cashPay,Double owe,String remark){
+	static public int addProjectDetail(String memberCardId,String projectId,String secondName,Integer buyNumber,Integer number,Integer serviceTime,String remark){
+		 return addProjectDetail(memberCardId, projectId, secondName, 0D, buyNumber, number, serviceTime, 0D, 0D, 0D, 0D, remark);
+	}
+	
+	static public int addProjectDetail(String memberCardId,String projectId,String secondName,Double price,Integer buyNumber,Integer number,Integer serviceTime,Double storePay,Double bankcardPay,Double cashPay,Double owe,String remark){
 		ProjectDetailConsumption detail = new ProjectDetailConsumption();
 		Date date = new Date();
 		detail.setActivityId("");
@@ -175,6 +184,57 @@ public class BaseKangWangDao extends BaseDao{
 		if(addProjectDetailConsumption==0){
 			throw new RuntimeException("新增项目错误");
 		}
+		return addProjectDetailConsumption;
+	}
+	
+	static public int addProductDetail(String memberCardId,String productId,Integer buyNumber,Integer leftNumber,Double price,String unit,String remark){
+		Date date = new Date();
+		String consumptionId = "Init"+date.getTime();
+		ProductDetailConsumption detail = new ProductDetailConsumption();
+		detail.setActivityId("");
+		detail.setActualNumber(leftNumber);
+		detail.setActualPrice(price);
+		detail.setActualUnit(unit);
+		detail.setBankCardPay(0D);
+		detail.setBuyNumber(buyNumber);
+		detail.setBuyOwe(0D);
+		detail.setBuyType("Init");
+		detail.setBuyUnit(unit);
+		detail.setCashPay(0D);
+		detail.setChannelId(0);
+		detail.setConsumptionId(consumptionId);
+		detail.setConsumptionProductId(consumptionId);
+		detail.setConsumptionSetId(null);
+		detail.setCoupon("");
+		detail.setCreateDate(date);
+		detail.setEffectiveEarn(leftNumber * price);
+		detail.setExperiencePrice(0D);
+		detail.setExpressType(null);
+		detail.setId(UUID.randomUUID().toString());
+		detail.setIntroducer(null);
+		detail.setIsBook(0);
+		detail.setIsFail(0);
+		detail.setIsIntroduce(0);
+		detail.setIsPay(1);
+		detail.setIsSend(0);
+		detail.setLeftNumber(leftNumber);
+		detail.setLeftUnit(unit);
+		detail.setMarketPrice(0D);
+		detail.setMemberCardId(memberCardId);
+		detail.setOwe(0D);
+		detail.setPayment(price * buyNumber);
+		detail.setPrice(price);
+		detail.setProductId(productId);
+		detail.setPromotionPrice(0D);
+		detail.setRealPayment(0D);
+		detail.setRemark(remark);
+		detail.setShopId("110103");
+		detail.setStorePay(0d);
+		int addProductDetailConsumption = ProductSellDao.addProductDetailConsumption(detail);
+		if(addProductDetailConsumption==0){
+			throw new RuntimeException("新增产品错误");
+		}
+		return addProductDetailConsumption;
 	}
 	
 	
@@ -192,9 +252,16 @@ public class BaseKangWangDao extends BaseDao{
 		return selectList;
 	}
 	
+	static public List<Map<String,Object>> getCooProjectDetailLeft(String memberCardId){
+		Map<String,Object> map = new HashMap<>();
+		map.put("memberCardId", memberCardId);
+		List<Map<String,Object>> selectList = getSession().selectList("com.zive.kangwang.getCooProjectDetailLeft", map);
+		return selectList;
+	}
 	
 	
-	static public void addCooperationConsumption(String memberCardId,String cooperationId,Double price,Integer buyNumber,Integer leftNumber,Double storePay,Double bankCardPay,Double cashPay,Double owe,String remark){
+	
+	static public int addCooperationConsumption(String memberCardId,String cooperationId,Double price,Integer buyNumber,Integer leftNumber,Double storePay,Double bankCardPay,Double cashPay,Double owe,String remark){
 		Date date = new Date();
 		String consumptionId = "Init"+date.getTime();
 		ProjectCooperationConsumption detail = new ProjectCooperationConsumption();
@@ -231,6 +298,8 @@ public class BaseKangWangDao extends BaseDao{
 		
 		
 		addConsumption(memberCardId, consumptionId, date, 1);
+		
+		return addCooperationDetail;
 	}
 	
 	static public int addConsumption(String memberCardId,String consumptionId,Date date,Integer isCooperation){
@@ -295,47 +364,5 @@ public class BaseKangWangDao extends BaseDao{
 		}
 		return addProjectCooperationDetailConsumption;
 	}
-}
-
-class NameToSystemName {
-
-	private String OldName;
 	
-	private String NewName;
-	
-	private Integer time;
-	
-	private String type;
-
-	public String getOldName() {
-		return OldName;
-	}
-
-	public void setOldName(String oldName) {
-		OldName = oldName;
-	}
-
-	public String getNewName() {
-		return NewName;
-	}
-
-	public void setNewName(String newName) {
-		NewName = newName;
-	}
-
-	public Integer getTime() {
-		return time;
-	}
-
-	public void setTime(Integer time) {
-		this.time = time;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
 }

@@ -145,6 +145,249 @@
 	</select>
 	
 	
+	<insert id="addProductDetailConsumption" parameterType="com.zive.dataOut.entity.ProductDetailConsumption">
+        INSERT INTO shop_s_consumption_product_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        				<if test ='null != id'>
+                        id,
+                        </if>
+                        <if test ='null != consumptionId'>
+                        consumption_id,
+                        </if>
+                        <if test ='null != consumptionProductId'>
+                        consumption_product_id,
+                        </if>
+                        <if test ='null != productId'>
+                        product_id,
+                        </if>
+                        <if test ='null != activityId'>
+                        activity_id,
+                        </if>
+                        <if test ='null != buyNumber'>
+                        buy_number,
+                        </if>
+                        <if test ='null != leftNumber'>
+                        left_number,
+                        </if>
+                        <if test ='null != coupon'>
+                        coupon,
+                        </if>
+                        <if test ='null != isIntroduce'>
+                        is_introduce,
+                        </if>
+                        <if test ='null != introducer'>
+                        introducer,
+                        </if>
+                        <if test ='null != memberCardId'>
+                        member_card_id,
+                        </if>
+                        <if test ='null != createDate'>
+                        create_date,
+                        </if>
+                        <if test ='null != isSend'>
+                        is_send,
+                        </if>
+                        <if test ='null != buyUnit'>
+                        buy_unit,
+                        </if>
+                        <if test ='null != consumptionSetId'>
+                        consumption_set_id,
+                        </if>
+                        <if test ='null != price'>
+                        price,
+                        </if>
+                        <if test ='null != shopId'>
+                        shop_id,
+                        </if>
+                        <if test ='null != isFail'>
+                        is_fail,
+                        </if>
+                        <if test ='null != experiencePrice'>
+                        experience_price,
+                        </if>
+                        <if test ='null != promotionPrice'>
+                        promotion_price,
+                        </if>
+                        <if test ='null != marketPrice'>
+                        market_price,
+                        </if>
+                        <if test ='null != leftUnit'>
+                        left_unit,
+                        </if>
+                        <if test ='null != buyType'>
+                        buy_type,
+                        </if>
+                        <if test ='null != expressType'>
+                        express_type,
+                        </if>
+                        <if test ='null != channelId'>
+                        channel_id,
+                        </if>
+                        <if test ='null != payment'>
+                        payment,
+                        </if>
+                        <if test ='null != storePay'>
+                        store_pay,
+                        </if>
+                        <if test ='null != bankCardPay'>
+                        bankcard_pay,
+                        </if>
+                        <if test ='null != cashPay'>
+                        cash_pay,
+                        </if>
+                        <if test ='null != isBook'>
+                        is_book,
+                        </if>
+                        <if test ='null != owe'>
+                        owe,
+                        </if>
+                        <if test ='null != buyOwe'>
+                        buy_owe,
+                        </if>
+                        <if test ='null != effectiveEarn'>
+                        effective_earn,
+                        </if>
+                        <if test ='null != realPayment'>
+                        real_payment,
+                        </if>
+                        <if test ='null != isPay'>
+                        is_pay,
+                        </if>
+                        <if test ='null != remark'>
+                        remark,
+                        </if>
+                        <if test ='null != actualNumber'>
+                        actual_number,
+                        </if>
+                        <if test ='null != actualPrice'>
+                        actual_price,
+                        </if>
+                        <if test ='null != actualUnit'>
+                        actual_unit
+                        </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        				<if test ='null != id'>
+                        #{id},
+                        </if>
+                        <if test ='null != consumptionId'>
+                        #{consumptionId},
+                        </if>
+                        <if test ='null != consumptionProductId'>
+                        #{consumptionProductId},
+                        </if>
+                        <if test ='null != productId'>
+                        #{productId},
+                        </if>
+                        <if test ='null != activityId'>
+                        #{activityId},
+                        </if>
+                        <if test ='null != buyNumber'>
+                        #{buyNumber},
+                        </if>
+                        <if test ='null != leftNumber'>
+                        #{leftNumber},
+                        </if>
+                        <if test ='null != coupon'>
+                        #{coupon},
+                        </if>
+                        <if test ='null != isIntroduce'>
+                        #{isIntroduce},
+                        </if>
+                        <if test ='null != introducer'>
+                        #{introducer},
+                        </if>
+                        <if test ='null != memberCardId'>
+                        #{memberCardId},
+                        </if>
+                        <if test ='null != createDate'>
+                        #{createDate},
+                        </if>
+                        <if test ='null != isSend'>
+                        #{isSend},
+                        </if>
+                        <if test ='null != buyUnit'>
+                        #{buyUnit},
+                        </if>
+                        <if test ='null != consumptionSetId'>
+                        #{consumptionSetId},
+                        </if>
+                        <if test ='null != price'>
+                        #{price},
+                        </if>
+                        <if test ='null != shopId'>
+                        #{shopId},
+                        </if>
+                        <if test ='null != isFail'>
+                        #{isFail},
+                        </if>
+                        <if test ='null != experiencePrice'>
+                        #{experiencePrice},
+                        </if>
+                        <if test ='null != promotionPrice'>
+                        #{promotionPrice},
+                        </if>
+                        <if test ='null != marketPrice'>
+                        #{marketPrice},
+                        </if>
+                        <if test ='null != leftUnit'>
+                        #{leftUnit},
+                        </if>
+                        <if test ='null != buyType'>
+                        #{buyType},
+                        </if>
+                        <if test ='null != expressType'>
+                        #{expressType},
+                        </if>
+                        <if test ='null != channelId'>
+                        #{channelId},
+                        </if>
+                        <if test ='null != payment'>
+                        #{payment},
+                        </if>
+                        <if test ='null != storePay'>
+                        #{storePay},
+                        </if>
+                        <if test ='null != bankCardPay'>
+                        #{bankCardPay},
+                        </if>
+                        <if test ='null != cashPay'>
+                        #{cashPay},
+                        </if>
+                        <if test ='null != isBook'>
+                        #{isBook},
+                        </if>
+                        <if test ='null != owe'>
+                        #{owe},
+                        </if>
+                        <if test ='null != buyOwe'>
+                        #{buyOwe},
+                        </if>
+                        <if test ='null != effectiveEarn'>
+                        #{effectiveEarn},
+                        </if>
+                        <if test ='null != realPayment'>
+                        #{realPayment},
+                        </if>
+                        <if test ='null != isPay'>
+                        #{isPay},
+                        </if>
+                        <if test ='null != remark'>
+                        #{remark},
+                        </if>
+                        <if test ='null != actualNumber'>
+                        #{actualNumber},
+                        </if>
+                        <if test ='null != actualPrice'>
+                        #{actualPrice},
+                        </if>
+                        <if test ='null != actualUnit'>
+                        #{actualUnit}
+                        </if>
+        </trim>
+    </insert>
+	
+	
 	<update id="updateProductDetailConsumption" parameterType="com.zive.dataOut.entity.ProductDetailConsumption">
         UPDATE shop_s_consumption_product_detail
         <set>

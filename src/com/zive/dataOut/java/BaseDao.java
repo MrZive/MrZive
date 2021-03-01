@@ -19,6 +19,7 @@ import com.zive.dataOut.entity.MaterialInfo;
 import com.zive.dataOut.entity.MaterialInventory;
 import com.zive.dataOut.entity.MemberCard;
 import com.zive.dataOut.entity.ProductInfo;
+import com.zive.dataOut.entity.ProductInfoDetail;
 import com.zive.dataOut.entity.ProjectInfo;
 import com.zive.dataOut.entity.ProjectInfoDetail;
 import com.zive.dataOut.entity.Shop;
@@ -149,6 +150,14 @@ public class BaseDao {
 	static public List<ProductInfo> getProductInfo(ProductInfo ProductInfo){
 		List<ProductInfo> list = getSession().selectList("com.zive.dataOut.common.getProductInfo", ProductInfo);
 		return list;
+	}
+	
+	static public ProductInfoDetail getProductInfoDetail(String shopId,String productId){
+		ProductInfoDetail detail = new ProductInfoDetail();
+		detail.setShopId(shopId);
+		detail.setProductId(productId);
+		ProductInfoDetail one = getSession().selectOne("com.zive.dataOut.common.getProductInfoDetail", detail);
+		return one;
 	}
 	
 	//項目------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -286,6 +286,27 @@
 		</where>
 	</select>
 	
+	<select id="getProductInfoDetail" resultType="com.zive.dataOut.entity.ProductInfoDetail" parameterType="com.zive.dataOut.entity.ProductInfoDetail">
+        SELECT
+        id,
+        shop_id shopId,
+        product_id productId,
+        shop_name shopName,
+        product_name productName,
+        market_price marketPrice,
+        boxes_market_price boxesMarketPrice,
+        promotion_price promotionPrice,
+        boxes_promotion_price boxesPromotionPrice,
+        experience_price experiencePice,
+        boxes_experience_price boxesExperiencePrice
+        FROM
+        shop_b_product_price
+        <where>
+	        <if test="shopId != null">AND shop_id = #{shopId}</if>
+	        <if test="productId != null">AND product_id = #{productId}</if>
+        </where>
+	</select>
+	
 	
 	<select id="getProjectInfo" resultType="com.zive.dataOut.entity.ProjectInfo" parameterType="com.zive.dataOut.entity.ProjectInfo">
 		SELECT

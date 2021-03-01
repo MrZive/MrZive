@@ -24,7 +24,7 @@ import com.zive.pub.OfficeUtil;
  * @author Administrator
  *
  */
-public class CheckKangWangRenameOldProject extends BaseDao{
+public class CheckKangWangRenameOldProject extends BaseKangWangDao{
 
 	public static void main(String[] args) throws IOException {
 		File file = new File("D:\\公司数据\\操作数据\\康王店\\003康王店会员筛选 - 无备注.xlsx");

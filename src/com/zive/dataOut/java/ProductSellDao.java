@@ -77,6 +77,11 @@ public class ProductSellDao extends BaseDao{
 		return one;
 	}
 	
+	static public int addProductDetailConsumption(ProductDetailConsumption detail){
+		int add = getSession().update("com.zive.dataOut.product.addProductDetailConsumption", detail);
+		return add;
+	}
+	
 	static public int updateProductDetailConsumption(ProductDetailConsumption detail){
 		int update = getSession().update("com.zive.dataOut.product.updateProductDetailConsumption", detail);
 		return update;

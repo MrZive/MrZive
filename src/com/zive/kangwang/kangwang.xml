@@ -80,6 +80,45 @@
 		AND a.channel_id &lt;&gt; 5
 	</select>
 	
+	<select id="getCooProjectDetailLeft" parameterType = "map" resultType = "map">
+		SELECT
+		coo.id 'id',
+		coo.consumption_id 'consumptionId',
+		detail.id 'projectDetailId',
+		cooProject.name,
+		detail.cooperation_id,
+		c.shop_id,
+		cooProject.no,
+		cooProject.name,
+		detail.buy_number,
+		detail.left_number,
+		c.create_date,
+		c.consumption_date 'consumptionDate',
+		detail.price,
+		coo.remark
+		FROM
+		shop_s_consumption c
+		RIGHT JOIN
+		shop_s_member_card m ON m.id = c.member_card_id
+		RIGHT JOIN
+		shop_s_consumption_cooperation_project coo ON coo.consumption_id = c.id
+		RIGHT JOIN
+		shop_s_consumption_cooperation_project_detail detail ON detail.consumption_id = c.id
+		RIGHT JOIN
+		shop_b_cooperation_project cooProject ON cooProject.id = detail.cooperation_id
+		WHERE
+		c.is_cooperation = 1
+		AND c.status = 1
+		AND coo.status = 0
+		AND coo.member_card_id = #{memberCardId}
+		ORDER BY
+		c.consumption_date
+	</select>
+	
+	
+	
+	
+	
 	<update id="updateProjectDetailSecondName" parameterType="map">
 		update shop_s_consumption_project_detail set second_name = #{secondName} where id = #{id}
 	</update>
