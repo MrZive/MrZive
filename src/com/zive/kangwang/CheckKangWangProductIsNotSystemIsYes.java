@@ -131,6 +131,6 @@ public class CheckKangWangProductIsNotSystemIsYes extends BaseKangWangDao{
 			}
 		}
 		
-		getSession().commit();
+//		getSession().commit();
 	}
 }

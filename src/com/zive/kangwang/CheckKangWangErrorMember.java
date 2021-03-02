@@ -72,7 +72,7 @@ public class CheckKangWangErrorMember extends BaseDao{
 			}
 		}
 		
-		getSession().commit();
+//		getSession().commit();
 	}
 	
 	static public int updateMemberToError(MemberCard memberCard){

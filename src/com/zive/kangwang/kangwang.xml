@@ -23,6 +23,7 @@
 		a.market_price,
 		a.is_send,
 		a.create_date,
+		c.consumption_date,
 		a.end_date,
 		a.price,
 		a.service_time ,
@@ -31,10 +32,8 @@
 		a.remark
 		FROM
 		shop_s_consumption_project_detail a
-		LEFT JOIN
-		shop_b_project_info b
-		ON
-		b.id = a.project_id
+		LEFT JOIN shop_b_project_info b	ON b.id = a.project_id
+		LEFT JOIN shop_s_consumption c ON a.consumption_id = c.id
 		<where>
 		    <if test="memberCardId != null and memberCardId != ''">
 		        and a.member_card_id = #{memberCardId}
@@ -58,6 +57,7 @@
 	 	a.is_send,
 	 	b.standard,
 	 	a.create_date,
+	 	c.consumption_date,
 	 	a.buy_unit,
 	 	a.left_unit,
 	 	b.bulk_unit ,
@@ -67,10 +67,8 @@
 	 	a.remark
 		FROM
 			shop_s_consumption_product_detail a 
-		LEFT JOIN 
-			shop_b_product_info b 
-		ON 
-			b.id = a.product_id 
+		LEFT JOIN shop_b_product_info b ON b.id = a.product_id
+		LEFT JOIN shop_s_consumption c ON a.consumption_id = c.id
 		WHERE 
 			a.member_card_id = #{memberCardId}
 		AND 
@@ -93,7 +91,7 @@
 		detail.buy_number,
 		detail.left_number,
 		c.create_date,
-		c.consumption_date 'consumptionDate',
+		c.consumption_date,
 		detail.price,
 		coo.remark
 		FROM

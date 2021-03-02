@@ -132,6 +132,6 @@ public class CheckKangWangUnfatheredFrom extends BaseKangWangDao{
 			throw new RuntimeException("找不到项目信息");
 		}
 		
-		getSession().commit();
+//		getSession().commit();
 	}
 }

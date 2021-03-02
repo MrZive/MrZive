@@ -400,6 +400,79 @@
 	</select>
 	
 	
+	<select id="getActivity" resultType="com.zive.dataOut.entity.Activity" parameterType="com.zive.dataOut.entity.Activity">
+		SELECT
+		id,
+		name,
+		type,
+		begin_date 'beginDate',
+		end_date 'endDate',
+		status,
+		is_limit_region 'isLimitRegion',
+		region,
+		is_limit_time 'isLimitTime',
+		is_limit_consume 'isLimitConsume',
+		is_loop 'isLoop',
+		is_message 'isMessage',
+		consume1,
+		consume2,
+		consume3,
+		consume_type1 'consumeType1',
+		consume_type2 'consumeType2',
+		consume_type3 'consumeType3',
+		charge1,
+		charge2,
+		charge3,
+		charge_type1 'chargeType1',
+		charge_type2 'chargeType2',
+		charge_type3 'chargeType3',
+		act_type 'actType',
+		`condition`
+		FROM
+		shop_b_activity_info
+		<where>
+			<if test ='null != id'>AND id = #{id}</if>
+			<if test ='null != name'>AND name = #{name}</if>
+            <if test ='null != type'>AND type = #{type}</if>
+            <if test ='null != status'>AND status = #{status}</if>
+		</where>
+	</select>
+	
+	<insert id="addActivityShop" parameterType="com.zive.dataOut.entity.ActivityShop">
+        INSERT INTO shop_b_activity_shop
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        				<if test="id != null">
+        				id,
+        				</if>
+                        <if test ='null != shopId'>
+                        shop_id,
+                        </if>
+                        <if test ='null != activityId'>
+                        activity_id,
+                        </if>
+                        <if test ='null != createDateTime'>
+                        create_date_time
+                        </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        				<if test="id != null">
+        				#{id},
+        				</if>
+                        <if test ='null != shopId'>
+                        #{shopId},
+                        </if>
+                        <if test ='null != activityId'>
+                        #{activityId},
+                        </if>
+                        <if test ='null != createDateTime'>
+                        #{createDateTime}
+                        </if>
+        </trim>
+    </insert>
+	
+	
+	
+	
 	<insert id="addConsumption" parameterType="com.zive.dataOut.entity.Consumption">
         INSERT INTO shop_s_consumption
         <trim prefix="(" suffix=")" suffixOverrides=",">

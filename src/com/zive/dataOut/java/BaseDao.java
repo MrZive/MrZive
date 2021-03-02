@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+import com.zive.dataOut.entity.Activity;
+import com.zive.dataOut.entity.ActivityShop;
 import com.zive.dataOut.entity.Consumption;
 import com.zive.dataOut.entity.CooperationProject;
 import com.zive.dataOut.entity.MaterialInfo;
@@ -207,6 +210,27 @@ public class BaseDao {
 		List<CooperationProject> list = getSession().selectList("com.zive.dataOut.common.getCooperationProject", CooperationProject);
 		return list;
 	}
+	
+	//套餐------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	static public Activity getActivityById(String id){
+		Activity activity = new Activity();
+		activity.setId(id);
+		Activity one = getSession().selectOne("com.zive.dataOut.common.getActivityById", activity);
+		return one;
+	}
+	
+	static public List<Activity> getActivity(Activity activity){
+		List<Activity> list = getSession().selectList("com.zive.dataOut.common.getActivity", activity);
+		return list;
+	}
+	
+	static public int addActivityShop(ActivityShop shop){
+		shop.setCreateDateTime(new Date());
+		int add = getSession().insert("com.zive.dataOut.common.addActivityShop", shop);
+		return add;
+	}
+	
 	
 	//消费流水------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	static public Consumption getConsumptionById(String id){

@@ -36,7 +36,7 @@ import com.zive.pub.OfficeUtil;
 public class BaseKangWangDao extends BaseDao{
 	
 	public static String getSecondName(String oldName){
-		if(oldName.contains("旧项目")){
+		if(oldName.contains("旧项目") || oldName.contains("免费项目")){
 			if(oldName.contains("（")){
 				String secondName = oldName.substring(oldName.indexOf("（")+1, oldName.lastIndexOf("）"));
 				return secondName;

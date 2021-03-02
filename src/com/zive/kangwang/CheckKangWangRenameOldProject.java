@@ -98,7 +98,7 @@ public class CheckKangWangRenameOldProject extends BaseKangWangDao{
 			}
 		}
 		
-		getSession().commit();
+//		getSession().commit();
 	}
 	
 	static public int updateProjectDetailSecondName(Map<String,Object> map){

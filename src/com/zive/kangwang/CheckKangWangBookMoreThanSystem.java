@@ -1,4 +1,4 @@
-package com.zive.kangwang.two;
+package com.zive.kangwang;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,16 +32,15 @@ import com.zive.pub.ExcelSheet;
 import com.zive.pub.OfficeUtil;
 
 /**
- *  检查是否有对应的项目
+ *  003康王店会员筛选 - 档案剩余次数比系统多
  * @author Administrator
  *
  */
-public class CheckKangWangIsCheck extends BaseKangWangDao{
+public class CheckKangWangBookMoreThanSystem extends BaseKangWangDao{
 
 	public static void main(String[] args) throws IOException {
 		
-//		File file = new File("D:\\公司数据\\操作数据\\康王店\\整理\\003康王店会员筛选 - 档案有购买记录系统无.xlsx");
-		File file = new File("D:\\公司数据\\操作数据\\康王店\\整理\\003康王店会员筛选 - 档案已做完系统还有次数.xlsx");
+		File file = new File("D:\\公司数据\\操作数据\\康王店\\整理\\003康王店会员筛选 - 档案剩余次数比系统多.xlsx");
 		
 		Excel excel = null;
 		try {
@@ -83,7 +82,6 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 			remark2 = remark2.length()==0 ? "无" : remark2;
 			
 			String operation = excelCells.get(31).getValue() == null ? "" : excelCells.get(31).getValue().toString();
-			boolean isCheck = excelCells.get(32).getValue() == null ? false : Boolean.valueOf(excelCells.get(32).getValue().toString());
 			
 			if(operation.equals("pass")){
 				continue;
@@ -131,14 +129,16 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 						unit = info.getBoxesUnit();
 					}else if(name.contains(info.getBulkUnit())){
 						unit = info.getBulkUnit();
+					}else if(name.equals("水润修护原液（非卖品）")){
+						unit = "支";
 					}else{
 						throw new RuntimeException("匹配不到大小单位");
 					}
 				}
 				
-				Map<String, Object> left = getProductLeftMap(productDetailLeft, info.getName(), buyNumber2, leftNumber2, buyDate2, isCheck);
+				Map<String, Object> left = getProductLeftMap(productDetailLeft, info.getName(), buyNumber2, leftNumber2, buyDate2, operation);
 //				if(left == null){
-//					left = getProductLeftMap(productDetailLeft, info.getName(), null, leftNumber2, buyDate2, isCheck);
+//					left = getProductLeftMap(productDetailLeft, info.getName(), null, leftNumber2, buyDate2, operation);
 //				}
 				
 				if(left != null){
@@ -155,8 +155,9 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 						throw new RuntimeException("购买与剩余大小单位不一样，人工排查");
 					}
 					
+					
 					//判断是否作废
-					if(buyNumber==0 && leftNumber==0 && buyNumber2 > 0 && leftNumber2 > 0){
+					if(buyNumber>=0 && leftNumber==0 && buyNumber2 > 0 && leftNumber2 > 0){
 						
 						double chaPrice = -oldLeftNumber * price;
 						MemberCard changeMember = new MemberCard();
@@ -176,7 +177,7 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 						detail.setIsFail(1);
 						detail.setRemark(newRemark);
 						int update2 = ProductSellDao.updateProductDetailConsumption(detail);
-						System.out.println("执行作废操作"+"购买数量:"+oldBuyNumber+"，剩余数量:"+oldLeftNumber);
+						System.out.println("执行作废操作"+"，备注"+oldRemark+"，购买数量:"+oldBuyNumber+"，剩余数量:"+oldLeftNumber);
 						if(update2 == 0){
 							throw new RuntimeException("更新失败");
 						}
@@ -269,11 +270,12 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 				ProjectInfoDetail projectInfoDetail = getProjectInfoDetail("110103", info.getId());
 				time = time==null ? kangWangName.containsKey(name) ? kangWangName.get(name).getTime() : time : time;
 				time = time==null ? getTimeFromKangWangName(kangWangName,name) : time;
-				time = time==null ? projectInfoDetail.getServiceTime().intValue() : time;
+ 
 				
-				Map<String, Object> left = getProjectLeftMap(projectDetailLeft, info.getName(), buyNumber2, leftNumber2, buyDate2, isCheck);
+				
+				Map<String, Object> left = getProjectLeftMap(projectDetailLeft, info.getName(), buyNumber2, leftNumber2, buyDate2, operation);
 //				if(left == null){
-//					left = getProjectLeftMap(projectDetailLeft, info.getName(), null, leftNumber2, buyDate2, isCheck);
+//					left = getProjectLeftMap(projectDetailLeft, info.getName(), null, leftNumber2, buyDate2, operation);
 //				}
 				
 				if(left != null){
@@ -395,9 +397,9 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 			if(cooList.size() > 0){
 				CooperationProject info = cooList.get(0);
 				
-				Map<String, Object> left = getCooProjectLeftMap(cooProjectDetailLeft, info.getName(), buyNumber2, leftNumber2, buyDate2, isCheck);
+				Map<String, Object> left = getCooProjectLeftMap(cooProjectDetailLeft, info.getName(), buyNumber2, leftNumber2, buyDate2, operation);
 //				if(left == null){
-//					left = getCooProjectLeftMap(projectDetailLeft, info.getName(), null, leftNumber2, buyDate2, isCheck);
+//					left = getCooProjectLeftMap(projectDetailLeft, info.getName(), null, leftNumber2, buyDate2, operation);
 //				}
 				
 				if(left != null){
@@ -512,7 +514,7 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 	}
 	
 	private static Map<String, Object> getCooProjectLeftMap(List<Map<String,Object>> projectDetailLeft,String name, Integer buyNumber2,
-			Integer leftNumber2, String buyDate2, boolean isCheck) {
+			Integer leftNumber2, String buyDate2, String operation) {
 		// TODO Auto-generated method stub
 		int index = 0;
 		Map<String, Object> left = null;
@@ -569,7 +571,7 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 			
 			if(flag){
 				++index;
-				if(index > 1 && !isCheck){
+				if(index > 1 && !operation.equals("choose")){
 					throw new RuntimeException("找到用户多个对应的合作项目：" + name);
 				}
 				left = leftInfo;
@@ -588,7 +590,7 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 		return left;
 	}
 
-	public static Map<String,Object> getProductLeftMap(List<Map<String,Object>> productDetailLeft, String name, Integer buyNumber2, Integer leftNumber2, String buyDate2, boolean isCheck){
+	public static Map<String,Object> getProductLeftMap(List<Map<String,Object>> productDetailLeft, String name, Integer buyNumber2, Integer leftNumber2, String buyDate2, String operation){
 		int index = 0;
 		Map<String, Object> left = null;
 		for (Map<String, Object> leftInfo : productDetailLeft) {
@@ -618,7 +620,7 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 					if(buyNumber2 == oldBuyNumber && leftNumber2 == oldLeftNumber && buyDate2.equals(oldCreateDate)){
 						flag = true;
 					}
-					if(buyNumber2 == oldBuyNumber && leftNumber2 == oldLeftNumber && buyDate2.equals(oldCreateDate)){
+					if(buyNumber2 == oldBuyNumber && leftNumber2 == oldLeftNumber && buyDate2.equals(oldBuyDate)){
 						flag = true;
 					}
 				}else if( buyNumber2!=null && leftNumber2!=null && buyDate2==null ){
@@ -643,7 +645,7 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 			
 			if(flag){
 				++index;
-				if(index > 1 && !isCheck){
+				if(index > 1 && !operation.equals("choose")){
 					throw new RuntimeException("找到用户多个对应的产品：" + name);
 				}
 				left = leftInfo;
@@ -652,7 +654,7 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 		if(left!=null){
 			String leftRemark = left.get("remark") == null ? "无" : left.get("remark").toString();
 			if(leftRemark.contains("要求录入")){
-				throw new RuntimeException("不可修改，备注:"+leftRemark);
+				throw new RuntimeException("不可修改");
 			}
 			int oldLeftNumber = Double.valueOf(left.get("left_number").toString()).intValue();
 			if(oldLeftNumber != leftNumber2){
@@ -662,7 +664,7 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 		return left;
 	}
 	
-	public static Map<String,Object> getProjectLeftMap(List<Map<String,Object>> projectDetailLeft, String name, Integer buyNumber2, Integer leftNumber2, String buyDate2, boolean isCheck){
+	public static Map<String,Object> getProjectLeftMap(List<Map<String,Object>> projectDetailLeft, String name, Integer buyNumber2, Integer leftNumber2, String buyDate2, String operation){
 		int index = 0;
 		Map<String, Object> left = null;
 		for (Map<String, Object> leftInfo : projectDetailLeft) {
@@ -718,7 +720,7 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 			
 			if(flag){
 				++index;
-				if(index > 1 && !isCheck){
+				if(index > 1 && !operation.equals("choose")){
 					throw new RuntimeException("找到用户多个对应的项目：" + name);
 				}
 				left = leftInfo;
@@ -727,7 +729,7 @@ public class CheckKangWangIsCheck extends BaseKangWangDao{
 		if(left!=null){
 			String leftRemark = left.get("remark") == null ? "无" : left.get("remark").toString();
 			if(leftRemark.contains("要求录入")){
-				throw new RuntimeException("不可修改");
+				throw new RuntimeException("不可修改，备注:"+leftRemark);
 			}
 			int oldLeftNumber = Double.valueOf(left.get("number").toString()).intValue();
 			if(oldLeftNumber != leftNumber2){

@@ -432,7 +432,7 @@ public class CheckKangWangOtherUserIn extends BaseKangWangDao{
 //			}
 		}
 		
-		getSession().commit();
+//		getSession().commit();
 	}
 	
 	public static Map<String,Object> getProductLeftMap(List<Map<String,Object>> productDetailLeft, String name, Integer buyNumber2, String buyDate2, boolean isCheck){
