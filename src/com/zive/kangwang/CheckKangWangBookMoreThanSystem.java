@@ -284,6 +284,7 @@ public class CheckKangWangBookMoreThanSystem extends BaseKangWangDao{
 					Double price = Double.valueOf(left.get("price").toString());
 					int oldBuyNumber = Double.valueOf(left.get("buy_number").toString()).intValue();
 					int oldLeftNumber = Double.valueOf(left.get("number").toString()).intValue();
+					int oldDoneNumber = oldBuyNumber - oldLeftNumber;
 					
 					//判断是否作废
 					if((buyNumber==0 && leftNumber==0 && buyNumber2 > 0 && leftNumber2 > 0)
@@ -320,6 +321,15 @@ public class CheckKangWangBookMoreThanSystem extends BaseKangWangDao{
 					
 					//判断是否更新
 					if(leftNumber != leftNumber2){
+						if(leftNumber > leftNumber2){
+							int projectDoneNumber = getProjectDoneNumber(detailId);
+							int doneCha = oldDoneNumber - projectDoneNumber;
+							if((leftNumber-leftNumber2) > doneCha){
+								throw new RuntimeException("根据档案增加的次数 大于 系统能找到的次数，系统能找到的购买次数："+oldBuyNumber+"，剩余次数："+oldLeftNumber+"，消耗次数："+projectDoneNumber);
+							}
+						}
+						
+						
 						String newRemark = "康王纸质档案录入系统，分类：" + remark2 +"，备注：" + remark + "，旧备注：" + oldRemark + "，操作：";
 						int cha = leftNumber - leftNumber2;
 						double chaPrice = cha * price;

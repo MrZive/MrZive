@@ -365,4 +365,21 @@ public class BaseKangWangDao extends BaseDao{
 		return addProjectCooperationDetailConsumption;
 	}
 	
+	
+	public static int getProjectDoneNumber(String detailId){
+		Map<String,Object> map = new HashMap<>();
+		map.put("detailId", detailId);
+		map.put("isFail", 0);
+		int number = getSession().selectOne("com.zive.kangwang.getProjectDoneNumber", map);
+		return number;
+	}
+	
+	public static int getCooDoneNumber(String detailId){
+		Map<String,Object> map = new HashMap<>();
+		map.put("detailId", detailId);
+		map.put("isFail", 0);
+		int number = getSession().selectOne("com.zive.kangwang.getCooDoneNumber", map);
+		return number;
+	}
+	
 }

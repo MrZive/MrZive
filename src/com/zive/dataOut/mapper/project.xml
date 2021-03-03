@@ -522,7 +522,7 @@
                     <if test ='null != wechatPay'>wechat_pay = #{wechatPay},</if>
                     <if test ='null != aliPay'>ali_pay = #{aliPay},</if>
                     <if test ='null != invalidNumber'>invalid_number = #{invalidNumber},</if>
-                    <if test ='null != secondName'>second_ame = #{secondName},</if>
+                    <if test ='null != secondName'>second_name = #{secondName},</if>
         </set>
         WHERE id = #{id}
     </update>

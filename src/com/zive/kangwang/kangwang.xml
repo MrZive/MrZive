@@ -120,4 +120,12 @@
 	<update id="updateProjectDetailSecondName" parameterType="map">
 		update shop_s_consumption_project_detail set second_name = #{secondName} where id = #{id}
 	</update>
+	
+	<select id="getProjectDoneNumber" parameterType = "map" resultType="integer">
+		SELECT SUM(done_number) FROM shop_s_consumption_project_done WHERE project_detail_id = #{detailId} AND is_fail = #{isFail}
+	</select>
+	
+	<select id="getCooDoneNumber" parameterType = "map" resultType="integer">
+		SELECT SUM(service_number) FROM shop_s_consumption_cooperation_project_done WHERE detail_id = #{detailId} AND is_fail = #{isFail}
+	</select>
 </mapper>
