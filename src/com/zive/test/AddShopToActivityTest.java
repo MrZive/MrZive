@@ -26,7 +26,7 @@ import com.zive.pub.OfficeUtil;
 public class AddShopToActivityTest extends BaseDao{
 
 	public static void main(String[] args) throws IOException {
-		File file = new File("D:\\公司数据\\操作数据\\批量设置套餐门店.xls");
+		File file = new File("D:\\公司数据\\操作数据\\批量设置套餐门店2.xlsx");
 		
 		Excel excel = null;
 		try {

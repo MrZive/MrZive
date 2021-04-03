@@ -74,5 +74,8 @@
 		<mapper resource="com/zive/member386Plan/memberStatus.xml"/>
 		<!-- 康王店数据 -->
 		<mapper resource="com/zive/kangwang/kangwang.xml"/>
+		
+		<!-- 优惠券 -->
+		<mapper resource="com/zive/coupon/coupon.xml"/>
 	</mappers>
 </configuration>

@@ -73,6 +73,7 @@
 		store_balance 'storeBalance',
 		point_balance 'pointBalance',
 		treatment_balance 'treatmentBalance',
+		wenxiu_balance 'wenxiuBalance',
 		stock_balance 'stockBalance',
 		owe_balance 'oweBalance',
 		is_new_pass 'isNewPass',

@@ -30,12 +30,12 @@ public class CreateRandomNumberTest {
 
 	public static void main(String[] args) throws IOException {
 		JSONArray list = new JSONArray();
-		for(int i = 0;i<6500;i++){
+		for(int i = 0;i<356;i++){
 			Random r = new Random();
 			//chr(random.randint(65,90))#随机选取一个大写字母
 			//chr(random.randint(97,122))#随机选取一个小写字母
 			String letter = (char)(Math.random()*26+'a') + "";
-			String numberStr = "202103"+r.nextInt(10)+r.nextInt(10)+r.nextInt(10)+r.nextInt(10)+r.nextInt(10) + letter.toUpperCase();
+			String numberStr = "20210310"+r.nextInt(10)+r.nextInt(10)+r.nextInt(10) + letter.toUpperCase();
 			RandomNumber numberO = new RandomNumber();
 			numberO.setNumber(numberStr);
 			
