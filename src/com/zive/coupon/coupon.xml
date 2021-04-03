@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zive.coupon">
+<!-- 	<update id="getCouponIdByActivityId" parameterType="com.zive.dataOut.entity.MemberCard"> -->
+<!-- 		update shop_s_member_card set error = #{error} where id = #{id} -->
+<!-- 	</update> -->
+	
+	
+	<select id="getCouponIdByActivityId" parameterType="string" resultType="map">
+		SELECT id FROM shop_b_activity_coupon WHERE activity_id = #{id}
+	</select>
+	
+	<select id="getCouponDetailIdByCouponId" parameterType="string" resultType="map">
+		SELECT id FROM shop_b_activity_coupon_detail WHERE coupon_id = #{couponId}
+	</select>
+	
+	
+	<update id="updateCouponNo" parameterType="map">
+		UPDATE shop_b_activity_coupon_detail SET coupon = #{coupon} WHERE coupon_id = #{couponId} AND id = #{id}
+	</update>
+	
+	
+	<insert id="addCoupon" parameterType="map">
+		INSERT INTO
+		shop_b_activity_coupon_detail
+		(
+		id,
+		coupon_id,
+		coupon,
+		value,
+		is_use,
+		use_consumption_id,
+		type,
+		begin_time,
+		end_time
+		)VALUES(
+		#{id},
+		#{couponId},
+		#{coupon},
+		#{value},
+		#{isUse},
+		#{useConsumptionId},
+		#{type},
+		#{beginTime},
+		#{endTime}
+		)
+	</insert>
+</mapper>
