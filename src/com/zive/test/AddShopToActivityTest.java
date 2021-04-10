@@ -26,7 +26,7 @@ import com.zive.pub.OfficeUtil;
 public class AddShopToActivityTest extends BaseDao{
 
 	public static void main(String[] args) throws IOException {
-		File file = new File("D:\\公司数据\\操作数据\\批量设置套餐门店2.xlsx");
+		File file = new File("D:\\公司数据\\操作数据\\批量设置套餐门店4.xlsx");
 		
 		Excel excel = null;
 		try {
@@ -65,7 +65,9 @@ public class AddShopToActivityTest extends BaseDao{
 			String name = excelCells2.get(0).getValue().toString();
 			String no = name.substring(0, 3);
 			Shop con = new Shop();
-			con.setNo(no);
+//			con.setNo(no);
+//			System.out.println(no);
+			con.setName(name);
 			Shop shop = getShop(con).get(0);
 			
 			shopList.add(shop.getId());

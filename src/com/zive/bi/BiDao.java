@@ -41,8 +41,8 @@ import com.zive.pojo.EmployeeEarn;
 public class BiDao extends BaseDao{
 	
 	public static void main(String[] args) throws ParseException, IOException {
-		String beginDateStr = "2020-11-01 00:00:00";
-		String endDateStr = "2020-11-30 23:59:59";
+		String beginDateStr = "2021-03-01 00:00:00";
+		String endDateStr = "2021-03-31 23:59:59";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date beginDate = format.parse(beginDateStr);
         Date endDate = format.parse(endDateStr);
