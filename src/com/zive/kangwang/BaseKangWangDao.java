@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.zive.dataOut.entity.Consumption;
 import com.zive.dataOut.entity.CooperationProject;
 import com.zive.dataOut.entity.ProductDetailConsumption;
@@ -124,6 +126,21 @@ public class BaseKangWangDao extends BaseDao{
 		return map;
 	}
 	
+	static public int failProjectDetail(String detailId){
+		ProjectDetailConsumption info = ProjectSellDao.getProjectDetailConsumptionById(detailId);
+		if(info == null){
+			return 0;
+		}
+		String remark = "康王纸质档案录入系统，操作：作废";
+		if(StringUtils.isNotBlank(info.getRemark())){
+			remark = remark + "，原备注："+info.getRemark();
+		}
+		ProjectDetailConsumption change = new ProjectDetailConsumption();
+		change.setId(info.getId());
+		change.setIsFail(2);
+		change.setRemark(remark);
+		return ProjectSellDao.updateProjectDetailConsumption(change);
+	}
 	
 	static public int addProjectDetail(String memberCardId,String projectId,String secondName,Double price,Integer buyNumber,Integer number,Integer serviceTime,String remark){
 		 return addProjectDetail(memberCardId, projectId, secondName, price, buyNumber, number, serviceTime, 0D, 0D, 0D, 0D, remark);
@@ -158,7 +175,7 @@ public class BaseKangWangDao extends BaseDao{
 		detail.setIsTuoke(0);
 		detail.setMarketPrice(0D);
 		detail.setPointPay(0D);
-		detail.setRemark("康王纸质档案录入系统，分类：不明来源，备注："+remark);
+		detail.setRemark("康王纸质档案录入系统，新方式，操作：新增，备注："+remark);
 		detail.setServiceType(0);
 		detail.setShopId("110103");
 		detail.setWechatPay(0D);
@@ -185,6 +202,23 @@ public class BaseKangWangDao extends BaseDao{
 			throw new RuntimeException("新增项目错误");
 		}
 		return addProjectDetailConsumption;
+	}
+	
+	
+	static public int failProductDetail(String detailId){
+		ProjectDetailConsumption info = ProjectSellDao.getProjectDetailConsumptionById(detailId);
+		if(info == null){
+			return 0;
+		}
+		String remark = "康王纸质档案录入系统，操作：作废";
+		if(StringUtils.isNotBlank(info.getRemark())){
+			remark = remark + "，原备注："+info.getRemark();
+		}
+		ProductDetailConsumption change = new ProductDetailConsumption();
+		change.setId(info.getId());
+		change.setIsFail(2);
+		change.setRemark(info.getRemark());
+		return ProductSellDao.updateProductDetailConsumption(change);
 	}
 	
 	static public int addProductDetail(String memberCardId,String productId,Integer buyNumber,Integer leftNumber,Double price,String unit,String remark){
@@ -281,7 +315,7 @@ public class BaseKangWangDao extends BaseDao{
 		detail.setOwe(owe);
 		detail.setPayment(buyNumber * price);
 		detail.setRealPayment(detail.getPayment() - detail.getOwe());
-		detail.setRemark("康王纸质档案录入系统，分类：不明来源，备注："+remark);
+		detail.setRemark("康王纸质档案录入系统，新方式，操作：新增，备注："+remark);
 		detail.setShopid("110103");
 		detail.setStatus(owe>0?1:0);
 		detail.setStorePay(storePay);
