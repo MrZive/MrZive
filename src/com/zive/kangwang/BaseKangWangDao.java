@@ -126,6 +126,86 @@ public class BaseKangWangDao extends BaseDao{
 		return map;
 	}
 	
+	public static Map<String,NameToSystemName> getZhaoMeiName() {
+		File file = new File("D:\\公司数据\\操作数据\\找美网\\没对应的项目名称-找美网.xlsx");
+		
+		Excel excel = null;
+		try {
+			excel = OfficeUtil.readExcel(new FileInputStream(file), file.getName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        //第一行为表头
+		ExcelRow excelRow = null;
+		List<ExcelCell> excelCells = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		ExcelSheet excelSheet = excel.getSheets().get(0);
+		
+		Map<String,NameToSystemName> map = new HashMap<>();
+		
+		for(int i = 1; i < excelSheet.getRows().size();i++){
+			excelRow = excelSheet.getRows().get(i);
+			excelCells = excelRow.getCells();
+			String oldName = excelCells.get(0).getValue().toString();
+			System.out.println(i);
+			String newName = excelCells.get(1).getValue() == null ? null : excelCells.get(1).getValue().toString();
+			
+			if(newName==null || newName.length()==0 || newName.equals("0")){
+				continue;
+			}
+			
+			if(!map.containsKey(oldName)){
+				NameToSystemName entity = new NameToSystemName();
+				entity.setOldName(oldName);
+				entity.setNewName(newName);
+				
+				
+				if(newName!=null && newName.length()>0){
+					boolean flag = false;
+					
+					ProductInfo productInfo = new ProductInfo();
+					productInfo.setName(newName);
+					List<ProductInfo> productList = getProductInfo(productInfo);
+					if(productList.size()>0){
+						flag = true;
+						entity.setType("product");
+					}
+					
+					if(!flag){
+						ProjectInfo projectInfo = new ProjectInfo();
+						projectInfo.setName(newName);
+						List<ProjectInfo> projectList = getProjectInfo(projectInfo);
+						
+						if(projectList.size()>0){
+							flag = true;
+							entity.setType("project");
+						}
+					}
+					
+					if(!flag){
+						CooperationProject cooInfo = new CooperationProject();
+						cooInfo.setName(newName);
+						List<CooperationProject> cooList = getCooperationProject(cooInfo);
+						
+						if(cooList.size()>0){
+							flag = true;
+							entity.setType("coo");
+						}
+					}
+					
+					if(!flag){
+						entity.setType("");
+//						System.out.println(entity.getNewName());
+					}
+				}
+				
+				map.put(oldName, entity);
+			}
+			
+		}
+		return map;
+	}
+	
 	static public int failProjectDetail(String detailId){
 		ProjectDetailConsumption info = ProjectSellDao.getProjectDetailConsumptionById(detailId);
 		if(info == null){
@@ -414,6 +494,32 @@ public class BaseKangWangDao extends BaseDao{
 		map.put("isFail", 0);
 		int number = getSession().selectOne("com.zive.kangwang.getCooDoneNumber", map);
 		return number;
+	}
+	
+	
+	public static Integer getProjectServiceTime(String projectId,String shopId){
+		Map<String,Object> map = new HashMap<>();
+		map.put("projectId", projectId);
+		map.put("shopId", shopId);
+		List<Integer> selectList = getSession().selectList("com.zive.kangwang.getProjectServiceTime", map);
+		if(selectList.size()==0){
+			map.remove("shopId");
+			selectList = getSession().selectList("com.zive.kangwang.getProjectServiceTime", map);
+		}
+		
+		Integer serviceTimeTemp = -1;
+		if(selectList.size()>0){
+			for (Integer serviceTime : selectList) {
+				serviceTimeTemp = serviceTimeTemp==-1 ? serviceTime : serviceTimeTemp;
+//				if(serviceTimeTemp != serviceTime){
+//					throw new RuntimeException("找不到时长");
+//				}
+			}
+		}
+		if(serviceTimeTemp!=-1){
+			return serviceTimeTemp;
+		}
+		return null;
 	}
 	
 }

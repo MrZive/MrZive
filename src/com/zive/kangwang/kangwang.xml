@@ -128,4 +128,13 @@
 	<select id="getCooDoneNumber" parameterType = "map" resultType="integer">
 		SELECT SUM(service_number) FROM shop_s_consumption_cooperation_project_done WHERE detail_id = #{detailId} AND is_fail = #{isFail}
 	</select>
+	
+	
+	<select id="getProjectServiceTime" parameterType = "map" resultType="integer">
+		SELECT service_time 'serviceTime' FROM shop_s_consumption_project_detail WHERE project_id = #{projectId} AND is_fail = 0 
+		<if test="shopId != null and shopId.length() gt 0">
+			AND shop_id = #{shopId}
+		</if>
+		ORDER BY create_date DESC LIMIT 10
+	</select>
 </mapper>

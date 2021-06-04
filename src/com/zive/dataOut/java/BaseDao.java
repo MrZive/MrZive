@@ -74,8 +74,17 @@ public class BaseDao {
 	static public MemberCard getMemberCardByPhone(String phone){
 		MemberCard memberCard = new MemberCard();
 		memberCard.setPhone(phone);
-		MemberCard one = getSession().selectOne("com.zive.dataOut.common.getMemberCard", memberCard);
-		return one;
+		List<MemberCard> list = getSession().selectList("com.zive.dataOut.common.getMemberCard", memberCard);
+		if(list.size()>1){
+			for (MemberCard one : list) {
+				if(one.getStatus()!=-1){
+					return one;
+				}
+			}
+		}else if(list.size()>0){
+			return list.get(0);
+		}
+		return null;
 	}
 	
 	static public List<MemberCard> getMemberCard(MemberCard memberCard){
@@ -86,6 +95,11 @@ public class BaseDao {
 	static public int updateMemberCard(MemberCard memberCard){
 		int update = getSession().update("com.zive.dataOut.common.updateMemberCard", memberCard);
 		return update;
+	}
+	
+	static public int addMemberCard(MemberCard memberCard){
+		int add = getSession().insert("com.zive.dataOut.common.addMemberCard", memberCard);
+		return add;
 	}
 	
 	//账户------------------------------------------------------------------------------------------------------------------------------------------------------------------

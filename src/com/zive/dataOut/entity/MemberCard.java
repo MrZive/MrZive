@@ -21,6 +21,11 @@ public class MemberCard {
     * 会员姓名
     */
     private String name;
+    
+    /**
+     * 昵称
+     */
+    private String nickName;
 
     /**
     * 开卡日期
@@ -51,6 +56,11 @@ public class MemberCard {
     * 来源渠道。222，自主进店；223，门店拓客；224，客带客；225，网络拓客；226，其他；227，微信（当操作为更新会员时此字段为空）
     */
     private String fromType;
+    
+    /**
+     * 头像
+     */
+    private String avatar;
 
     /**
     * 会员职业
@@ -71,6 +81,11 @@ public class MemberCard {
     * 1是客人不肯提供手机号，0提供
     */
     private Integer noPhone;
+    
+    /**
+     * 是否介绍
+     */
+    private Integer IsIndroduce;
 
     /**
     * 操作人的id
@@ -266,6 +281,32 @@ public class MemberCard {
     * new_tuoke_time
     */
     private Date newTuokeTime;
+    
+    /**
+	 * 客户经理
+	 */
+	private String managerId;
+	
+	/**
+	 * 客户经理
+	 */
+	private String managerName;
+	
+	
+	/**
+	 * 老客带新客--是否老客
+	 */
+	private Integer isOld;
+	
+	/**
+	 * 老客带新客--员工推荐老客户
+	 */
+	private String employeeId;
+	
+	/**
+	 * 老客带新客--新客绑定的老客客
+	 */
+	private String oldMemberCardId;
 
     /**
     * open_id
@@ -742,6 +783,70 @@ public class MemberCard {
 
 	public void setIsNewAbandon(Integer isNewAbandon) {
 		this.isNewAbandon = isNewAbandon;
+	}
+
+	public String getManagerId() {
+		return managerId;
+	}
+
+	public void setManagerId(String managerId) {
+		this.managerId = managerId;
+	}
+
+	public String getManagerName() {
+		return managerName;
+	}
+
+	public void setManagerName(String managerName) {
+		this.managerName = managerName;
+	}
+
+	public Integer getIsOld() {
+		return isOld;
+	}
+
+	public void setIsOld(Integer isOld) {
+		this.isOld = isOld;
+	}
+
+	public String getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(String employeeId) {
+		this.employeeId = employeeId;
+	}
+
+	public String getOldMemberCardId() {
+		return oldMemberCardId;
+	}
+
+	public void setOldMemberCardId(String oldMemberCardId) {
+		this.oldMemberCardId = oldMemberCardId;
+	}
+
+	public Integer getIsIndroduce() {
+		return IsIndroduce;
+	}
+
+	public void setIsIndroduce(Integer isIndroduce) {
+		IsIndroduce = isIndroduce;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
     
     
