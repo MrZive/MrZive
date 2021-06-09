@@ -24,12 +24,9 @@ import com.zive.pub.ExcelRow;
 import com.zive.pub.ExcelSheet;
 import com.zive.pub.OfficeUtil;
 
-public class ZhaoMeiAddProjectTest extends BaseKangWangDao{
-	
-	final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-	final static SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd");
+public class ZhaoMeiAddSetTest extends BaseKangWangDao{
 
-	public static void main(String[] args) throws IOException, ParseException {
+public static void main(String[] args) throws IOException, ParseException {
 		
 		File file = new File("D:\\公司数据\\操作数据\\找美网\\项目资产.xls");
 		
@@ -42,6 +39,8 @@ public class ZhaoMeiAddProjectTest extends BaseKangWangDao{
         //第一行为表头
 		ExcelRow excelRow = null;
 		List<ExcelCell> excelCells = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd");
 		ExcelSheet excelSheet = excel.getSheets().get(0);
 		
 		Map<String, NameToSystemName> zhaoMeiName = getZhaoMeiName();
@@ -51,7 +50,7 @@ public class ZhaoMeiAddProjectTest extends BaseKangWangDao{
 			excelRow = excelSheet.getRows().get(i);
 			excelCells = excelRow.getCells();
 			
-			String index = excelCells.get(0).getValue().toString();
+			String index = excelCells.get(1).getValue().toString();
 			String shopName = excelCells.get(1).getValue().toString();
 			String phone = excelCells.get(5).getValue().toString();
 			String name = excelCells.get(6).getValue().toString();
@@ -80,8 +79,8 @@ public class ZhaoMeiAddProjectTest extends BaseKangWangDao{
 			
 			MemberCard memberCard = getMemberCardByPhone(phone);
 			if(memberCard == null){
-//				continue;
-				throw new RuntimeException("手机号不存在"+phone);
+				continue;
+//				throw new RuntimeException("手机号不存在"+phone);
 			}
 			
 			if(true){
@@ -189,7 +188,7 @@ public class ZhaoMeiAddProjectTest extends BaseKangWangDao{
 		detail.setIsTuoke(0);
 		detail.setMarketPrice(0D);
 		detail.setPointPay(0D);
-		detail.setRemark("找美网数据录入系统，序号："+index+"单号创建人："+createUser+"，购买时间："+sdf.format(buyTime)+"，备注："+remark);
+		detail.setRemark("找美网数据录入系统，序号："+index+"单号创建人："+createUser+"，购买时间："+buyTime+"，备注："+remark);
 		detail.setServiceType(0);
 		detail.setShopId(shopId);
 		detail.setWechatPay(0D);

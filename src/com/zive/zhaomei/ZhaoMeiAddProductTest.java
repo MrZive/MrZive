@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.zive.dataOut.entity.MemberCard;
 import com.zive.dataOut.entity.ProductDetailConsumption;
 import com.zive.dataOut.entity.ProductInfo;
@@ -28,10 +30,13 @@ import com.zive.pub.ExcelSheet;
 import com.zive.pub.OfficeUtil;
 
 public class ZhaoMeiAddProductTest extends BaseKangWangDao{
-
-public static void main(String[] args) throws IOException, ParseException {
+	
+	final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	final static SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd");
+	
+	public static void main(String[] args) throws IOException, ParseException {
 		
-		File file = new File("D:\\公司数据\\操作数据\\找美网\\产品资产.xls");
+		File file = new File("C:\\Users\\Administrator\\Desktop\\公司数据\\操作数据\\找美网\\产品资产.xls");
 		
 		Excel excel = null;
 		try {
@@ -42,18 +47,16 @@ public static void main(String[] args) throws IOException, ParseException {
         //第一行为表头
 		ExcelRow excelRow = null;
 		List<ExcelCell> excelCells = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd");
 		ExcelSheet excelSheet = excel.getSheets().get(0);
 		
 		Map<String, NameToSystemName> zhaoMeiName = getZhaoMeiName();
 		
-		for(int i = 2; i < excelSheet.getRows().size();i++){
+		for(int i = 1; i < excelSheet.getRows().size();i++){
 			System.out.println("当前行数："+ (i+1));
 			excelRow = excelSheet.getRows().get(i);
 			excelCells = excelRow.getCells();
 			
-			String index = excelCells.get(1).getValue().toString();
+			String index = excelCells.get(0).getValue().toString();
 			String shopName = excelCells.get(1).getValue().toString();
 			String phone = excelCells.get(5).getValue().toString();
 			String name = excelCells.get(6).getValue().toString();
@@ -78,6 +81,16 @@ public static void main(String[] args) throws IOException, ParseException {
 			String createUser = excelCells.get(16).getValue().toString();
 			
 			String remark = excelCells.get(17).getValue().toString();
+			remark=remark.equals("0")?"":remark;
+			
+			if(leftNumber == 0){
+				continue;
+			}
+			
+			
+			if(name.equals("闺蜜面膜(星和)")){
+				continue;
+			}
 			
 			
 			double price = payment / buyNumber;
@@ -94,28 +107,47 @@ public static void main(String[] args) throws IOException, ParseException {
 				ProductInfo productInfo = new ProductInfo();
 				productInfo.setName(name);
 				List<ProductInfo> productList = getProductInfo(productInfo);
+				String unit = null;
 				if(productList.size() == 0){
-					//查询对应的名称
-					if(zhaoMeiName.containsKey(name) && zhaoMeiName.get(name).getType().equals("product")){
-						productInfo.setName(zhaoMeiName.get(name).getNewName());
+					if(name.contains("(")){
+						unit = name.substring(name.lastIndexOf("("), name.length()-1);
+						String nameTemp = name.substring(0, name.indexOf("("));
+						productInfo.setName(nameTemp);
 						productList = getProductInfo(productInfo);
-						if(productList.size() == 0){
-							continue;
+					}
+					
+					if(productList.size() == 0){
+						//查询对应的名称
+						if(zhaoMeiName.containsKey(name) && zhaoMeiName.get(name).getType().equals("product")){
+							productInfo.setName(zhaoMeiName.get(name).getNewName());
+							productList = getProductInfo(productInfo);
+							if(productList.size() == 0){
+								continue;
+							}
 						}
 					}
 				}
 				
+				
 				if(productList.size() > 0){//项目处理逻辑
 					ProductInfo info = productList.get(0);
 					Shop shop = getShop(new Shop(){{setName(shopName);}}).get(0);
+					if(info.getBoxesUnit().equals(info.getBulkUnit())){
+						unit = info.getBoxesUnit();
+					}else{
+						if(StringUtils.isBlank(unit)){
+							throw new RuntimeException("excel产品没有单位");
+						}
+						if(!info.getBoxesUnit().equals(unit) && !info.getBulkUnit().equals(unit)){
+							throw new RuntimeException("excel产品单位与系统的不匹配");
+						}
+					}
 					
-					
-					addZhaoMeiProductDetail(index, memberCard.getId(), shop.getId(), info.getId(), secondName, price, buyNumber, leftNumber, unit,0D,realPayment,0D,owe,"", createUser,buyDate,createDate);
-					
+					addZhaoMeiProductDetail(index, memberCard.getId(), shop.getId(), info.getId(), secondName, price, buyNumber, leftNumber, unit,0D,realPayment,0D,owe,isSend,remark, createUser,buyDate,createDate);
 				
 					MemberCard change = new MemberCard();
 					change.setId(memberCard.getId());
-					change.setStoreBalance(memberCard.getStoreBalance()+realPayment);
+					change.setStockBalance(memberCard.getStockBalance()+realPayment);
 					change.setOweBalance(memberCard.getOweBalance()+owe);
 					updateMemberCard(change);
 				}else{
@@ -123,46 +155,6 @@ public static void main(String[] args) throws IOException, ParseException {
 					System.out.println("找不到对应的信息:" + name);
 				}
 			}
-			
-			
-			
-//			if(type.equals("产品")){
-//				ProductInfo productInfo = new ProductInfo();
-//				productInfo.setName(name);
-//				List<ProductInfo> productList = getProductInfo(productInfo);
-//				if(productList.size() == 0){
-//					//查询对应的名称
-//					if(kangWangName.containsKey(name) && kangWangName.get(name).getType().equals("product")){
-//						productInfo.setName(kangWangName.get(name).getNewName());
-//						productList = getProductInfo(productInfo);
-//						if(productList.size() == 0){
-//							throw new RuntimeException("找不到产品名称信息");
-//						}
-//					}
-//				}
-//				
-//				String secondName = "";
-//				if(productList.size() > 0){//项目处理逻辑
-//					ProductInfo info = productList.get(0);
-//					Integer number = Integer.valueOf(numberStr.substring(0, numberStr.length()-1));
-//					String unit = numberStr.substring(numberStr.length()-1);
-//					if(StringUtils.isBlank(unit)){
-//						throw new RuntimeException("excel产品没有单位");
-//					}
-//					if(!info.getBoxesUnit().equals(unit) && !info.getBulkUnit().equals(unit)){
-//						throw new RuntimeException("excel产品单位与系统的不匹配");
-//					}
-//					
-//					if(operation.equals("新增")){
-//						addProductDetail(memberCard.getId(), info.getId(), number, number, price, unit, remark);
-//					}else if(operation.equals("作废")){
-//						failProductDetail(detailId);
-//					}
-//					
-//				}else{
-//					throw new RuntimeException("找不到对应的信息:" + name);
-//				}
-//			}
 		}
 		getSession().commit();
 		getSession().close();
@@ -197,7 +189,7 @@ public static void main(String[] args) throws IOException, ParseException {
 		detail.setIsBook(owe>0?1:0);
 		detail.setIsFail(0);
 		detail.setIsIntroduce(0);
-		detail.setRemark("找美网数据录入系统，序号："+index+"单号创建人："+createUser+"，购买时间："+buyTime);
+		detail.setRemark("找美网数据录入系统，序号："+index+"单号创建人："+createUser+"，购买时间："+sdf.format(buyTime)+"，备注："+remark);
 		detail.setIsPay(1);
 		detail.setIsSend(isSend);
 		detail.setLeftNumber(leftNumber);
