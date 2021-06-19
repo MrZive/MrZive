@@ -45,7 +45,7 @@ public static void main(String[] args) throws IOException, ParseException {
 		
 		Map<String, NameToSystemName> kangWangName = getKangWangName();
 		
-		for(int i = 2; i < excelSheet.getRows().size();i++){
+		for(int i = 1; i < excelSheet.getRows().size();i++){
 			System.out.println("当前行数："+ (i+1));
 			excelRow = excelSheet.getRows().get(i);
 			excelCells = excelRow.getCells();
@@ -104,7 +104,7 @@ public static void main(String[] args) throws IOException, ParseException {
 //				change.setName(name);
 //				change.setBirthday(birthday);
 				change.setStoreBalance(memberCard.getStoreBalance()+Double.valueOf(store));
-				change.setOweBalance(memberCard.getOweBalance()+Double.valueOf(owe));
+//				change.setOweBalance(memberCard.getOweBalance()+Double.valueOf(owe));
 				updateMemberCard(change);
 			}
 			

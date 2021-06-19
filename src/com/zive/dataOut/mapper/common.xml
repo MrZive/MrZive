@@ -86,14 +86,23 @@
 			<if test="id != null">
 				and id = #{id}
 			</if>
-			<if test="phone != null">
+			<if test="phone != null and phone.length() gt 0">
 				and phone = #{phone}
+			</if>
+			<if test="name != null and name.length() gt 0">
+				and name = #{name}
+			</if>
+			<if test="shopId != null and shopId.length() gt 0">
+				and shop_id = #{shopId}
 			</if>
 			<if test="status != null">
 				and status = #{status}
 			</if>
 			<if test="isPass != null">
 				and is_pass = #{isPass}
+			</if>
+			<if test="passShopId != null and passShopId.length() gt 0">
+				and pass_shop_id = #{passShopId}
 			</if>
 		</where>
 	</select>

@@ -70,6 +70,7 @@ public class ZhaoMeiAddProductTest extends BaseKangWangDao{
 			Double realPayment = Double.valueOf(excelCells.get(10).getValue().toString());
 			Double refundPayment = Double.valueOf(excelCells.get(11).getValue().toString());
 			realPayment = realPayment - refundPayment;
+			Double leftPayment = realPayment;
 			
 			Double owe = Double.valueOf(excelCells.get(12).getValue().toString());
 			int refundNumber = Double.valueOf(excelCells.get(13).getValue().toString()).intValue();
@@ -93,8 +94,7 @@ public class ZhaoMeiAddProductTest extends BaseKangWangDao{
 			}
 			
 			
-			double price = payment / buyNumber;
-			price = new BigDecimal(price).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
+			double price = setDoubleScale(payment / buyNumber);
 			
 			
 			MemberCard memberCard = getMemberCardByPhone(phone);
@@ -103,65 +103,74 @@ public class ZhaoMeiAddProductTest extends BaseKangWangDao{
 //				throw new RuntimeException("手机号不存在"+phone);
 			}
 			
-			if(true){
-				ProductInfo productInfo = new ProductInfo();
-				productInfo.setName(name);
-				List<ProductInfo> productList = getProductInfo(productInfo);
-				String unit = null;
-				if(productList.size() == 0){
-					if(name.contains("(")){
-						unit = name.substring(name.lastIndexOf("("), name.length()-1);
-						String nameTemp = name.substring(0, name.indexOf("("));
-						productInfo.setName(nameTemp);
-						productList = getProductInfo(productInfo);
-					}
-					
-					if(productList.size() == 0){
-						//查询对应的名称
-						if(zhaoMeiName.containsKey(name) && zhaoMeiName.get(name).getType().equals("product")){
-							productInfo.setName(zhaoMeiName.get(name).getNewName());
-							productList = getProductInfo(productInfo);
-							if(productList.size() == 0){
-								continue;
-							}
-						}
-					}
-				}
-				
-				
-				if(productList.size() > 0){//项目处理逻辑
-					ProductInfo info = productList.get(0);
-					Shop shop = getShop(new Shop(){{setName(shopName);}}).get(0);
-					if(info.getBoxesUnit().equals(info.getBulkUnit())){
-						unit = info.getBoxesUnit();
-					}else{
-						if(StringUtils.isBlank(unit)){
-							throw new RuntimeException("excel产品没有单位");
-						}
-						if(!info.getBoxesUnit().equals(unit) && !info.getBulkUnit().equals(unit)){
-							throw new RuntimeException("excel产品单位与系统的不匹配");
-						}
-					}
-					
-					addZhaoMeiProductDetail(index, memberCard.getId(), shop.getId(), info.getId(), secondName, price, buyNumber, leftNumber, unit,0D,realPayment,0D,owe,isSend,remark, createUser,buyDate,createDate);
-				
-					MemberCard change = new MemberCard();
-					change.setId(memberCard.getId());
-					change.setStockBalance(memberCard.getStockBalance()+realPayment);
-					change.setOweBalance(memberCard.getOweBalance()+owe);
-					updateMemberCard(change);
-				}else{
-//					throw new RuntimeException("找不到对应的信息:" + name);
-					System.out.println("找不到对应的信息:" + name);
-				}
-			}
+			checkAndAddProductInfo(zhaoMeiName, index, shopName, name, secondName, isSend, buyNumber, realPayment, owe,
+					leftPayment, leftNumber, createDate, buyDate, createUser, remark, price, memberCard, "product");
 		}
 		getSession().commit();
 		getSession().close();
 	}
+	
+	static public boolean checkAndAddProductInfo(Map<String, NameToSystemName> zhaoMeiName, String index,
+			String shopName, String name, String secondName, Integer isSend, int buyNumber, Double realPayment,
+			Double owe, Double leftPayment, Integer leftNumber, Date createDate, Date buyDate, String createUser,
+			String remark, double price, MemberCard memberCard, String type){
+		ProductInfo productInfo = new ProductInfo();
+		productInfo.setName(name);
+		List<ProductInfo> productList = getProductInfo(productInfo);
+		String unit = null;
+		if(productList.size() == 0){
+			if(name.contains("(")){
+				unit = name.substring(name.lastIndexOf("("), name.length()-1);
+				String nameTemp = name.substring(0, name.indexOf("("));
+				productInfo.setName(nameTemp);
+				productList = getProductInfo(productInfo);
+			}
+			
+			if(productList.size() == 0){
+				//查询对应的名称
+				if(zhaoMeiName.containsKey(name) && zhaoMeiName.get(name).getType().equals("product")){
+					productInfo.setName(zhaoMeiName.get(name).getNewName());
+					productList = getProductInfo(productInfo);
+				}
+				if(zhaoMeiName.get(name).getType().equals("pass")){
+					return true;
+				}
+			}
+		}
+		
+		if(productList.size() > 0){//项目处理逻辑
+			ProductInfo info = productList.get(0);
+			Shop shop = getShop(new Shop(){{setName(shopName);}}).get(0);
+			if(info.getBoxesUnit().equals(info.getBulkUnit())){
+				unit = info.getBoxesUnit();
+			}else{
+				if(StringUtils.isBlank(unit)){
+					throw new RuntimeException("excel产品没有单位");
+				}
+				if(!info.getBoxesUnit().equals(unit) && !info.getBulkUnit().equals(unit)){
+					throw new RuntimeException("excel产品单位与系统的不匹配");
+				}
+			}
+			
+			addZhaoMeiProductDetail(index, memberCard.getId(), shop.getId(), info.getId(), secondName, price, buyNumber, leftNumber, unit,0D,realPayment,0D,owe,isSend,remark, createUser,buyDate,createDate,type);
+		
+			MemberCard change = new MemberCard();
+			change.setId(memberCard.getId());
+			change.setStockBalance(memberCard.getStockBalance()+realPayment);
+			change.setOweBalance(memberCard.getOweBalance()+owe);
+			updateMemberCard(change);
+			return true;
+		}else{
+//			throw new RuntimeException("找不到对应的信息:" + name);
+			if(type.equals("product")){
+				System.out.println("找不到对应的信息:" + name);
+			}
+			return false;
+		}
+	}
 
 	
-	static public int addZhaoMeiProductDetail(String index,String memberCardId,String shopId,String productId,String secondName,Double price,Integer buyNumber,Integer leftNumber,String unit,Double storePay,Double bankcardPay,Double cashPay,Double owe,Integer isSend,String remark,String createUser,Date buyTime,Date createDate){
+	static public int addZhaoMeiProductDetail(String index,String memberCardId,String shopId,String productId,String secondName,Double price,Integer buyNumber,Integer leftNumber,String unit,Double storePay,Double bankcardPay,Double cashPay,Double owe,Integer isSend,String remark,String createUser,Date buyTime,Date createDate,String type){
 		Date date = new Date();
 		String consumptionId = "ZhaoMei"+date.getTime();
 		ProductDetailConsumption detail = new ProductDetailConsumption();
@@ -181,7 +190,8 @@ public class ZhaoMeiAddProductTest extends BaseKangWangDao{
 		detail.setConsumptionSetId(null);
 		detail.setCoupon("");
 		detail.setCreateDate(date);
-		detail.setEffectiveEarn(leftNumber * price);
+		double effectiveEarn = setDoubleScale(leftNumber * price);
+		detail.setEffectiveEarn(effectiveEarn);
 		detail.setExperiencePrice(0D);
 		detail.setExpressType(null);
 		detail.setId(UUID.randomUUID().toString());
@@ -189,7 +199,7 @@ public class ZhaoMeiAddProductTest extends BaseKangWangDao{
 		detail.setIsBook(owe>0?1:0);
 		detail.setIsFail(0);
 		detail.setIsIntroduce(0);
-		detail.setRemark("找美网数据录入系统，序号："+index+"单号创建人："+createUser+"，购买时间："+sdf.format(buyTime)+"，备注："+remark);
+		detail.setRemark("找美网数据录入系统，类型："+type+"，序号："+index+"，单号创建人："+createUser+"，购买时间："+sdf.format(buyTime)+"，备注："+remark);
 		detail.setIsPay(1);
 		detail.setIsSend(isSend);
 		detail.setLeftNumber(leftNumber);
@@ -197,7 +207,10 @@ public class ZhaoMeiAddProductTest extends BaseKangWangDao{
 		detail.setMarketPrice(0D);
 		detail.setMemberCardId(memberCardId);
 		detail.setOwe(owe);
-		detail.setPayment(price * buyNumber);
+		
+		double payment = setDoubleScale(price * buyNumber);
+		detail.setPayment(payment);
+		
 		detail.setPrice(price);
 		detail.setProductId(productId);
 		detail.setPromotionPrice(0D);

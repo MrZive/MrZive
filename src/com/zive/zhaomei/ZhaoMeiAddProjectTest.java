@@ -71,11 +71,11 @@ public class ZhaoMeiAddProjectTest extends BaseKangWangDao{
 			Date buyDate = sdf.parse(excelCells.get(19).getValue().toString());
 			
 			String createUser = excelCells.get(20).getValue().toString();
-			String remark = excelCells.get(21).getValue().toString();
+			String remark = excelCells.get(21).getValue()==null?"":excelCells.get(21).getValue().toString();
 			
 			
 			double price = payment / buyNumber;
-			price = new BigDecimal(price).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
+			price = setDoubleScale(price);
 			
 			
 			MemberCard memberCard = getMemberCardByPhone(phone);
@@ -84,80 +84,9 @@ public class ZhaoMeiAddProjectTest extends BaseKangWangDao{
 				throw new RuntimeException("手机号不存在"+phone);
 			}
 			
-			if(true){
-				ProjectInfo projectInfo = new ProjectInfo();
-				projectInfo.setName(name);
-				List<ProjectInfo> projectList = getProjectInfo(projectInfo);
-				if(projectList.size() == 0){
-					//查询对应的名称
-					if(zhaoMeiName.containsKey(name) && zhaoMeiName.get(name).getType().equals("project")){
-						projectInfo.setName(zhaoMeiName.get(name).getNewName());
-						projectList = getProjectInfo(projectInfo);
-						if(projectList.size() == 0){
-							continue;
-						}
-					}
-				}
-				
-				if(projectList.size() > 0){//项目处理逻辑
-					ProjectInfo info = projectList.get(0);
-					Shop shop = getShop(new Shop(){{setName(shopName);}}).get(0);
-					
-					Integer serviceTime = getProjectServiceTime(info.getId(),shop.getId());
-					
-					addZhaoMeiProjectDetail(index, memberCard.getId(), shop.getId(), info.getId(), secondName, price, buyNumber, leftNumber, serviceTime,0D,realPayment,0D,owe,isSend,remark, createUser,buyDate,createDate);
-					
-				
-					MemberCard change = new MemberCard();
-					change.setId(memberCard.getId());
-					change.setTreatmentBalance(memberCard.getTreatmentBalance()+leftPayment);
-					change.setOweBalance(memberCard.getOweBalance()+owe);
-					updateMemberCard(change);
-				}else{
-//					throw new RuntimeException("找不到对应的信息:" + name);
-					System.out.println("找不到对应的信息:" + name);
-				}
-			}
+			checkAndAddProjdectInfo(zhaoMeiName, index, shopName, name, secondName, isSend, buyNumber, realPayment, owe,
+					leftPayment, leftNumber, createDate, buyDate, createUser, remark, price, memberCard, "project");
 			
-			
-			
-//			if(type.equals("产品")){
-//				ProductInfo productInfo = new ProductInfo();
-//				productInfo.setName(name);
-//				List<ProductInfo> productList = getProductInfo(productInfo);
-//				if(productList.size() == 0){
-//					//查询对应的名称
-//					if(kangWangName.containsKey(name) && kangWangName.get(name).getType().equals("product")){
-//						productInfo.setName(kangWangName.get(name).getNewName());
-//						productList = getProductInfo(productInfo);
-//						if(productList.size() == 0){
-//							throw new RuntimeException("找不到产品名称信息");
-//						}
-//					}
-//				}
-//				
-//				String secondName = "";
-//				if(productList.size() > 0){//项目处理逻辑
-//					ProductInfo info = productList.get(0);
-//					Integer number = Integer.valueOf(numberStr.substring(0, numberStr.length()-1));
-//					String unit = numberStr.substring(numberStr.length()-1);
-//					if(StringUtils.isBlank(unit)){
-//						throw new RuntimeException("excel产品没有单位");
-//					}
-//					if(!info.getBoxesUnit().equals(unit) && !info.getBulkUnit().equals(unit)){
-//						throw new RuntimeException("excel产品单位与系统的不匹配");
-//					}
-//					
-//					if(operation.equals("新增")){
-//						addProductDetail(memberCard.getId(), info.getId(), number, number, price, unit, remark);
-//					}else if(operation.equals("作废")){
-//						failProductDetail(detailId);
-//					}
-//					
-//				}else{
-//					throw new RuntimeException("找不到对应的信息:" + name);
-//				}
-//			}
 		}
 		getSession().commit();
 		getSession().close();
@@ -165,7 +94,51 @@ public class ZhaoMeiAddProjectTest extends BaseKangWangDao{
 
 
 
-	static public int addZhaoMeiProjectDetail(String index,String memberCardId,String shopId,String projectId,String secondName,Double price,Integer buyNumber,Integer number,Integer serviceTime,Double storePay,Double bankcardPay,Double cashPay,Double owe,Integer isSend,String remark,String createUser,Date buyTime,Date createDate){
+	public static boolean checkAndAddProjdectInfo(Map<String, NameToSystemName> zhaoMeiName, String index,
+			String shopName, String name, String secondName, Integer isSend, int buyNumber, Double realPayment,
+			Double owe, Double leftPayment, Integer leftNumber, Date createDate, Date buyDate, String createUser,
+			String remark, double price, MemberCard memberCard,String type) {
+		ProjectInfo projectInfo = new ProjectInfo();
+		projectInfo.setName(name);
+		List<ProjectInfo> projectList = getProjectInfo(projectInfo);
+		if(projectList.size() == 0){
+			//查询对应的名称
+			if(zhaoMeiName.containsKey(name) && zhaoMeiName.get(name).getType().equals("project")){
+				projectInfo.setName(zhaoMeiName.get(name).getNewName());
+				projectList = getProjectInfo(projectInfo);
+			}
+			if(zhaoMeiName.get(name).getType().equals("pass")){
+				return true;
+			}
+		}
+		
+		if(projectList.size() > 0){//项目处理逻辑
+			ProjectInfo info = projectList.get(0);
+			Shop shop = getShop(new Shop(){{setName(shopName);}}).get(0);
+			
+			Integer serviceTime = getProjectServiceTime(info.getId(),shop.getId());
+			
+			addZhaoMeiProjectDetail(index, memberCard.getId(), shop.getId(), info.getId(), secondName, price, buyNumber, leftNumber, serviceTime,0D,realPayment,0D,owe,isSend,remark, createUser,buyDate,createDate,type);
+			
+		
+			MemberCard change = new MemberCard();
+			change.setId(memberCard.getId());
+			change.setTreatmentBalance(memberCard.getTreatmentBalance()+leftPayment);
+			change.setOweBalance(memberCard.getOweBalance()+owe);
+			updateMemberCard(change);
+			return true;
+		}else{
+//			throw new RuntimeException("找不到对应的信息:" + name);
+			if(type.equals("project")){
+				System.out.println("找不到对应的信息:" + name);
+			}
+			return false;
+		}
+	}
+
+
+
+	static public int addZhaoMeiProjectDetail(String index,String memberCardId,String shopId,String projectId,String secondName,Double price,Integer buyNumber,Integer number,Integer serviceTime,Double storePay,Double bankcardPay,Double cashPay,Double owe,Integer isSend,String remark,String createUser,Date buyTime,Date createDate,String type){
 		ProjectDetailConsumption detail = new ProjectDetailConsumption();
 		Date date = new Date();
 		detail.setActivityId("");
@@ -189,7 +162,7 @@ public class ZhaoMeiAddProjectTest extends BaseKangWangDao{
 		detail.setIsTuoke(0);
 		detail.setMarketPrice(0D);
 		detail.setPointPay(0D);
-		detail.setRemark("找美网数据录入系统，序号："+index+"单号创建人："+createUser+"，购买时间："+sdf.format(buyTime)+"，备注："+remark);
+		detail.setRemark("找美网数据录入系统，类型："+type+"，序号："+index+"，单号创建人："+createUser+"，购买时间："+sdf.format(buyTime)+"，备注："+remark);
 		detail.setServiceType(0);
 		detail.setShopId(shopId);
 		detail.setWechatPay(0D);
@@ -204,7 +177,10 @@ public class ZhaoMeiAddProjectTest extends BaseKangWangDao{
 		detail.setMemberCardId(memberCardId);
 		detail.setNumber(number);
 		detail.setOwe(owe);
-		detail.setPayment(price * buyNumber);
+		
+		double payment = setDoubleScale(price * buyNumber);
+		detail.setPayment(payment);
+		
 		detail.setPrice(price);
 		detail.setProjectId(projectId);
 		detail.setRealPayment(detail.getPayment() - detail.getOwe());

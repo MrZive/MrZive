@@ -3,6 +3,8 @@ package com.zive.kangwang;
 import java.io.File;
 import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -127,7 +129,7 @@ public class BaseKangWangDao extends BaseDao{
 	}
 	
 	public static Map<String,NameToSystemName> getZhaoMeiName() {
-		File file = new File("C:\\Users\\Administrator\\Desktop\\公司数据\\操作数据\\找美网\\没对应的项目名称-找美网.xlsx");
+		File file = new File("D:\\公司数据\\操作数据\\找美网\\没对应的项目名称-找美网.xlsx");
 		
 		Excel excel = null;
 		try {
@@ -190,6 +192,14 @@ public class BaseKangWangDao extends BaseDao{
 						if(cooList.size()>0){
 							flag = true;
 							entity.setType("coo");
+						}
+					}
+					
+					if(!flag){
+						List<String> list = Arrays.asList("储值补录(星和)","空白项目","哈曼尼脊柱","私密小精灵套盒","新项目上市免费体验","全脸胶原蛋白","皮肤检测","青花瓷浴袍(私人定制)","青花瓷水杯(私人定制)","艾条(私人定制)");
+						if(list.contains(oldName)){
+							flag = true;
+							entity.setType("pass");
 						}
 					}
 					
@@ -510,6 +520,9 @@ public class BaseKangWangDao extends BaseDao{
 		Integer serviceTimeTemp = -1;
 		if(selectList.size()>0){
 			for (Integer serviceTime : selectList) {
+				if(serviceTime == null){
+					continue;
+				}
 				serviceTimeTemp = serviceTimeTemp==-1 ? serviceTime : serviceTimeTemp;
 //				if(serviceTimeTemp != serviceTime){
 //					throw new RuntimeException("找不到时长");

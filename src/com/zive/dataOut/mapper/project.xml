@@ -344,10 +344,7 @@
                         wechat_pay,
                         </if>
                         <if test ='null != aliPay'>
-                        ali_pay,
-                        </if>
-                        <if test ='null != invalidNumber'>
-                        invalid_number
+                        ali_pay
                         </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -472,10 +469,7 @@
                         #{wechatPay},
                         </if>
                         <if test ='null != aliPay'>
-                        #{aliPay},
-                        </if>
-                        <if test ='null != invalidNumber'>
-                        #{invalidNumber}
+                        #{aliPay}
                         </if>
         </trim>
     </insert>
@@ -521,7 +515,6 @@
                     <if test ='null != serviceType'>service_type = #{serviceType},</if>
                     <if test ='null != wechatPay'>wechat_pay = #{wechatPay},</if>
                     <if test ='null != aliPay'>ali_pay = #{aliPay},</if>
-                    <if test ='null != invalidNumber'>invalid_number = #{invalidNumber},</if>
                     <if test ='null != secondName'>second_name = #{secondName},</if>
         </set>
         WHERE id = #{id}

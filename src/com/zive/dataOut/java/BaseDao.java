@@ -50,6 +50,11 @@ public class BaseDao {
 		session.close();
 	}
 	
+	
+	static public double setDoubleScale(Double price){
+		return price = new BigDecimal(price).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
+	}
+	
 	//门店----------------------------------------------------------------------------------------------------------------------------------------------------------------
 	static public List<Shop> getShop(Shop shop){
 		List<Shop> list = getSession().selectList("com.zive.dataOut.common.getShop", shop);
