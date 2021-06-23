@@ -218,6 +218,15 @@ public class ProjectDetailConsumption {
     * 应品牌要求处理过期项目，原失效次数存至此处
     */
     private Integer invalidNumber;
+    
+    
+    
+    
+    
+    
+    private String keyword;
+    
+    
 
 	public String getId() {
 		return id;
@@ -553,6 +562,14 @@ public class ProjectDetailConsumption {
 
 	public void setSecondName(String secondName) {
 		this.secondName = secondName;
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
 	
 	

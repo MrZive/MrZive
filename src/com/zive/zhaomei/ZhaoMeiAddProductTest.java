@@ -120,7 +120,7 @@ public class ZhaoMeiAddProductTest extends BaseKangWangDao{
 		String unit = null;
 		if(productList.size() == 0){
 			if(name.contains("(")){
-				unit = name.substring(name.lastIndexOf("("), name.length()-1);
+				unit = name.substring(name.lastIndexOf("(")+1, name.length()-1);
 				String nameTemp = name.substring(0, name.indexOf("("));
 				productInfo.setName(nameTemp);
 				productList = getProductInfo(productInfo);
@@ -132,7 +132,7 @@ public class ZhaoMeiAddProductTest extends BaseKangWangDao{
 					productInfo.setName(zhaoMeiName.get(name).getNewName());
 					productList = getProductInfo(productInfo);
 				}
-				if(zhaoMeiName.get(name).getType().equals("pass")){
+				if(zhaoMeiName.containsKey(name) && zhaoMeiName.get(name).getType().equals("pass")){
 					return true;
 				}
 			}
@@ -145,10 +145,10 @@ public class ZhaoMeiAddProductTest extends BaseKangWangDao{
 				unit = info.getBoxesUnit();
 			}else{
 				if(StringUtils.isBlank(unit)){
-					throw new RuntimeException("excel产品没有单位");
+					throw new RuntimeException(name+"：excel产品没有单位");
 				}
 				if(!info.getBoxesUnit().equals(unit) && !info.getBulkUnit().equals(unit)){
-					throw new RuntimeException("excel产品单位与系统的不匹配");
+					throw new RuntimeException(name+"：excel产品单位与系统的不匹配");
 				}
 			}
 			

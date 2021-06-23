@@ -107,7 +107,7 @@ public class ZhaoMeiAddProjectTest extends BaseKangWangDao{
 				projectInfo.setName(zhaoMeiName.get(name).getNewName());
 				projectList = getProjectInfo(projectInfo);
 			}
-			if(zhaoMeiName.get(name).getType().equals("pass")){
+			if(zhaoMeiName.containsKey(name) && zhaoMeiName.get(name).getType().equals("pass")){
 				return true;
 			}
 		}

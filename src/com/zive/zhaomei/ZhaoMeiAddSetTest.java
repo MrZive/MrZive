@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class ZhaoMeiAddSetTest extends BaseKangWangDao{
 
 public static void main(String[] args) throws IOException, ParseException {
 		
-		File file = new File("D:\\公司数据\\操作数据\\找美网\\套餐\\合并.xlsx");
+		File file = new File("D:\\公司数据\\操作数据\\找美网\\套餐合并 - 修改2.xlsx");
 		
 		Excel excel = null;
 		try {
@@ -45,7 +46,7 @@ public static void main(String[] args) throws IOException, ParseException {
 		
 		Map<String, NameToSystemName> zhaoMeiName = getZhaoMeiName();
 //		excelSheet.getRows().size()
-		for(int i = 4200; i < 4245;i++){
+		for(int i = 1; i < excelSheet.getRows().size();i++){
 			System.out.println("当前行数："+ (i+1));
 			excelRow = excelSheet.getRows().get(i);
 			excelCells = excelRow.getCells();
@@ -77,12 +78,10 @@ public static void main(String[] args) throws IOException, ParseException {
 			String createUser = excelCells.get(30).getValue().toString();
 			String remark = excelCells.get(31).getValue()==null?"":excelCells.get(31).getValue().toString();
 			
-			
-			
 			MemberCard memberCard = getMemberCardByPhone(phone);
 			if(memberCard == null){
+				System.out.println("手机号不存在"+phone);
 				continue;
-//				throw new RuntimeException("手机号不存在"+phone);
 			}
 			
 			//项目-----------------------------------------------------------------------------------------------------------

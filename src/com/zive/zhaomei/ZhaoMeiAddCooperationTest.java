@@ -113,6 +113,9 @@ public class ZhaoMeiAddCooperationTest extends BaseKangWangDao{
 					cooInfo.setName(nameToSystemName.getNewName());
 					cooList = getCooperationProject(cooInfo);
 				}
+				if(!zhaoMeiName.containsKey(name)){
+					throw new RuntimeException("找不到对应的信息:" + name);
+				}
 				if(zhaoMeiName.get(name).getType().equals("pass")){
 					return true;
 				}
