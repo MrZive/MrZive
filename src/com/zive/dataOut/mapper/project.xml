@@ -155,6 +155,142 @@
 			</if>
 		</where>
 	</select>
+	
+	
+	
+	<insert id="addProjectConsumption" parameterType="com.zive.dataOut.entity.ProjectConsumption">
+		INSERT INTO shop_s_consumption_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        				<if test="null != id and '' != id">
+                        id,
+                        </if>
+                        <if test="null != consumptionId and '' != consumptionId">
+                        consumption_id,
+                        </if>
+                        <if test="null != storePay">
+                        store_pay,
+                        </if>
+                        <if test="null != bankcardPay">
+                        bankcard_pay,
+                        </if>
+                        <if test="null != cashPay">
+                        cash_pay,
+                        </if>
+                        <if test="null != pointPay">
+                        point_pay,
+                        </if>
+                        <if test="null != isBook">
+                        is_book,
+                        </if>
+                        <if test="null != payment">
+                        payment,
+                        </if>
+                        <if test="null != effectiveEarn">
+                        effective_earn,
+                        </if>
+                        <if test="null != remark and '' != remark">
+                        remark,
+                        </if>
+                        <if test="null != isBirthday">
+                        is_birthday,
+                        </if>
+                        <if test="null != realPayment">
+                        real_payment,
+                        </if>
+                        <if test="null != owe">
+                        owe,
+                        </if>
+                        <if test="null != memberCardId and '' != memberCardId">
+                        member_card_id,
+                        </if>
+                        <if test="null != isCashCoupon">
+                        is_cash_coupon,
+                        </if>
+                        <if test="null != createDate">
+                        create_date,
+                        </if>
+                        <if test="null != isFail">
+                        is_fail,
+                        </if>
+                        <if test="null != shopid and '' != shopid">
+                        shopid,
+                        </if>
+                        <if test="null != cashCoupon">
+                        cash_coupon,
+                        </if>
+                        <if test="null != buyOwe">
+                        buy_owe,
+                        </if>
+                        <if test="null != isDetailPay">
+                        is_detail_pay
+                        </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        				<if test="null != id and '' != id">
+                        #{id},
+                        </if>
+                        <if test="null != consumptionId and '' != consumptionId">
+                        #{consumptionId},
+                        </if>
+                        <if test="null != storePay">
+                        #{storePay},
+                        </if>
+                        <if test="null != bankcardPay">
+                        #{bankcardPay},
+                        </if>
+                        <if test="null != cashPay">
+                        #{cashPay},
+                        </if>
+                        <if test="null != pointPay">
+                        #{pointPay},
+                        </if>
+                        <if test="null != isBook">
+                        #{isBook},
+                        </if>
+                        <if test="null != payment">
+                        #{payment},
+                        </if>
+                        <if test="null != effectiveEarn">
+                        #{effectiveEarn},
+                        </if>
+                        <if test="null != remark and '' != remark">
+                        #{remark},
+                        </if>
+                        <if test="null != isBirthday">
+                        #{isBirthday},
+                        </if>
+                        <if test="null != realPayment">
+                        #{realPayment},
+                        </if>
+                        <if test="null != owe">
+                        #{owe},
+                        </if>
+                        <if test="null != memberCardId and '' != memberCardId">
+                        #{memberCardId},
+                        </if>
+                        <if test="null != isCashCoupon">
+                        #{isCashCoupon},
+                        </if>
+                        <if test="null != createDate">
+                        #{createDate},
+                        </if>
+                        <if test="null != isFail">
+                        #{isFail},
+                        </if>
+                        <if test="null != shopid and '' != shopid">
+                        #{shopid},
+                        </if>
+                        <if test="null != cashCoupon and '' != cashCoupon">
+                        #{cashCoupon},
+                        </if>
+                        <if test="null != buyOwe">
+                        #{buyOwe},
+                        </if>
+                        <if test="null != isDetailPay">
+                        #{isDetailPay}
+                        </if>
+        </trim>
+	</insert>
 
 
 	<select id="getProjectDetailConsumption" parameterType="com.zive.dataOut.entity.ProjectDetailConsumption" resultType="com.zive.dataOut.entity.ProjectDetailConsumption">
