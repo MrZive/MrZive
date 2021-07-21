@@ -125,6 +125,8 @@ public class ProductDetailConsumption {
 	
 	private String introducer;
 	
+	private String keyword;
+	
 	public Integer getIsIntroduce() {
 		return isIntroduce;
 	}
@@ -438,6 +440,14 @@ public class ProductDetailConsumption {
 
 	public void setActualUnit(String actualUnit) {
 		this.actualUnit = actualUnit;
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
 
 }

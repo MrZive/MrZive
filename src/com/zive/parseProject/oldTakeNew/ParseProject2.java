@@ -1,15 +1,10 @@
-package com.zive.parseProject;
+package com.zive.parseProject.oldTakeNew;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
-import javax.management.RuntimeErrorException;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -21,6 +16,7 @@ import com.zive.dataOut.entity.Shop;
 import com.zive.dataOut.java.BaseDao;
 import com.zive.dataOut.java.ExcelUtilForDO;
 import com.zive.dataOut.java.ProjectInfoDao;
+import com.zive.parseProject.Parse;
 import com.zive.shop.entity.ProjectConsumption;
 import com.zive.shop.entity.ProjectDetailConsumption;
 
@@ -122,32 +118,7 @@ public class ParseProject2 extends BaseDao{
 		List<JSONObject> list = getSession().selectList("com.zive.parseProject.getProjectList");
 		return list;
 	}
-	
-	static int addConsumption(Consumption consumption){
-		int insert = getSession().insert("com.zive.parseProject.addConsumption",consumption);
-		return insert;
-	}
-	
-	static int addProjectConsumption(ProjectConsumption projectcConsumption){
-		int insert = getSession().insert("com.zive.parseProject.addProjectConsumption",projectcConsumption);
-		return insert;
-	}
-	
-	static int addProjectDetailConsumption(ProjectDetailConsumption projectcDetailConsumption){
-		int insert = getSession().insert("com.zive.parseProject.addProjectDetailConsumption",projectcDetailConsumption);
-		return insert;
-	}
-	
-	static List<ProjectDetailConsumption> getConsumptionProjectDetailList(ProjectDetailConsumption detail){
-		JSONObject parseObject = JSONObject.parseObject(JSON.toJSONString(detail));
-		List<ProjectDetailConsumption> list = getSession().selectList("com.zive.parseProject.getConsumptionProjectDetailList",parseObject.getInnerMap());
-		return list;
-	}
-	
-	static List<ProjectDetailConsumption> getConsumptionProjectDetailList(Map<String,Object> map){
-		List<ProjectDetailConsumption> list = getSession().selectList("com.zive.parseProject.getConsumptionProjectDetailList",map);
-		return list;
-	}
+
 	
 	static int updateConsumptionProjectDetail(String id,String projectId){
 		Map<String,Object> map = new HashMap<>();

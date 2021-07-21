@@ -65,7 +65,7 @@ public class ProductSellDao extends BaseDao{
 		return list;
 	}
 	
-	static List<ProductDetailConsumption> getProductDetailConsumption(ProductDetailConsumption detail){
+	static public List<ProductDetailConsumption> getProductDetailConsumption(ProductDetailConsumption detail){
 		List<ProductDetailConsumption> list = getSession().selectList("com.zive.dataOut.product.getProductDetailConsumption", detail);
 		return list;
 	}

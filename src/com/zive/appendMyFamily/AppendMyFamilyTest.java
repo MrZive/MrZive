@@ -36,19 +36,20 @@ public class AppendMyFamilyTest extends BaseDao{
 	public static void main(String[] args) throws IOException, ParseException {
 		
 		String phone = "18680688112";
-//		String projectName = "免疫调理-三焦艾熏";
-		String projectName = "三焦艾熏";
-//		String shopName = "总部店";
+		String projectName = "免疫调理-三焦艾熏";
+//		String projectName = "三焦艾熏";
 		String shopName = "000000总部店";
-		String orderId = "Z002000070";
-		Double price = 99.95D;
+//		String shopName = "002江燕店";
+//		String orderId = "Z002000070";
+		String orderId = "Z200113004639";
+		Double price = 0D;
 		Integer serviceTime = 45;
 		Integer buyNumber = 20;
-		String buyTime = "2017-11-12 14:02:15";
+		String buyTime = "2017-06-12 14:02:15";
 		String createUser = "100";
 		Double payment = price * buyNumber;
-		Double storePay = 0D;
-		Double bankcardPay = payment;
+		Double storePay = payment;
+		Double bankcardPay = 0D;
 		Double cashPay = 0D;
 		
 		MemberCard memberCard = getMemberCardByPhone(phone);
@@ -63,11 +64,11 @@ public class AppendMyFamilyTest extends BaseDao{
 		
 		
 		
-		MemberCard change = new MemberCard();
-		change.setId(memberCard.getId());
-		change.setTreatmentBalance(memberCard.getTreatmentBalance()+payment);
-		updateMemberCard(change);
-		
+//		MemberCard change = new MemberCard();
+//		change.setId(memberCard.getId());
+//		change.setTreatmentBalance(memberCard.getTreatmentBalance()+payment);
+//		updateMemberCard(change);
+//		
 		getSession().commit();
 		getSession().close();
 	}
@@ -89,7 +90,7 @@ public class AppendMyFamilyTest extends BaseDao{
 		}
 		Calendar rightNow = Calendar.getInstance();
 		rightNow.setTime(detail.getCreateDate());
-		int year = 24/12;
+		int year = 64/12;
 		if (year>0){
 			rightNow.add(Calendar.YEAR,year);//日期加年
 		}
@@ -102,7 +103,7 @@ public class AppendMyFamilyTest extends BaseDao{
 		detail.setShopId(shopId);
 		detail.setIsFail(0);
 		detail.setExperiencePrice(159D);
-		detail.setPromotionPrice(99.95D);
+		detail.setPromotionPrice(0D);
 		detail.setMarketPrice(399.9D);
 		detail.setBuyType("0");
 		detail.setChannelId(0);
@@ -138,9 +139,9 @@ public class AppendMyFamilyTest extends BaseDao{
 		}
 		
 		
-		addProjectConsumption(consumptionId, memberCardId, shopId, storePay, bankcardPay, cashPay, payment, buyTime);
+//		addProjectConsumption(consumptionId, memberCardId, shopId, storePay, bankcardPay, cashPay, payment, buyTime);
 		
-		addConsumption(consumptionId, memberCardId, buyTime, shopId);
+//		addConsumption(consumptionId, memberCardId, buyTime, shopId);
 		
 		return addProjectDetailConsumption;
 	}

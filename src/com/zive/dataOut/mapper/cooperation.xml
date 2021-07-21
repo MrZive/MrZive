@@ -44,6 +44,9 @@
 			<if test="isFail != null">
 				AND is_fail = #{isFail}
 			</if>
+			<if test="remark != null and remark.length() gt 0">
+				AND remark LIKE CONCAT('%',#{remark},'%')
+			</if>
 		</where>
 	</select>
 
@@ -88,6 +91,15 @@
 			</if>
 			<if test="memberCardId != null">
 				AND member_card_id = #{memberCardId}
+			</if>
+			<if test="activityId != null">
+				AND activity_id = #{activityId}
+			</if>
+			<if test="cooperationId != null">
+				AND cooperation_id = #{cooperationId}
+			</if>
+			<if test="isFail != null">
+				AND is_fail = #{isFail}
 			</if>
 		</where>
 	</select>

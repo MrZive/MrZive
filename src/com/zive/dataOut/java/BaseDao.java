@@ -250,6 +250,11 @@ public class BaseDao {
 		return add;
 	}
 	
+	static public List<ActivityShop> getActivityShop(ActivityShop activity){
+		List<ActivityShop> list = getSession().selectList("com.zive.dataOut.common.getActivityShop", activity);
+		return list;
+	}
+	
 	
 	//消费流水------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	static public Consumption getConsumptionById(String id){
@@ -266,6 +271,11 @@ public class BaseDao {
 	
 	static public int addConsumption(Consumption Consumption){
 		int add = getSession().insert("com.zive.dataOut.common.addConsumption", Consumption);
+		return add;
+	}
+	
+	static public int updateConsumption(Consumption Consumption){
+		int add = getSession().update("com.zive.dataOut.common.updateConsumption", Consumption);
 		return add;
 	}
 	

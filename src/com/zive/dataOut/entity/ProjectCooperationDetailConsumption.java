@@ -116,7 +116,6 @@ public class ProjectCooperationDetailConsumption {
     private String buyType;
     
     
-    
 
 	public String getId() {
 		return id;

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zive.xiaogan">
+	
+	<update id="updateProjectDetailDone" parameterType="map">
+		update shop_s_consumption_project_detail set service_time = #{serviceTime} where id = #{detailId}
+	</update>
+	
+	<update id="updateErrorProject" parameterType="map">
+		update zive_xiaogan set flag = 1 where id = #{detailId}
+	</update>
+	
+	<select id="getErrorProject" resultType="map">
+		select * from zive_xiaogan where flag = 0
+	</select>
+	
+	<select id="getDoneTimeFromDetailId" parameterType="string" resultType="integer">
+		SELECT done_service_time FROM shop_s_consumption_project_done WHERE project_detail_id = #{detailId} ORDER BY create_date DESC LIMIT 1
+	</select>
+	
+	
+	<select id="getActivityIdAndProjectId" parameterType="string" resultType="map">
+		SELECT activity_id,project_id,shop_id,buy_type FROM shop_s_consumption_project_detail WHERE id = #{detailId}
+	</select>
+	
+
+	<select id="getDoneTimeFromActivityInfo" parameterType="map" resultType="integer">
+		SELECT service_time FROM
+		shop_b_activity_info a 
+		INNER JOIN shop_b_activity_set b ON a.id = b.activity_id
+		INNER JOIN shop_b_activity_set_project c ON b.id = c.set_id
+		WHERE
+		a.id = #{activityId}
+		AND c.project_id = #{projectId}
+	</select>
+</mapper>

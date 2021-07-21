@@ -354,6 +354,9 @@
 			<if test="keyword != null and keyword.length() gt 0">
 				AND consumption_id LIKE CONCAT('%',#{keyword},'%')
 			</if>
+			<if test="remark != null and remark.length() gt 0">
+				AND remark LIKE CONCAT('%',#{remark},'%')
+			</if>
 		</where>
 	</select>
 	

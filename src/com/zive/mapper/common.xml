@@ -10,4 +10,13 @@
 	 <select id="getSettingByKey" resultType="string">
 	 	SELECT `value` FROM `qhc_system_setting` WHERE `key` = #{value}
 	 </select>
+	 
+	 <select id="getShopIdFromLeader" parameterType="string" resultType="string">
+		SELECT a.id,a.name,b.id,b.name,c.id,c.name,d.id,d.name FROM `oa_department_chief` a
+		LEFT JOIN oa_department_chief b ON a.parentid = b.chief_id
+		LEFT JOIN oa_department_chief c ON b.parentid = c.chief_id
+		LEFT JOIN oa_department_chief d ON c.parentid = d.chief_id
+		WHERE a.is_shop = 1
+		AND (b.name = #{name} OR c.name = #{name} OR d.name = #{name})
+	 </select>
 </mapper>

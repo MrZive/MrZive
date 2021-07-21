@@ -1,4 +1,4 @@
-package com.zive.parseProject;
+package com.zive.parseProject.oldTakeNew;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import javax.management.RuntimeErrorException;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -21,6 +19,7 @@ import com.zive.dataOut.entity.Shop;
 import com.zive.dataOut.java.BaseDao;
 import com.zive.dataOut.java.ExcelUtilForDO;
 import com.zive.dataOut.java.ProjectInfoDao;
+import com.zive.parseProject.Parse;
 import com.zive.shop.entity.ProjectConsumption;
 import com.zive.shop.entity.ProjectDetailConsumption;
 
@@ -284,7 +283,7 @@ public class ParseProject extends BaseDao{
 		return list;
 	}
 	
-	static int addConsumption(Consumption consumption){
+	static int addParseProjectConsumption(Consumption consumption){
 		int insert = getSession().insert("com.zive.parseProject.addConsumption",consumption);
 		return insert;
 	}

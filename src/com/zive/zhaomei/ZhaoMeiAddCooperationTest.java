@@ -102,6 +102,27 @@ public class ZhaoMeiAddCooperationTest extends BaseKangWangDao{
 			String shopName, String name, String secondName, Integer isSend, int buyNumber, Double realPayment,
 			Double owe, Double leftPayment, Integer leftNumber, Date createDate, Date buyDate, String createUser,
 			String remark, double price, MemberCard memberCard,String type) {
+		//------------------------------过滤之前添加的传统项目---------------------------
+		ProjectInfo projectInfo = new ProjectInfo();
+		projectInfo.setName(name);
+		List<ProjectInfo> projectList = getProjectInfo(projectInfo);
+		if(projectList.size() == 0){
+			//查询对应的名称
+			if(zhaoMeiName.containsKey(name) && zhaoMeiName.get(name).getType().equals("project")){
+				projectInfo.setName(zhaoMeiName.get(name).getNewName());
+				projectList = getProjectInfo(projectInfo);
+			}
+			if(zhaoMeiName.containsKey(name) && zhaoMeiName.get(name).getType().equals("pass")){
+				return true;
+			}
+		}
+		
+		if(projectList.size() > 0){//项目处理逻辑
+			return true;
+		}
+		
+		
+		//------------------------------开始合作项目的业务-------------------------------
 		CooperationProject cooInfo = new CooperationProject();
 		cooInfo.setName(name);
 		List<CooperationProject> cooList = getCooperationProject(cooInfo);
