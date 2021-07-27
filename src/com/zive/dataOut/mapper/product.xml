@@ -141,6 +141,9 @@
 			<if test="memberCardId != null">
 				AND member_card_id = #{memberCardId}
 			</if>
+			<if test="productId != null and productId.length() gt 0">
+				AND product_id = #{productId}
+			</if>
 			<if test="keyword != null and keyword.length() gt 0">
 				AND consumption_id LIKE CONCAT('%',#{keyword},'%')
 			</if>

@@ -51,8 +51,12 @@ public class BaseDao {
 	}
 	
 	
-	static public double setDoubleScale(Double price){
+	static public double setDoubleScale(Double price, int number){
 		return price = new BigDecimal(price).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
+	}
+	
+	static public double setDoubleScale(Double price){
+		return setDoubleScale(price, 4);
 	}
 	
 	//门店----------------------------------------------------------------------------------------------------------------------------------------------------------------
