@@ -1,9 +1,14 @@
 package com.zive.dataOut.java;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -18,6 +23,7 @@ import com.zive.dataOut.entity.Activity;
 import com.zive.dataOut.entity.ActivityShop;
 import com.zive.dataOut.entity.Consumption;
 import com.zive.dataOut.entity.CooperationProject;
+import com.zive.dataOut.entity.HistoryConsumption;
 import com.zive.dataOut.entity.MaterialInfo;
 import com.zive.dataOut.entity.MaterialInventory;
 import com.zive.dataOut.entity.MemberCard;
@@ -57,6 +63,10 @@ public class BaseDao {
 	
 	static public double setDoubleScale(Double price){
 		return setDoubleScale(price, 4);
+	}
+	
+	static public double setDoubleScaleROUND_DOWN(Double price, int number){
+		return price = new BigDecimal(price).setScale(4, BigDecimal.ROUND_DOWN).doubleValue();
 	}
 	
 	//门店----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -283,6 +293,18 @@ public class BaseDao {
 		return add;
 	}
 	
+	//获取会员录单历史记录
+	static public List<HistoryConsumption> getHistoryConsumption(HistoryConsumption HistoryConsumption){
+		List<HistoryConsumption> list = getSession().selectList("com.zive.dataOut.common.getHistoryConsumption", HistoryConsumption);
+		return list;
+	}
+	
+	static public int addHistoryConsumption(HistoryConsumption HistoryConsumption){
+		int add = getSession().insert("com.zive.dataOut.common.addHistoryConsumption", HistoryConsumption);
+		return add;
+	}
+	
+	
 	//获取会员剩余项目----------------------------------------------------------------------------------------------------------------------------------------------------------
 	static public List<Map<String,Object>> getCanDoneMemberProjectNumber(String memberCardId){
 		List<Map<String, Object>> memberProjectNumber = getSession().selectList("com.zive.dataOut.common.getCanDoneMemberProjectNumber", memberCardId);
@@ -312,4 +334,32 @@ public class BaseDao {
 		
 		return memberProjectNumber;
 	}
+	
+	
+	
+	public static List<String> readTxtFile(String filePath){
+		List<String> list = new ArrayList<>();
+        try {
+                String encoding="UTF8";
+                File file=new File(filePath);
+                if(file.isFile() && file.exists()){ //判断文件是否存在
+                    InputStreamReader read = new InputStreamReader(
+                    new FileInputStream(file),encoding);//考虑到编码格式
+                    BufferedReader bufferedReader = new BufferedReader(read);
+                    String lineTxt = null;
+                    while((lineTxt = bufferedReader.readLine()) != null){
+                        list.add(lineTxt);
+                    }
+                    read.close();
+        }else{
+            System.out.println("找不到指定的文件");
+        }
+        } catch (Exception e) {
+            System.out.println("读取文件内容出错");
+            e.printStackTrace();
+        }
+        return list;
+    }
+	
+	
 }

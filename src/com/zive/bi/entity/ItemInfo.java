@@ -31,6 +31,9 @@ public class ItemInfo {
 	
 	@FieldName("收款金额")
 	private BigDecimal price;
+	
+	@FieldName("日期")
+	private String consumeDate;
 
 	
 	
@@ -96,6 +99,14 @@ public class ItemInfo {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public String getConsumeDate() {
+		return consumeDate;
+	}
+
+	public void setConsumeDate(String consumeDate) {
+		this.consumeDate = consumeDate;
 	}
 
 }

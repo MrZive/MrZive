@@ -810,8 +810,157 @@
         </set>
         WHERE id = #{id}
     </update>
+    
+    
+    <select id="getHistoryConsumption" parameterType="com.zive.dataOut.entity.HistoryConsumption" resultType="com.zive.dataOut.entity.HistoryConsumption">
+		SELECT
+		id,
+		member_card_id 'memberCardId',
+		store_before 'storeBefore',
+		point_before 'pointBefore',
+		treatment_before 'treatmentBefore',
+		stock_before 'stockBefore',
+		store_after 'storeAfter',
+		point_after 'pointAfter',
+		treatment_after 'treatmentAfter',
+		stock_after 'stockAfter',
+		owe_after 'oweAfter',
+		owe_before 'oweBefore',
+		wenxiu_before 'wenxiuBefore',
+		wenxiu_after 'wenxiuAfter',
+		consumption_id 'consumptionId'
+		FROM
+		shop_s_consumption_history
+		<where>
+			<if test="memberCardId != null and memberCardId.length() gt 0">
+				AND member_card_id = #{memberCardId}
+			</if>
+			<if test="consumptionId != null and consumptionId.length() gt 0">
+				AND consumption_id = #{consumptionId}
+			</if>
+			<if test="beginDate != null">
+		      <![CDATA[ AND create_date >= #{beginDate}]]>
+		   </if>
+		   <if test="endDate != null">
+		      <![CDATA[ AND create_date <= #{endDate}]]>
+		   </if>
+			<if test="keyword != null and keyword.length() gt 0">
+				AND consumption_id LIKE CONCAT(#{keyword},'%')
+			</if>
+		</where>
+		ORDER BY create_date ASC
+		
+	</select>
 	
-	
+	<insert id="addHistoryConsumption" parameterType="com.zive.dataOut.entity.HistoryConsumption">
+        INSERT INTO shop_s_consumption_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        				<if test="null != id and '' != id">
+                        id,
+                        </if>
+                        <if test="null != memberCardId and '' != memberCardId">
+                        member_card_id,
+                        </if>
+                        <if test="null != storeBefore">
+                        store_before,
+                        </if>
+                        <if test="null != pointBefore">
+                        point_before,
+                        </if>
+                        <if test="null != treatmentBefore">
+                        treatment_before,
+                        </if>
+                        <if test="null != stockBefore">
+                        stock_before,
+                        </if>
+                        <if test="null != storeAfter">
+                        store_after,
+                        </if>
+                        <if test="null != pointAfter">
+                        point_after,
+                        </if>
+                        <if test="null != treatmentAfter">
+                        treatment_after,
+                        </if>
+                        <if test="null != stockAfter">
+                        stock_after,
+                        </if>
+                        <if test="null != consumptionId and '' != consumptionId">
+                        consumption_id,
+                        </if>
+                        <if test="null != createDate">
+                        create_date,
+                        </if>
+                        <if test="null != isFail">
+                        is_fail,
+                        </if>
+                        <if test="null != oweAfter">
+                        owe_after,
+                        </if>
+                        <if test="null != oweBefore">
+                        owe_before,
+                        </if>
+                        <if test="null != wenxiuBefore">
+                        wenxiu_before,
+                        </if>
+                        <if test="null != wenxiuAfter">
+                        wenxiu_after
+                        </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        				<if test="null != id and '' != id">
+                        #{id},
+                        </if>
+                        <if test="null != memberCardId and '' != memberCardId">
+                        #{memberCardId},
+                        </if>
+                        <if test="null != storeBefore">
+                        #{storeBefore},
+                        </if>
+                        <if test="null != pointBefore">
+                        #{pointBefore},
+                        </if>
+                        <if test="null != treatmentBefore">
+                        #{treatmentBefore},
+                        </if>
+                        <if test="null != stockBefore">
+                        #{stockBefore},
+                        </if>
+                        <if test="null != storeAfter">
+                        #{storeAfter},
+                        </if>
+                        <if test="null != pointAfter">
+                        #{pointAfter},
+                        </if>
+                        <if test="null != treatmentAfter">
+                        #{treatmentAfter},
+                        </if>
+                        <if test="null != stockAfter">
+                        #{stockAfter},
+                        </if>
+                        <if test="null != consumptionId and '' != consumptionId">
+                        #{consumptionId},
+                        </if>
+                        <if test="null != createDate">
+                        #{createDate},
+                        </if>
+                        <if test="null != isFail">
+                        #{isFail},
+                        </if>
+                        <if test="null != oweAfter">
+                        #{oweAfter},
+                        </if>
+                        <if test="null != oweBefore">
+                        #{oweBefore},
+                        </if>
+                        <if test="null != wenxiuBefore">
+                        #{wenxiuBefore},
+                        </if>
+                        <if test="null != wenxiuAfter">
+                        #{wenxiuAfter}
+                        </if>
+        </trim>
+    </insert>
 	
 	
 	<select id="getCanDoneMemberProjectNumber" resultType="map" parameterType="string">

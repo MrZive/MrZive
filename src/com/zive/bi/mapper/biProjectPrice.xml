@@ -1190,7 +1190,7 @@
 		a.shop_id 'shopId',
 		a.is_fail 'isFail',
 		'旧还项目' as 'type',
-		a.return_date 'createDate',
+		a.return_date 'returnDate',
 		b.consumption_project_id 'buyOrderId',
 		c.id
 		'businessId',
@@ -1242,7 +1242,7 @@
 		a.shop_id 'shopId',
 		a.is_fail 'isFail',
 		'旧还产品' as 'type',
-		a.return_date 'createDate',
+		a.return_date 'returnDate',
 		b.consumption_product_id 'buyOrderId',
 		c.id
 		'businessId',
@@ -1301,7 +1301,7 @@
 		else '旧未知' end as 'type'
 		from shop_b_activity_info where id =
 		b.activity_id) as 'type',
-		a.return_date 'createDate',
+		a.return_date 'returnDate',
 		b.consumption_set_id 'buyOrderId',
 		c.id 'businessId',
 		c.`status`,
@@ -1362,7 +1362,7 @@
 		when l.id is not null and l.consumption_set_id is null then '新还产品'
 		when l.id is not null and l.consumption_set_id is not null then '新还套餐产品'
 		else '新系统错误？' end as 'type',
-		a.return_date 'createDate',
+		a.return_date 'returnDate',
 		case 
 		when k.id is not null then k.consumption_id
 		when l.id is not null then l.consumption_id
@@ -1419,7 +1419,7 @@
 		a.shop_id 'shopId',
 		a.is_fail 'isFail',
 		'新还合作项目' as 'type',
-		a.return_date 'createDate',
+		a.return_date 'returnDate',
 		c.id 'businessId',
 		b.consumption_cooperation_id 'buyOrderId',
 		d.`name` 'shopName',
