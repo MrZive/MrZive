@@ -50,6 +50,7 @@
 		<mapper resource="com/zive/dataOut/mapper/project.xml"/>
 		<mapper resource="com/zive/dataOut/mapper/cooperation.xml"/>
 		<mapper resource="com/zive/dataOut/mapper/cooperationWx.xml"/>
+		<mapper resource="com/zive/dataOut/mapper/set.xml"/>
 		<mapper resource="com/zive/dataOut/mapper/return.xml"/>
 		<mapper resource="com/zive/dataOut/mapper/refund.xml"/>
 		

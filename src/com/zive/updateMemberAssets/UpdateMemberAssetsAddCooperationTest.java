@@ -80,7 +80,7 @@ public class  UpdateMemberAssetsAddCooperationTest extends BaseKangWangDao{
 		detail.setOwe(0D);
 		detail.setPayment(setDoubleScale(buyNumber * price));
 		detail.setRealPayment(detail.getPayment() - detail.getOwe());
-		detail.setRemark("资产盘点，类型："+type+"，修改时间："+sdf.format(date)+"，备注："+remark);
+		detail.setRemark("资产盘点，数量：0==》"+buyNumber+"，修改时间："+sdf.format(date)+"，备注："+remark);
 		detail.setShopid(shopId);
 		detail.setStatus(0);
 		detail.setStorePay(0D);

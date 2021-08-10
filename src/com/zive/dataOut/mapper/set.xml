@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zive.dataOut.set">
+
+	<select id="getSetConsumption" parameterType="com.zive.dataOut.entity.SetConsumption" resultType="com.zive.dataOut.entity.SetConsumption">
+		SELECT
+		id,
+		is_fail 'isFail',
+		consumption_id 'consumptionId',
+		store_pay 'storePay',
+		bankcard_pay 'bankCardPay',
+		cash_pay 'cashPay',
+		is_book 'isBook',
+		payment,
+		effective_earn 'effectiveEarn',
+		real_payment 'realPayment',
+		owe,
+		buy_owe 'buyOwe',
+		member_card_id 'memberCardId',
+		remark,
+		is_tuoke 'isTuoke',
+		tuoke_id 'tuokeId'
+		FROM
+		shop_s_consumption_set
+		WHERE 1=1
+		<if test="id != null"> and id = #{id}</if>
+		<if test="consumptionId != null"> and consumption_id = #{consumptionId}</if>
+	</select>
+
+</mapper>

@@ -102,7 +102,7 @@ public class UpdateMemberAssetsAddProductTest extends BaseKangWangDao{
 		detail.setIsBook(0);
 		detail.setIsFail(0);
 		detail.setIsIntroduce(0);
-		detail.setRemark("资产盘点，类型："+type+"，修改时间："+sdf.format(date)+"，备注："+remark);
+		detail.setRemark("资产盘点，数量：0==》"+buyNumber+"，修改时间："+sdf.format(date)+"，备注："+remark);
 		detail.setIsPay(1);
 		detail.setIsSend(0);
 		detail.setLeftNumber(leftNumber);
