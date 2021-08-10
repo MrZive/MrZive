@@ -45,13 +45,13 @@ public class BiDao extends BaseDao{
 	static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	public static void main(String[] args) throws ParseException, IOException {
-		String beginDateStr = "2021-07-01 00:00:00";
+		String beginDateStr = "2021-07-12 00:00:00";
 		String endDateStr = "2021-07-31 23:59:59";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date beginDate = format.parse(beginDateStr);
         Date endDate = format.parse(endDateStr);
         
-        boolean isDay = true;
+        boolean isDay = false;
         
         
 		String shopId = null;
@@ -68,7 +68,7 @@ public class BiDao extends BaseDao{
 		System.out.println(monthOfTargetList.size());
 		
 		Set<String> monthOfTarget = new HashSet<String>();
-		monthOfTarget.addAll(Arrays.asList("110187","110199","110185","110189","110192","110190"));
+		monthOfTarget.addAll(Arrays.asList("110173"));
 //		for (String string : monthOfTargetList) {
 //			monthOfTarget.add(string);
 //		}

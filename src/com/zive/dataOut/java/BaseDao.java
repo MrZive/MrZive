@@ -304,6 +304,37 @@ public class BaseDao {
 		return add;
 	}
 	
+	static public int addConsumption(String shopId,String region,String memberCardId,String consumptionId,Date date,String createUserId,Integer isCooperation){
+		Consumption detail = new Consumption();
+		detail.setConsumptionDate(date);
+		detail.setCreateDate(date);
+		detail.setCreateUserId(createUserId);
+		detail.setFailDate(null);
+		detail.setFailEarn(null);
+		detail.setFailId(null);
+		detail.setFailUserId(null);
+		detail.setId(consumptionId);
+		detail.setIsCooperation(isCooperation);
+		detail.setIsDetailPay(1);
+		detail.setIsLinkFail(0);
+		detail.setIsOverFail(0);
+		detail.setIsTuoke(0);
+		detail.setMakerId(shopId);
+		detail.setMemberCardId(memberCardId);
+		detail.setOstype("");
+		detail.setReceiptShopType(0);
+		detail.setRegion(region);
+		detail.setShopId(shopId);
+		detail.setStatus(1);
+		detail.setIsOnline(0);
+		
+		int index = addConsumption(detail);
+		if(index==0){
+			throw new RuntimeException("新增流水单错误");
+		}
+		return index;
+	}
+	
 	
 	//获取会员剩余项目----------------------------------------------------------------------------------------------------------------------------------------------------------
 	static public List<Map<String,Object>> getCanDoneMemberProjectNumber(String memberCardId){
